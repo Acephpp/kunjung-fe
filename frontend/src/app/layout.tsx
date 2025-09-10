@@ -3,6 +3,7 @@ import "./globals.css"
 import HeroSection from "@/components/HeroSection"
 import SearchBar from "@/components/SearchBar"
 import DefiningComfort from "@/components/DefiningComport"
+import ProviderSection from "@/components/ProviderSection"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SearchBar/>
         <HeroSection/>
         <DefiningComfort/>
+        <ProviderSection/>
         <main className="pt-36">{children}</main>
       </body>
     </html>
