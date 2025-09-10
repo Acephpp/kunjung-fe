@@ -37,7 +37,7 @@ const villas: Villa[] = [
 
 export default function HeroSection() {
     return (
-        <section className="max-w-9xl mx-auto px-10 h-screen grid grid-cols-3 gap-5 mt-30">
+        <section className="max-w-9xl mx-auto px-10 h-screen grid grid-cols-3 gap-5 mt-5">
             <div className="relative w-full h-full col-span-2">
                 <Swiper
                     pagination={{ clickable: true }}
