@@ -7,6 +7,7 @@ import ProviderSection from "@/components/ProviderSection"
 import GallerySection from "@/components/GallerySection"
 import TestimoniSection from "@/components/TestimoniSection"
 import ProductSection from "@/components/ProductSection"
+import Footer from "@/components/Footer"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GallerySection/>
         <TestimoniSection/>
         <ProductSection/>
+        <Footer/>
         <main className="pt-36">{children}</main>
       </body>
     </html>
