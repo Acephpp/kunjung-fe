@@ -6,6 +6,7 @@ import DefiningComfort from "@/components/DefiningComport"
 import ProviderSection from "@/components/ProviderSection"
 import GallerySection from "@/components/GallerySection"
 import TestimoniSection from "@/components/TestimoniSection"
+import ProductSection from "@/components/ProductSection"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ProviderSection/>
         <GallerySection/>
         <TestimoniSection/>
+        <ProductSection/>
         <main className="pt-36">{children}</main>
       </body>
     </html>
