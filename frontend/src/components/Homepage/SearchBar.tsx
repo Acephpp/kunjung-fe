@@ -10,7 +10,7 @@ export default function SearchBar() {
     const [guests, setGuests] = useState("");
 
     return (
-        <div className="max-w-5xl mx-auto px-4 mt-25">
+        <div className="max-w-5xl mx-auto px-4 mt-5">
             <div className="flex items-center bg-[#F7F5F1] rounded-2xl shadow-md border border-gray-200 overflow-hidden">
                 {/* Where */}
                 <div className="flex-1 px-6 py-4 border-r border-gray-300">
