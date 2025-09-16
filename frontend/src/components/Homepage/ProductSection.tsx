@@ -46,7 +46,7 @@ const villas: Villa[] = [
         bedrooms: 5,
         bathrooms: 3,
         description:
-            "A retreat surrounded by the warmth of a beloved uncle's home. Located in the cool outskirts of Bandung, Silas House offers comfortable spaces wit...",
+            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
         image: "/images/villa-3.jpg",
         weekendPrice: "IDR 4.056.000",
         weekdayPrice: "IDR 3.056.000",
@@ -67,8 +67,8 @@ const villas: Villa[] = [
 
 export default function ProductSection() {
     return (
-        <section className="max-w-9xl mx-auto px-6 py-16">
-            <h2 className="text-center text-2xl md:text-3xl font-semibold mb-12">
+        <section className="max-w-9xl mx-auto px-6 py-20">
+            <h2 className="text-center text-[40px] font-semibold mb-12">
                 You may also like
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -80,7 +80,7 @@ export default function ProductSection() {
                                 src={villa.image}
                                 alt={villa.name}
                                 fill
-                                className="object-cover"
+                                className="object-cover rounded-sm"
                             />
                         </div>
 
@@ -88,19 +88,21 @@ export default function ProductSection() {
                         <p className="mt-3 text-sm text-gray-500">({villa.location})</p>
 
                         {/* Details */}
-                        <div className="flex space-x-4 text-sm text-gray-800 font-semibold mt-1">
+                        <div className="flex space-x-4 text-sm text-gray-800 font-bold mt-1">
                             <span>{villa.guests} Guests</span>
                             <span>{villa.bedrooms} Bedrooms</span>
                             <span>{villa.bathrooms} Bathrooms</span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="mt-3 text-2xl font-semibold text-gray-900">
+                        <h3 className="mt-3 text-3xl font-semibold text-gray-900">
                             {villa.name}
                         </h3>
 
                         {/* Description */}
-                        <p className="mt-2 text-gray-600 text-base">{villa.description}</p>
+                        <p className="mt-2 text-gray-600 text-base text-justify line-clamp-3">
+                            {villa.description}
+                        </p>
 
                         {/* Price */}
                         <div className="flex justify-between mt-6 text-base text-gray-800">
