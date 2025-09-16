@@ -37,7 +37,7 @@ const villas: Villa[] = [
 
 export default function HeroSection() {
     return (
-        <section className="max-w-9xl mx-auto px-10 h-screen grid grid-cols-3 gap-5 mt-5">
+        <section className="max-w-9xl mx-auto px-10 h-[842px] grid grid-cols-3 gap-5 mt-8">
             <div className="relative w-full h-full col-span-2">
                 <Swiper
                     pagination={{ clickable: true }}
@@ -58,10 +58,10 @@ export default function HeroSection() {
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute bottom-6 left-6 text-white">
-                                    <h2 className="text-lg md:text-xl font-semibold">
+                                    <h2 className="text-[32px] md:text-xl font-semibold">
                                         {villa.name}
                                     </h2>
-                                    <p className="text-sm md:text-base">
+                                    <p className="mt-5 text-xl md:text-base">
                                         {villa.description}
                                     </p>
                                 </div>
@@ -95,15 +95,15 @@ export default function HeroSection() {
 
             <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-9 col-start-3 col-span-1">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold leading-snug">
+                    <h1 className="text-[44px] font-bold leading-snug">
                         Discover Your Most Comfortable Curated Villas
                     </h1>
-                    <p className="mt-4 text-base md:text-lg max-w-sm">
+                    <p className="mt-6 text-xl max-w-sm">
                         Your insider guides of curated boutique villas in Bandung, Indonesia.
                     </p>
                 </div>
 
-                <span className="text-sm uppercase tracking-wide">
+                <span className="text-xl font-medium tracking-wide">
                     KUNJUNG Family
                 </span>
             </div>
