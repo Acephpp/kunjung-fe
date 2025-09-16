@@ -51,19 +51,15 @@ export default function TestimoniSection() {
         },
     ]
 
-
     return (
-        <section className="px-6 md:px-12 py-12 md:py-16 bg-[#F9F7F4]">
+        <section className="px-12 pt-12 pb-10 py-16 bg-[#F9F7F4]">
             {/* Header */}
             <div className="flex justify-between items-center mb-10">
-                {/* Kiri */}
                 <div className="flex items-center space-x-3 text-[#4A3B2D]">
                     <Star className="w-7 h-7 fill-current" />
                     <span className="text-3xl font-semibold">4.9</span>
                     <span className="text-gray-500 text-lg">876 Reviews</span>
                 </div>
-
-                {/* Kanan */}
                 <div className="flex items-center space-x-8">
                     <button className="text-gray-500 text-lg hover:text-[#4A3B2D]">See All Reviews</button>
                     <button className="text-[#A06A55] text-lg font-medium flex items-center space-x-2">
@@ -89,29 +85,33 @@ export default function TestimoniSection() {
             >
                 {reviews.map((review) => (
                     <SwiperSlide key={review.id} className="h-full">
-                        <div className="border border-gray-300 p-6 h-full min-h-[300px] flex flex-col justify-between bg-white rounded-lg">
+                        <div className="border border-gray-300 p-6 h-full flex flex-col bg-white rounded-lg">
                             <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 className="font-semibold text-[#4A3B2D]">{review.name}</h3>
                                     <p className="text-sm text-gray-500">{review.date}</p>
                                 </div>
-                                <span className="flex items-center space-x-1 text-sm font-medium text-[#4A3B2D]">
-                                    <Star className="w-4 h-4 fill-current" />    {review.rating}
+                                <span className="flex items-center space-x-1 gap-1 text-sm font-medium text-[#4A3B2D]">
+                                    <Star className="w-4 h-4 fill-current" /> {review.rating}
                                 </span>
                             </div>
-                            <p className="text-gray-700 text-sm flex-1 leading-relaxed mt-5">{review.text}</p>
-                            <button className="mt-4 text-sm font-semibold underline text-start">Read More</button>
+                            <p className="text-gray-700 text-sm leading-relaxed mt-5 line-clamp-4">
+                                {review.text}
+                            </p>
+                            <button className="mt-auto pt-4 text-sm font-semibold underline text-start">
+                                Read More
+                            </button>
                         </div>
                     </SwiperSlide>
                 ))}
             </Swiper>
 
-            {/* Custom Navigation di bawah */}
-            <div className="flex justify-center gap-6 mt-6">
-                <button className="custom-prev bg-gray-200 hover:bg-gray-300 text-black w-10 h-10 flex items-center justify-center rounded-full">
+            {/* Custom Navigation */}
+            <div className="flex justify-center gap-6 mt-10">
+                <button className="custom-prev text-black w-10 h-10 flex items-center justify-center rounded-full">
                     <ChevronLeft className="w-5 h-5" />
                 </button>
-                <button className="custom-next bg-gray-200 hover:bg-gray-300 text-black w-10 h-10 flex items-center justify-center rounded-full">
+                <button className="custom-next text-black w-10 h-10 flex items-center justify-center rounded-full">
                     <ChevronRight className="w-5 h-5" />
                 </button>
             </div>
