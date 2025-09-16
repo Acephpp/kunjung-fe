@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function DefiningComport() {
     return (
-        <section className="max-w-9xl mx-auto px-10 py-5">
+        <section className="max-w-9xl mx-auto px-10 py-5 mt-[64px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
 
