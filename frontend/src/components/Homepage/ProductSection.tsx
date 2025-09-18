@@ -67,7 +67,7 @@ const villas: Villa[] = [
 
 export default function ProductSection() {
     return (
-        <section className="max-w-9xl mx-auto px-6 py-20">
+        <section className="max-w-9xl mx-auto px-10 py-20">
             <h2 className="text-center text-[40px] font-semibold mb-12">
                 You may also like
             </h2>
