@@ -10,7 +10,7 @@ import DefiningComport from "@/components/Homepage/DefiningComport";
 
 export default function HomePage() {
   return (
-    <>
+    <div>
       <SearchBar />
       <HeroSection />
       <DefiningComport />
@@ -18,6 +18,6 @@ export default function HomePage() {
       <GallerySection />
       <TestimoniSection />
       <ProductSection />
-    </>
+    </div>
   );
 }

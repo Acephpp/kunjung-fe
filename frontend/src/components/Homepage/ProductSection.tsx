@@ -7,10 +7,10 @@ import { villas } from "../../app/data/villas";
 export default function ProductSection() {
     return (
         <section className="max-w-9xl mx-auto px-10 py-20">
-            <h2 className="text-center text-[40px] font-semibold mb-12">
+            <h2 className="text-center text-[40px] font-semibold mb-12 font-primary">
                 You may also like
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 font-secondary">
                 {villas.slice(0, 4).map((villa) => (
                     <Link
                         href={`/houses/villa/${villa.id}`}

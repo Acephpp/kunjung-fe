@@ -30,11 +30,11 @@ export default function Navbar() {
     ];
 
     return (
-        <header
+        <header     
             className={`fixed top-0 left-0 w-full bg-[#FCFBF7] border-b border-gray-200 z-50 transition-transform duration-300 ${show ? "translate-y-0" : "-translate-y-full h-[73px]"
                 }`}
         >
-            <div className="relative max-w-9xl mx-auto flex items-center justify-between px-10 h-20">
+            <div className="relative max-w-9xl mx-auto flex items-center justify-between px-10 h-20 font-secondary">
                 {/* Logo */}
                 <div className="flex items-center space-x-6">
                     <Link href="/">

@@ -54,7 +54,7 @@ export default function TestimoniSection() {
     return (
         <section className="px-12 pt-12 pb-10 py-16 bg-[#F9F7F4]">
             {/* Header */}
-            <div className="flex justify-between items-center mb-10">
+            <div className="flex justify-between items-center mb-10 font-secondary">
                 <div className="flex items-center space-x-3 text-[#4A3B2D]">
                     <Star className="w-7 h-7 fill-current" />
                     <span className="text-3xl font-semibold">4.9</span>

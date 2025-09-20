@@ -2,19 +2,19 @@ import Image from "next/image";
 
 export default function DefiningComport() {
     return (
-        <section className="max-w-9xl mx-auto px-10 py-5 mt-[64px]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <section className="py-5 mt-[64px]">
+            <div className="max-w-9xl mx-auto px-10 grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
 
                 </div>
                 <div>
-                    <p className="text-xl font-bold text-gray-800 mb-[180px]">
+                    <p className="text-xl font-bold text-gray-800 mb-[150px] font-primary">
                         KUNJUNG Family
                     </p>
                 </div>
 
                 {/* Kiri atas */}
-                <div>
+                <div className="font-primary">
                     <h2 className="text-[40px] font-bold text-gray-900 mb-4 leading-snug">
                         Defining Comfort
                     </h2>
@@ -27,7 +27,7 @@ export default function DefiningComport() {
                 <div>
                     {/* Tambahkan teks KUNJUNG Family */}
                     
-                    <p className="text-gray-700 text-sm leading-relaxed">
+                    <p className="text-gray-700 text-sm leading-relaxed mt-1">
                         A home of unparalleled connections, offering a journey of transformation
                         through accessible artistry.
                         <br /><br />

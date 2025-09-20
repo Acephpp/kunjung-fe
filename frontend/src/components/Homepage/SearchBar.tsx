@@ -43,7 +43,7 @@ export default function SearchBar() {
 
     return (
         <div className="max-w-5xl mx-auto px-4 mt-4 relative" ref={dropdownRef}>
-            <div className="flex items-center bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 overflow-hidden h-[70px]">
+            <div className="flex items-center bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 overflow-hidden h-[70px] font-secondary">
                 {/* Where */}
                 <div
                     className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showWhere ? "bg-gray-200" : "hover:bg-gray-200/60"
@@ -130,7 +130,7 @@ export default function SearchBar() {
 
             {/* Dropdown Where */}
             {showWhere && (
-                <div className="absolute left-3 mt-2 w-[400px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
+                <div className="absolute left-3 mt-2 w-[400px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
                     {/* Item Destination */}
                     <div
                         onClick={() => setDestination("Bandung")}
@@ -166,7 +166,7 @@ export default function SearchBar() {
 
             {/* Dropdown Date (sama untuk check in & check out) */}
             {(showCheckIn || showCheckOut) && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
                     <DateRange
                         ranges={dateRange}
                         onChange={(item) => {
@@ -192,7 +192,7 @@ export default function SearchBar() {
 
             {/* Dropdown Guests */}
             {showGuests && (
-                <div className="absolute right-3 mt-2 w-[350px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-7 z-50">
+                <div className="absolute right-3 mt-2 w-[350px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-7 z-50 font-secondary">
                     <div className="flex items-center justify-between">
                         <p className="text-[16px] font-semibold text-gray-800">Add guests</p>
                         <div className="flex items-center gap-4">

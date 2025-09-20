@@ -13,7 +13,7 @@ export default function Footer() {
 
     return (
         <footer className="bg-[#7A3E2C] text-[#F5E9E2] h-[648px]">
-            <div className="max-w-9xl mx-auto px-10 pt-12 pb-6 flex flex-col h-full">
+            <div className="max-w-9xl mx-auto px-10 pt-12 pb-6 flex flex-col h-full font-primary">
                 {/* Top Menu */}
                 <nav className="flex flex-wrap gap-2 text-[40px] max-w-3xl">
                     <Link href="/" className={linkClass("/")}>

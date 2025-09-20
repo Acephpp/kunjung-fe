@@ -41,15 +41,15 @@ export default function VisiMisi() {
                 >
                     <div className="grid md:grid-cols-2 gap-12 items-start">
                         <div className="max-w-xl sticky top-24 self-start">
-                            <h2 className="text-4xl font-medium leading-relaxed">
+                            <h2 className="text-[32px] font-medium leading-relaxed font-primary">
                                 {section.title}
                             </h2>
                         </div>
 
-                        <div className="space-y-6 text-[24px] leading-relaxed whitespace-pre-line">
+                        <div className="space-y-6 text-[22px] leading-relaxed whitespace-pre-line font-secondary">
                             <p>{section.content}</p>
                             {section.note && (
-                                <p className="text-[24px] max-w-[230px] text-gray-400 mt-[100px]">
+                                <p className="text-[22px] max-w-[240px] text-gray-400 mt-[100px]">
                                     {section.note}
                                 </p>
                             )}

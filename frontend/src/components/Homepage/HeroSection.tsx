@@ -38,7 +38,7 @@ const villas: Villa[] = [
 export default function HeroSection() {
     return (
         <section className="max-w-9xl mx-auto px-10 h-[842px] grid grid-cols-3 gap-5 mt-8">
-            <div className="relative w-full h-full col-span-2">
+            <div className="relative w-full h-full col-span-2 font-primary">
                 <Swiper
                     pagination={{ clickable: true }}
                     autoplay={{
@@ -93,12 +93,12 @@ export default function HeroSection() {
                 `}</style>
             </div>
 
-            <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-9 col-start-3 col-span-1">
+            <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-9 col-start-3 col-span-1 font-primary">
                 <div>
-                    <h1 className="text-[44px] font-bold leading-snug">
+                    <h1 className="text-[40px] font-bold leading-snug">
                         Discover Your Most Comfortable Curated Villas
                     </h1>
-                    <p className="mt-6 text-xl max-w-sm">
+                    <p className="mt-6 text-[18px] max-w-xl">
                         Your insider guides of curated boutique villas in Bandung, Indonesia.
                     </p>
                 </div>

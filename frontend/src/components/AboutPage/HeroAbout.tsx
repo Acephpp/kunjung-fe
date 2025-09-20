@@ -1,12 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Libre_Baskerville } from "next/font/google";
-
-const libre = Libre_Baskerville({
-    subsets: ["latin"],
-    weight: ["400", "700"],
-});
 
 export default function HeroAbout() {
     return (
@@ -23,7 +17,7 @@ export default function HeroAbout() {
                 <div className="absolute inset-0 bg-black/30"></div>
 
                 <div className="absolute inset-0 flex items-end justify-end px-[100px] pb-[200px]">
-                    <div className={`max-w-2xl text-white ${libre.className}`}>
+                    <div className="max-w-2xl text-white font-primary">
                         <h2 className="text-5xl font-bold mb-4">
                             Kunjung’s story
                         </h2>
@@ -36,7 +30,7 @@ export default function HeroAbout() {
                 </div>
             </section>
 
-            <p className="mt-10 text-xl font-medium">
+            <p className="mt-10 text-xl font-medium font-secondary">
                 KUNJUNG Family
             </p>
         </div>
