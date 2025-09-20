@@ -1,69 +1,8 @@
 "use client";
 
 import Image from "next/image";
-
-type Villa = {
-    name: string;
-    location: string;
-    guests: number;
-    bedrooms: number;
-    bathrooms: number;
-    description: string;
-    image: string;
-    weekendPrice: string;
-    weekdayPrice: string;
-};
-
-const villas: Villa[] = [
-    {
-        name: "Silas House",
-        location: "Setiabudhi, Bandung",
-        guests: 15,
-        bedrooms: 5,
-        bathrooms: 3,
-        description:
-            "A retreat surrounded by the warmth of a beloved uncle's home. Located in the cool outskirts of Bandung, Silas House offers comfortable spaces wit...",
-        image: "/images/villa-1.jpg",
-        weekendPrice: "IDR 4.056.000",
-        weekdayPrice: "IDR 3.056.000",
-    },
-    {
-        name: "Montri House",
-        location: "Setiabudhi, Bandung",
-        guests: 15,
-        bedrooms: 5,
-        bathrooms: 3,
-        description:
-            "A retreat surrounded by the warmth of a beloved uncle's home. Located in the cool outskirts of Bandung, Silas House offers comfortable spaces wit...",
-        image: "/images/villa-2.jpg",
-        weekendPrice: "IDR 4.056.000",
-        weekdayPrice: "IDR 3.056.000",
-    },
-    {
-        name: "Gemala House",
-        location: "Setiabudhi, Bandung",
-        guests: 15,
-        bedrooms: 5,
-        bathrooms: 3,
-        description:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-        image: "/images/villa-3.jpg",
-        weekendPrice: "IDR 4.056.000",
-        weekdayPrice: "IDR 3.056.000",
-    },
-    {
-        name: "Padri House",
-        location: "Setiabudhi, Bandung",
-        guests: 15,
-        bedrooms: 5,
-        bathrooms: 3,
-        description:
-            "A retreat surrounded by the warmth of a beloved uncle's home. Located in the cool outskirts of Bandung, Silas House offers comfortable spaces wit...",
-        image: "/images/villa-4.jpg",
-        weekendPrice: "IDR 4.056.000",
-        weekdayPrice: "IDR 3.056.000",
-    },
-];
+import Link from "next/link";
+import { villas } from "../../app/data/villas";
 
 export default function ProductSection() {
     return (
@@ -72,8 +11,12 @@ export default function ProductSection() {
                 You may also like
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                {villas.map((villa, idx) => (
-                    <div key={idx} className="flex flex-col">
+                {villas.slice(0, 4).map((villa) => (
+                    <Link
+                        href={`/villa/${villa.id}`}
+                        key={villa.id}
+                        className="flex flex-col cursor-pointer hover:scale-[1.02] transition-transform"
+                    >
                         {/* Image */}
                         <div className="w-full h-64 relative">
                             <Image
@@ -109,15 +52,17 @@ export default function ProductSection() {
                             <p>
                                 <span className="font-medium">Weekends</span>
                                 <br />
-                                From <span className="font-bold">{villa.weekendPrice}</span>
+                                From{" "}
+                                <span className="font-bold">{villa.weekendPrice}</span>
                             </p>
-                            <p className="">
+                            <p>
                                 <span className="font-medium">Weekdays</span>
                                 <br />
-                                From <span className="font-bold">{villa.weekdayPrice}</span>
+                                From{" "}
+                                <span className="font-bold">{villa.weekdayPrice}</span>
                             </p>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>

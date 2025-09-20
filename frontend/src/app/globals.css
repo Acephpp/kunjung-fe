@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-body {
-  font-family: "Space Grotesk", sans-serif;
+@layer base {
+  :root {
+    --font-libre-baskerville: 'Libre Baskerville', serif;
+    --font-space-grotesk: 'Space Grotesk', sans-serif;
+  }
+}
+
+.font-primary {
+  font-family: var(--font-libre-baskerville);
+}
+
+.font-secondary {
+  font-family: var(--font-space-grotesk);
 }
