@@ -15,7 +15,7 @@ export default function VillaHeader() {
 
     return (
         <section className="">
-            <h1 className="font-primary text-[80px] text-center mb-8 mt-5">
+            <h1 className="font-primary text-[80px] text-center mb-8">
                 {villa.name}
             </h1>
 

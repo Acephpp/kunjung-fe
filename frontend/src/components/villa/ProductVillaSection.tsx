@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { villas } from "../../app/data/villas";
 
-export default function ProductSection() {
+export default function ProductVillaSection() {
     return (
-        <section className="max-w-9xl mx-auto px-10 py-12">
+        <section className="mb-20">
             <h2 className="text-center text-[40px] font-semibold mb-12 font-primary">
                 You may also like
             </h2>

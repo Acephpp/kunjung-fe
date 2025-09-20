@@ -20,7 +20,7 @@ export default function VillaDetail() {
     }
 
     return (
-        <div className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-6">
                 <h2 className="font-primary text-[40px] font-semibold mb-4">
                     A tranquil stay in the city
@@ -123,7 +123,7 @@ export default function VillaDetail() {
                 </div>
             </div>
 
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 mt-5">
                 <Card className="sticky top-2/12 py-10 px-10 rounded-xl shadow-xl bg-[#fcfbf7] border-[#E7E6E2]">
                     {/* Harga */}
                     <div className="grid grid-cols-2 gap-4">

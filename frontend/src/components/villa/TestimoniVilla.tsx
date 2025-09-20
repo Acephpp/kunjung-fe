@@ -5,7 +5,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 
-export default function TestimoniSection() {
+export default function TestimoniVilla() {
     const reviews = [
         {
             id: 1,
@@ -52,9 +52,9 @@ export default function TestimoniSection() {
     ]
 
     return (
-        <section className="px-12 pt-12 py-16">
+        <section className="">
             {/* Header */}
-            <div className="flex justify-between items-center mb-10">
+            <div className="flex justify-between items-center mb-10 font-secondary">
                 <div className="flex items-center space-x-3 text-[#4A3B2D]">
                     <Star className="w-7 h-7 fill-current" />
                     <span className="text-3xl font-semibold">4.9</span>
