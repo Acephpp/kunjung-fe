@@ -1,3 +1,4 @@
+import ComfortSection from '@/components/AboutPage/ComfortSection'
 import HeroAbout from '@/components/AboutPage/HeroAbout'
 import ScrollGallery from '@/components/AboutPage/ScrollGallery'
 import VisiMisi from '@/components/AboutPage/VisiMisi'
@@ -9,6 +10,7 @@ export default function Page() {
             <HeroAbout />
             <VisiMisi/>
             <ScrollGallery/>
+            <ComfortSection/>
         </div>
     )
 }
