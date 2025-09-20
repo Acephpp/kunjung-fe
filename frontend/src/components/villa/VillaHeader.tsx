@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { villas } from "../../app/data/villas";
+import { villas } from "@/app/data/villas";
 import { useParams, notFound } from "next/navigation";
 
 export default function VillaHeader() {
@@ -27,7 +27,7 @@ export default function VillaHeader() {
                         fill
                         className="object-cover"
                     />
-                    <button className="absolute bottom-6 left-6 flex items-center gap-2 bg-gray-500/90 text-white text-sm font-medium px-4 py-2 rounded-full shadow-md hover:bg-gray-600 transition">
+                    <button className="absolute bottom-6 left-6 flex items-center gap-2 bg-gray-500/50 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"

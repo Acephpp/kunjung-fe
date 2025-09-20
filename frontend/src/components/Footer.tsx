@@ -7,9 +7,9 @@ export default function Footer() {
     const pathname = usePathname();
 
     const linkClass = (href: string) =>
-        pathname === href
-            ? "text-white" 
-            : "text-white/40 hover:text-white";
+    pathname === href || pathname.startsWith(href + "/")
+        ? "text-white"
+        : "text-white/40 hover:text-white";
 
     return (
         <footer className="bg-[#7A3E2C] text-[#F5E9E2] h-[648px]">

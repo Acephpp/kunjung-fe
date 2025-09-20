@@ -13,7 +13,7 @@ export default function ProductSection() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 {villas.slice(0, 4).map((villa) => (
                     <Link
-                        href={`/villa/${villa.id}`}
+                        href={`/houses/villa/${villa.id}`}
                         key={villa.id}
                         className="flex flex-col cursor-pointer hover:scale-[1.02] transition-transform"
                     >
