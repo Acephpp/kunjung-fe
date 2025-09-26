@@ -6,7 +6,7 @@ import { villas } from "../../app/data/villas";
 
 export default function ProductSection() {
     return (
-        <section className="max-w-9xl mx-auto px-10 py-12">
+        <section className="max-w-9xl mx-auto px-10 pb-12">
             <h2 className="text-center text-[40px] font-semibold mb-12 font-primary">
                 You may also like
             </h2>
