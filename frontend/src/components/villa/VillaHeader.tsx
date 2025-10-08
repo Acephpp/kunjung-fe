@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { villas } from "@/app/data/villas";
 import { useParams, notFound } from "next/navigation";
+import Link from "next/link";
 
 export default function VillaHeader() {
     const params = useParams();
@@ -27,25 +28,27 @@ export default function VillaHeader() {
                         fill
                         className="object-cover"
                     />
-                    <button className="absolute bottom-6 left-6 flex items-center gap-2 bg-gray-500/50 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 16 16"
-                            className="w-4 h-4"
-                        >
-                            <circle cx="2" cy="2" r="1.5" />
-                            <circle cx="8" cy="2" r="1.5" />
-                            <circle cx="14" cy="2" r="1.5" />
-                            <circle cx="2" cy="8" r="1.5" />
-                            <circle cx="8" cy="8" r="1.5" />
-                            <circle cx="14" cy="8" r="1.5" />
-                            <circle cx="2" cy="14" r="1.5" />
-                            <circle cx="8" cy="14" r="1.5" />
-                            <circle cx="14" cy="14" r="1.5" />
-                        </svg>
-                        see all photos
-                    </button>
+                    <Link href={`/houses/villa/${id}/photos`}>
+                        <button className="absolute bottom-6 left-6 flex items-center gap-2 bg-gray-500/50 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 16 16"
+                                className="w-4 h-4"
+                            >
+                                <circle cx="2" cy="2" r="1.5" />
+                                <circle cx="8" cy="2" r="1.5" />
+                                <circle cx="14" cy="2" r="1.5" />
+                                <circle cx="2" cy="8" r="1.5" />
+                                <circle cx="8" cy="8" r="1.5" />
+                                <circle cx="14" cy="8" r="1.5" />
+                                <circle cx="2" cy="14" r="1.5" />
+                                <circle cx="8" cy="14" r="1.5" />
+                                <circle cx="14" cy="14" r="1.5" />
+                            </svg>
+                            see all photos
+                        </button>
+                    </Link>
 
                 </div>
                 <div className="flex flex-col gap-4 h-[800px]">

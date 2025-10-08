@@ -10,16 +10,19 @@ const images = [
 
 export default function ScrollGallery() {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    let index = 0;
+    const indexRef = useRef(0); // ✅ pakai useRef untuk menyimpan index antar render
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (containerRef.current) {
-                index = (index + 1) % images.length;
-                const child = containerRef.current.children[index] as HTMLElement;
+                indexRef.current = (indexRef.current + 1) % images.length; // ✅ ubah current
+                const child =
+                    containerRef.current.children[indexRef.current] as HTMLElement;
                 if (child) {
                     containerRef.current.scrollTo({
-                        left: child.offsetLeft - (containerRef.current.clientWidth - child.clientWidth) / 2,
+                        left:
+                            child.offsetLeft -
+                            (containerRef.current.clientWidth - child.clientWidth) / 2,
                         behavior: "smooth",
                     });
                 }

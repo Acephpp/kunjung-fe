@@ -19,7 +19,7 @@ export default function DefiningComport() {
                         Defining Comfort
                     </h2>
                     <p className="text-gray-600 text-xl">
-                        Redefine Comfort, Discover <br /> One's Self
+                        Redefine Comfort, Discover <br /> One&apos;s Self
                     </p>
                 </div>
 
@@ -31,7 +31,7 @@ export default function DefiningComport() {
                         A home of unparalleled connections, offering a journey of transformation
                         through accessible artistry.
                         <br /><br />
-                        Kunjung was created to be more than a place to stay; it's a place to belong.
+                        Kunjung was created to be more than a place to stay; it&apos;s a place to belong.
                         Here, every visit is a chance to find warmth, inspiration, and comfort in a
                         space that feels like home. Our team welcomes each guest as part of our story,
                         crafting moments that stay with you long after you leave.

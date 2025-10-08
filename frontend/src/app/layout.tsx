@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Libre_Baskerville, Space_Grotesk } from "next/font/google";
+import ClientLayoutContent from "@/components/ClientLayoutContent";
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -33,9 +34,8 @@ export default function RootLayout({
       className={`${libreBaskerville.variable} ${spaceGrotesk.variable}`}
     >
       <body className="antialiased bg-[#FCFBF7]">
-        <Navbar />
-        <main className="pt-20">{children}</main>
-        <Footer />
+        {/* 👇 Komponen ini client-side, jadi aman pakai usePathname */}
+        <ClientLayoutContent>{children}</ClientLayoutContent>
       </body>
     </html>
   );
