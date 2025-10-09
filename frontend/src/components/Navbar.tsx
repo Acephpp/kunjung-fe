@@ -61,7 +61,7 @@ export default function Navbar() {
 
     const menus = [
         { name: "Stays", href: "/" },
-        { name: "Weddings", href: "/weddings" },
+        { name: "Weddings", href: "/houses/weddings" },
         { name: "Shoots", href: "/shoots" },
     ];
 
