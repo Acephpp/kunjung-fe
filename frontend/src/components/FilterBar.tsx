@@ -7,6 +7,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 export default function FilterBar() {
+    const [showFilter, setShowFilter] = useState(false);
+    const [showSort, setShowSort] = useState(false);
     const [showWhere, setShowWhere] = useState(false);
     const [showCheckIn, setShowCheckIn] = useState(false);
     const [showCheckOut, setShowCheckOut] = useState(false);
@@ -14,6 +16,10 @@ export default function FilterBar() {
 
     const [destination, setDestination] = useState("");
     const [guests, setGuests] = useState(0);
+    const [price, setPrice] = useState([0, 6430000]);
+    const [amenities, setAmenities] = useState<string[]>([]);
+    const [propertyType, setPropertyType] = useState("any");
+    const [sortOption, setSortOption] = useState("Relevance");
 
     const [dateRange, setDateRange] = useState<Range[]>([
         {
@@ -35,20 +41,117 @@ export default function FilterBar() {
                 setShowCheckIn(false);
                 setShowCheckOut(false);
                 setShowGuests(false);
+                setShowFilter(false);
+                setShowSort(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const toggleAmenity = (item: string) => {
+        setAmenities((prev) =>
+            prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+        );
+    };
+
     return (
         <div className="mx-auto mt-4 relative font-secondary" ref={dropdownRef}>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-between gap-3 relative">
                 {/* Button Filter */}
-                <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition">
-                    <FiFilter size={18} />
-                    Filter
-                </button>
+                <div className="relative">
+                    <button
+                        onClick={() => {
+                            setShowFilter(!showFilter);
+                            setShowSort(false);
+                        }}
+                        className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition"
+                    >
+                        <FiFilter size={18} />
+                        Filter
+                    </button>
+
+                    {/* ✅ Modal muncul di bawah tombol Filter */}
+                    {showFilter && (
+                        <div className="absolute left-0 mt-5 w-[400px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-6 z-50">
+                            <h2 className="text-center font-primary text-2xl font-semibold mb-10">
+                                Filters
+                            </h2>
+                            <hr className="my-4" />
+
+                            {/* Price Range */}
+                            <div className="mb-10">
+                                <label className="text-[16px] font-semibold font-secondary text-gray-700">
+                                    Weekend pricing
+                                </label>
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={6430000}
+                                    value={price[1]}
+                                    onChange={(e) =>
+                                        setPrice([price[0], Number(e.target.value)])
+                                    }
+                                    className="w-full accent-[#7A3E2C] mt-2"
+                                />
+                                <div className="flex justify-between text-sm text-gray-700 mt-1">
+                                    <span>Rp{price[0].toLocaleString()}</span>
+                                    <span>Rp{price[1].toLocaleString()}</span>
+                                </div>
+                            </div>
+
+                            <hr className="my-4" />
+
+                            {/* Amenities */}
+                            <div className="grid grid-cols-2 gap-3 mb-10 text-[15px] text-gray-800">
+                                {[
+                                    "Bath tub",
+                                    "Kitchen",
+                                    "Hot water",
+                                    "Wifi",
+                                    "Pet friendly",
+                                    "Pool",
+                                ].map((item) => (
+                                    <label
+                                        key={item}
+                                        className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={amenities.includes(item)}
+                                            onChange={() => toggleAmenity(item)}
+                                            className="w-4 h-4 accent-[#7A3E2C]"
+                                        />
+                                        {item}
+                                    </label>
+                                ))}
+                            </div>
+
+                            <hr className="my-4" />
+
+                            {/* Property Type */}
+                            <div className="flex justify-center items-center gap-3">
+                                {[
+                                    { id: "any", label: "Any types" },
+                                    { id: "room", label: "Room" },
+                                    { id: "entire", label: "Entire house" },
+                                ].map((type) => (
+                                    <button
+                                        key={type.id}
+                                        onClick={() => setPropertyType(type.id)}
+                                        className={`px-5 py-2 rounded-xl border text-sm font-medium ${
+                                            propertyType === type.id
+                                                ? "bg-gray-200 border-gray-300 text-gray-800"
+                                                : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        {type.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
 
                 {/* Main Search Bar */}
                 <div className="flex flex-1 items-center justify-between bg-[#FCFBF7] border border-gray-300 rounded-2xl shadow-sm overflow-hidden h-[70px]">
@@ -62,6 +165,8 @@ export default function FilterBar() {
                             setShowCheckIn(false);
                             setShowCheckOut(false);
                             setShowGuests(false);
+                            setShowFilter(false);
+                            setShowSort(false);
                         }}
                     >
                         <p className="text-[15px] font-semibold text-gray-800">Where</p>
@@ -82,6 +187,8 @@ export default function FilterBar() {
                             setShowWhere(false);
                             setShowCheckOut(false);
                             setShowGuests(false);
+                            setShowFilter(false);
+                            setShowSort(false);
                         }}
                     >
                         <p className="text-[15px] font-semibold text-gray-800">Check in</p>
@@ -104,6 +211,8 @@ export default function FilterBar() {
                             setShowWhere(false);
                             setShowCheckIn(false);
                             setShowGuests(false);
+                            setShowFilter(false);
+                            setShowSort(false);
                         }}
                     >
                         <p className="text-[15px] font-semibold text-gray-800">Check out</p>
@@ -126,6 +235,8 @@ export default function FilterBar() {
                             setShowWhere(false);
                             setShowCheckIn(false);
                             setShowCheckOut(false);
+                            setShowFilter(false);
+                            setShowSort(false);
                         }}
                     >
                         <p className="text-[15px] font-semibold text-gray-800">Who</p>
@@ -141,94 +252,48 @@ export default function FilterBar() {
                 </div>
 
                 {/* Button Sort */}
-                <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition">
-                    <FiArrowDown size={18} />
-                    Sort
-                </button>
-            </div>
-
-            {/* Dropdown Where */}
-            {showWhere && (
-                <div className="absolute left-[120px] mt-3 w-[400px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
-                    <div
-                        onClick={() => setDestination("Bandung")}
-                        className="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-xl cursor-pointer"
-                    >
-                        <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                                stroke="currentColor"
-                                className="w-6 h-6 text-gray-700"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12 21c0 0 6-6.75 6-11.25A6 6 0 0 0 6 9.75C6 14.25 12 21 12 21z"
-                                />
-                                <circle cx="12" cy="9.75" r="2.25" />
-                            </svg>
-                        </div>
-
-                        <div>
-                            <p className="text-[16px] font-medium text-gray-800">Bandung</p>
-                            <p className="text-[14px] text-gray-500">West Java, Indonesia</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Dropdown Date */}
-            {(showCheckIn || showCheckOut) && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-3 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50">
-                    <DateRange
-                        ranges={dateRange}
-                        onChange={(item) => {
-                            setDateRange([item.selection]);
-
-                            if (showCheckIn) {
-                                setShowCheckIn(false);
-                                setShowCheckOut(true);
-                            } else if (showCheckOut) {
-                                setShowCheckOut(false);
-                            }
+                <div className="relative">
+                    <button
+                        onClick={() => {
+                            setShowSort(!showSort);
+                            setShowFilter(false);
                         }}
-                        rangeColors={["#7A3E2C"]}
-                        months={2}
-                        direction="horizontal"
-                        moveRangeOnFirstSelection={false}
-                        editableDateInputs={true}
-                    />
-                </div>
-            )}
+                        className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition"
+                    >
+                        <FiArrowDown size={18} />
+                        Sort
+                    </button>
 
-            {/* Dropdown Guests */}
-            {showGuests && (
-                <div className="absolute right-[130px] mt-3 w-[350px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-7 z-50">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[16px] font-semibold text-gray-800">Add guests</p>
-                        <div className="flex items-center gap-4">
-                            <button
-                                onClick={() => setGuests(Math.max(0, guests - 1))}
-                                className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40"
-                                disabled={guests === 0}
-                            >
-                                <FiMinus size={14} />
-                            </button>
-                            <span className="w-6 text-center text-gray-800">{guests}</span>
-                            <button
-                                onClick={() => setGuests(guests + 1)}
-                                className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100"
-                            >
-                                <FiPlus size={14} />
-                            </button>
+                    {/* ✅ Modal Sort */}
+                    {showSort && (
+                        <div className="absolute right-0 mt-5 w-[280px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-4 z-50">
+                            <div className="flex flex-col gap-3 text-gray-800 text-[15px]">
+                                {[
+                                    "Relevance",
+                                    "Trending",
+                                    "Price: High to Low",
+                                    "Price: Low to High",
+                                    "A to Z",
+                                    "Z to A",
+                                ].map((option) => (
+                                    <label
+                                        key={option}
+                                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-2 py-2 rounded-md"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={sortOption === option}
+                                            onChange={() => setSortOption(option)}
+                                            className="w-4 h-4 accent-[#7A3E2C]"
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    <div className="border-b border-gray-300 mt-3"></div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     );
 }
