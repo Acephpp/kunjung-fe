@@ -2,18 +2,52 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // Dummy user data
+        const firstName = "Acep";
+        const lastName = "Handika";
+        const validEmail = "admin@gmail.com";
+        const validPassword = "admin123";
+
+        if (email === validEmail && password === validPassword) {
+            setError("");
+
+            // ✅ Save user data to localStorage
+            localStorage.setItem("user", JSON.stringify({ firstName, lastName, email: validEmail }));
+
+            // ✅ Redirect to homepage
+            router.push("/");
+
+            // Optional: force reload so Navbar updates immediately
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        } else {
+            setError("Incorrect email or password!");
+        }
+    };
 
     return (
-        <form className="w-full max-w-md space-y-5">
+        <form onSubmit={handleLogin} className="w-full max-w-md space-y-5">
             {/* Email */}
             <div>
                 <input
                     type="email"
                     placeholder="Email*"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
                     required
                 />
@@ -24,6 +58,8 @@ export default function LoginForm() {
                 <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password*"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 pr-10 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
                     required
                 />
@@ -65,7 +101,12 @@ export default function LoginForm() {
                     Log in
                 </button>
 
-                {/* Garis pemisah setelah tombol */}
+                {/* Error Message */}
+                {error && (
+                    <p className="text-red-600 text-sm mt-2">{error}</p>
+                )}
+
+                {/* Divider */}
                 <div className="w-full mt-10 mb-5 border-t border-gray-300"></div>
             </div>
 

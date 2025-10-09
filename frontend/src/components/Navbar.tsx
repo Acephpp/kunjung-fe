@@ -2,16 +2,19 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LucideUserCircle2 } from "lucide-react";
 
 export default function Navbar() {
     const [show, setShow] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [openMenu, setOpenMenu] = useState(false);
+    const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
+    const router = useRouter();
 
+    // 🔹 Listen scroll to hide/show navbar
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > lastScrollY) setShow(false);
@@ -22,7 +25,7 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY]);
 
-    // Tutup dropdown saat klik di luar
+    // 🔹 Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
@@ -35,6 +38,26 @@ export default function Navbar() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    // 🔹 Load user info (simulated login persistence)
+    useEffect(() => {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) setUser(JSON.parse(savedUser));
+    }, []);
+
+    // 🔹 Handle logout
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        router.push("/");
+    };
+
+    // 🔹 Get initials from first + last name
+    const getInitials = (firstName: string, lastName: string) => {
+        const firstInitial = firstName?.charAt(0) || "";
+        const lastInitial = lastName?.charAt(0) || "";
+        return (firstInitial + lastInitial).toUpperCase();
+    };
 
     const menus = [
         { name: "Stays", href: "/" },
@@ -64,7 +87,7 @@ export default function Navbar() {
                     </p>
                 </div>
 
-                {/* Menu Tengah */}
+                {/* Middle Menu */}
                 <nav className="absolute left-1/2 -translate-x-1/2">
                     <ul className="flex space-x-10 text-[16px]">
                         {menus.map((menu) => (
@@ -84,38 +107,71 @@ export default function Navbar() {
                     </ul>
                 </nav>
 
-                {/* Icon kanan */}
+                {/* Right Icons */}
                 <div
                     className="flex items-center space-x-6 relative"
                     ref={dropdownRef}
                 >
-                    {/* ✅ Icon UserCircle2 */}
+                    {/* ✅ User or Guest Icon */}
                     <button
                         onClick={() => setOpenMenu(!openMenu)}
-                        className="relative p-1 rounded-full hover:bg-gray-100 transition"
+                        className={`relative p-1 rounded-full transition flex items-center justify-center w-9 h-9 ${
+                            user ? "bg-[#2D2A29]" : "hover:bg-gray-100"
+                        }`}
                     >
-                        <LucideUserCircle2 size={28} className="text-gray-700" />
+                        {user ? (
+                            <span className="font-semibold text-white text-sm">
+                                {getInitials(user.firstName, user.lastName)}
+                            </span>
+                        ) : (
+                            <LucideUserCircle2 size={28} className="text-gray-700" />
+                        )}
                     </button>
 
                     {/* ✅ Dropdown */}
                     {openMenu && (
-                        <div className="absolute p-2 right-0 top-12 w-52 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
-                            <Link
-                                href="/login/guest"
-                                className="block px-6 py-3 text-[15px] font-medium text-gray-900 transition-all duration-150 rounded-lg hover:bg-[#E9E8E4]"
-                            >
-                                Guest
-                            </Link>
-                            <Link
-                                href="/login/home-owner"
-                                className="block px-6 py-3 text-[15px] font-medium text-gray-900 transition-all duration-150 rounded-lg hover:bg-[#E9E8E4]"
-                            >
-                                Home Owner
-                            </Link>
+                        <div className="absolute p-2 right-0 top-12 w-65 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
+                            {user ? (
+                                <>
+                                    <Link
+                                        href="/reservations"
+                                        className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
+                                    >
+                                        Reservations
+                                    </Link>
+                                    <Link
+                                        href="/edit-profile"
+                                        className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
+                                    >
+                                        Edit Personal Information
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
+                                    >
+                                        Log out
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/login/guest"
+                                        className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
+                                    >
+                                        Guest
+                                    </Link>
+                                    <Link
+                                        href="/login/home-owner"
+                                        className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
+                                    >
+                                        Home Owner
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     )}
 
-                    {/* Icon garis kanan */}
+                    {/* Divider Right */}
                     <div className="space-y-2">
                         <span className="block w-20 h-[2px] bg-gray-600"></span>
                         <span className="block w-20 h-[2px] bg-gray-600"></span>
@@ -123,7 +179,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* ✅ Animasi */}
+            {/* ✅ Animation */}
             <style jsx>{`
                 @keyframes fadeIn {
                     from {

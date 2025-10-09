@@ -71,7 +71,7 @@ export const villas: Villa[] = [
         address:
             "Setiabudi Regency, Jl. Lapiz Lazuli Blok C No.125, Kel. Cihideung, Kec. Parongpong, Bandung Barat, 40559",
         mapUrl:
-            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37412.68649029256!2d107.52984755674326!3d-6.8706829513027525",
+            "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37412.68649029256!2d107.52984755674326!3d-6.8706829513027525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e4559bd023cd%3A0xb21724a94d165f8!2sJenderal%20Achmad%20Yani%20University!5e1!3m2!1sen!2sid!4v1758353571428!5m2!1sen!2sid",
         totalPrice: "Rp. 12.500.000",
         detailHeader:
             "First impressions have meaning for the future. The unique of Silas House look’s expected to be remembered in a good way. It’s great to catch Silas house iconic facade.",
