@@ -60,9 +60,9 @@ export default function Navbar() {
     };
 
     const menus = [
-        { name: "Stays", href: "/" },
-        { name: "Weddings", href: "/houses/weddings" },
-        { name: "Shoots", href: "/houses/shoots" },
+        { name: "stays", href: "/" },
+        { name: "events", href: "/events" },
+        { name: "shoots", href: "/houses/shoots" },
     ];
 
     return (

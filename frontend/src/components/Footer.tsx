@@ -28,11 +28,11 @@ export default function Footer() {
                         brand ethos
                     </Link>
                     <span>/</span>
-                    <Link href="/stays" className={linkClass("/stays")}>
+                    <Link href="/stay" className={linkClass("/stays")}>
                         stays
                     </Link>
                     <span>/</span>
-                    <Link href="/weddings" className={linkClass("/weddings")}>
+                    <Link href="/houses/weddings" className={linkClass("/weddings")}>
                         weddings
                     </Link>
                     <span>/</span>

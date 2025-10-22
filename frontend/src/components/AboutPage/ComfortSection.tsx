@@ -6,16 +6,14 @@ export default function ComfortSection() {
             {/* Left Side */}
             <div className="w-1/2">
                 <p className="text-gray-400 text-2xl leading-relaxed font-secondary">
-                    Defining Comfort and <br /> Connection.
+                    Attentive Services
                 </p>
             </div>
 
             {/* Right Side */}
             <div className="w-1/2 ml-10">
                 <p className="text-[42px] text-gray-900 font-serif font-primary">
-                    Kunjung promises to offer inspiring spaces and attentive service,
-                    creating experiences that leave a lasting impression on every guest’s
-                    heart.
+                    We’re here to make your stay comfortable with thoughtful service and genuine care. Whatever you need, we’re ready to assist.
                 </p>
             </div>
         </section>
