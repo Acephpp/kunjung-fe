@@ -43,7 +43,7 @@ export default function ProductSection() {
                         </h3>
 
                         {/* Description */}
-                        <p className="mt-2 text-gray-600 text-base text-justify line-clamp-3">
+                        <p className="mt-2 text-gray-600 text-base line-clamp-3">
                             {villa.description}
                         </p>
 
