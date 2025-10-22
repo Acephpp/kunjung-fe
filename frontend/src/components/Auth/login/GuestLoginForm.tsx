@@ -1,39 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
-export default function LoginForm() {
+export default function GuestLoginForm() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Dummy user data
-        const firstName = "Acep";
-        const lastName = "Handika";
-        const validEmail = "admin@gmail.com";
-        const validPassword = "admin123";
+        // ✅ Data khusus Guest
+        const user = {
+            firstName: "Acep",
+            lastName: "Handika",
+            email: "guest@gmail.com",
+            password: "guest123",
+            role: "guest",
+        };
 
-        if (email === validEmail && password === validPassword) {
+        if (email === user.email && password === user.password) {
             setError("");
+            localStorage.setItem("user", JSON.stringify(user));
 
-            // ✅ Save user data to localStorage
-            localStorage.setItem("user", JSON.stringify({ firstName, lastName, email: validEmail }));
+            // ✅ Redirect ke homepage
+            await router.push("/");
 
-            // ✅ Redirect to homepage
-            router.push("/");
-
-            // Optional: force reload so Navbar updates immediately
+            // 🔄 Reload supaya Navbar langsung update
             setTimeout(() => {
-                window.location.reload();
-            }, 300);
+                window.location.href = window.location.origin + "/";
+            }, 400);
         } else {
             setError("Incorrect email or password!");
         }
@@ -67,7 +68,6 @@ export default function LoginForm() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 text-gray-500 hover:text-gray-700"
-                    aria-label="Toggle password visibility"
                 >
                     {showPassword ? (
                         <EyeOff size={18} strokeWidth={1.5} />
@@ -84,10 +84,7 @@ export default function LoginForm() {
                     id="remember"
                     className="w-4 h-4 border-gray-300 text-brown-600 focus:ring-gray-400"
                 />
-                <label
-                    htmlFor="remember"
-                    className="ml-2 text-[16px] text-gray-700 select-none"
-                >
+                <label htmlFor="remember" className="ml-2 text-[16px] text-gray-700 select-none">
                     Remember me
                 </label>
             </div>
@@ -101,21 +98,13 @@ export default function LoginForm() {
                     Log in
                 </button>
 
-                {/* Error Message */}
-                {error && (
-                    <p className="text-red-600 text-sm mt-2">{error}</p>
-                )}
+                {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
 
-                {/* Divider */}
                 <div className="w-full mt-10 mb-5 border-t border-gray-300"></div>
             </div>
 
-            {/* Forgot Password */}
             <div className="text-center">
-                <Link
-                    href="/forgot-password"
-                    className="text-[16px] underline text-gray-700 hover:text-gray-900"
-                >
+                <Link href="/auth/forgot-password/guest" className="text-[16px] underline text-gray-700 hover:text-gray-900">
                     Forgot your password?
                 </Link>
             </div>

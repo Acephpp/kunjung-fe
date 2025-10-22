@@ -1,4 +1,5 @@
-import LoginForm from "@/components/login/LoginForm";
+
+import GuestLoginForm from "@/components/Auth/login/GuestLoginForm";
 import Link from "next/link";
 
 export default function Page() {
@@ -11,12 +12,12 @@ export default function Page() {
                 </h1>
                 <p className="text-[16px] text-gray-600 mb-8">
                     Not got an account?{" "}
-                    <Link href="/register" className="underline hover:text-gray-800">
+                    <Link href="/auth/register/guest" className="underline hover:text-gray-800">
                         Create an account
                     </Link>
                 </p>
 
-                <LoginForm />
+                <GuestLoginForm />
             </main>
 
         </div>

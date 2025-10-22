@@ -155,13 +155,13 @@ export default function Navbar() {
                             ) : (
                                 <>
                                     <Link
-                                        href="/login/guest"
+                                        href="/auth/login/guest"
                                         className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
                                     >
                                         Guest
                                     </Link>
                                     <Link
-                                        href="/login/home-owner"
+                                        href="/auth/login/homeOwner"
                                         className="block px-6 py-3 text-[15px] font-medium text-gray-900 rounded-lg hover:bg-[#E9E8E4]"
                                     >
                                         Home Owner
