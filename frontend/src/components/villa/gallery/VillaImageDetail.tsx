@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { villas } from "../../../app/data/villas";
 
-export default function VillaPhotosPage() {
+export default function VillaImageDetail() {
     const { id } = useParams();
     const villa = villas.find((v) => v.id === Number(id));
 
@@ -20,8 +20,8 @@ export default function VillaPhotosPage() {
                             key={index}
                             className="border-t border-gray-200 pt-16 grid grid-cols-1 md:grid-cols-6 gap-12 items-start"
                         >
-                            {/* 🧾 Text di kiri */}
-                            <div className="md:col-span-2 flex flex-col justify-start">
+                            {/* 🧾 Text kiri (sticky) */}
+                            <div className="md:col-span-2 flex flex-col justify-start max-w-xl sticky top-24 self-start">
                                 <h2 className="text-4xl font-primary mb-6">
                                     {detail.title}
                                 </h2>
@@ -30,7 +30,7 @@ export default function VillaPhotosPage() {
                                 </p>
                             </div>
 
-                            {/* 🖼️ Gambar di kanan */}
+                            {/* 🖼️ Gambar kanan */}
                             <div className="md:col-span-4 space-y-4">
                                 {images.length <= 3 ? (
                                     <>
