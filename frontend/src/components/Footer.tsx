@@ -76,10 +76,6 @@ export default function Footer() {
                     {/* Right Side */}
                     <div className="flex flex-wrap gap-2 text-2xl">
                         <a href="#" className="hover:underline">
-                            linkedin
-                        </a>
-                        <span>/</span>
-                        <a href="#" className="hover:underline">
                             instagram
                         </a>
                         <span>/</span>
@@ -88,7 +84,7 @@ export default function Footer() {
                         </a>
                         <span>/</span>
                         <a href="#" className="hover:underline">
-                            pinterest
+                            youtube
                         </a>
                     </div>
                 </div>
