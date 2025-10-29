@@ -6,6 +6,7 @@ import { addDays, format } from "date-fns";
 import Calendar from "react-date-range/dist/components/Calendar";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Link from "next/link";
 
 export default function ShootSearchBar() {
     const [showRegion, setShowRegion] = useState(false);
@@ -92,9 +93,11 @@ export default function ShootSearchBar() {
                 </div>
 
                 {/* SEARCH BUTTON */}
-                <button className="bg-gray-100 text-gray-700 w-[55px] h-[55px] rounded-xl m-3 flex items-center justify-center hover:bg-gray-200 transition">
-                    <FiSearch size={20} />
-                </button>
+                <Link href="/shoots/searchResult">
+                    <button className="bg-gray-100 text-gray-700 w-[55px] h-[55px] rounded-xl m-3 flex items-center justify-center hover:bg-gray-200 transition">
+                        <FiSearch size={20} />
+                    </button>
+                </Link>
             </div>
 
             {/* === DROPDOWN TYPE OF SHOOT === */}
