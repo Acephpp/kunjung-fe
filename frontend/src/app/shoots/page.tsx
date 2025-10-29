@@ -1,5 +1,3 @@
-import EventSearchBar from '@/components/event/EventSearchBar'
-import FilterBar from '@/components/FilterBar'
 import HeroSection from '@/components/Homepage/HeroSection'
 import ShootSearchBar from '@/components/Shoots/ShootSearchBar'
 import React from 'react'
