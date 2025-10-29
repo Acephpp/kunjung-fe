@@ -95,7 +95,7 @@ export default function Navbar() {
                                 <Link
                                     href={menu.href}
                                     className={`decoration-2 underline-offset-4 ${
-                                        pathname === menu.href
+                                        (pathname === menu.href) || (pathname.includes(menu.href) && menu.href !== "/")
                                             ? "text-black underline"
                                             : "text-[#808080] hover:underline"
                                     }`}
