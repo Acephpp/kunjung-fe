@@ -8,6 +8,7 @@ import Image from "next/image";
 import { villas } from "@/app/data/villas";
 import { useParams, notFound } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
+import Link from "next/link";
 
 export default function VillaDetail() {
     const [date, setDate] = useState<Date | undefined>(undefined);
@@ -185,9 +186,11 @@ export default function VillaDetail() {
 
 
                     {/* Tombol Reserve */}
-                    <Button className="w-full bg-[#7A3E2C] text-white rounded-lg py-8">
-                        <span className="text-3xl font-secondary">Reserve</span>
-                    </Button>
+                    <Link href={`/houses/villa/${id}/reserve`} className="block">
+                        <Button className="w-full bg-[#7A3E2C] hover:bg-[#693424] text-white rounded-lg py-8">
+                            <span className="text-3xl font-secondary">Reserve</span>
+                        </Button>
+                    </Link>
                     <p className="text-sm text-center font-secondary font-bold text-black italic">
                         You won’t be charged yet
                     </p>

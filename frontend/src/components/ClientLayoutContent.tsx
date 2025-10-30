@@ -11,14 +11,18 @@ export default function ClientLayoutContent({
 }) {
     const pathname = usePathname();
 
-    // Cek apakah URL mengandung '/photos'
+    // Cek apakah halaman khusus tanpa layout
     const isPhotosPage = pathname?.includes("/photos");
+    const isReservePage = pathname?.includes("/reserve");
+
+    // Tentukan apakah layout perlu ditampilkan
+    const hideLayout = isPhotosPage || isReservePage;
 
     return (
         <>
-            {!isPhotosPage && <Navbar />}
-            <main className={!isPhotosPage ? "pt-20" : ""}>{children}</main>
-            {!isPhotosPage && <Footer />}
+            {!hideLayout && <Navbar />}
+            <main className={!hideLayout ? "pt-20" : ""}>{children}</main>
+            {!hideLayout && <Footer />}
         </>
     );
 }
