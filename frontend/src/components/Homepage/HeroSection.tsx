@@ -25,7 +25,7 @@ const villas: Villa[] = [
     },
     {
         name: "Elysium Retreat",
-        description: "Luxury Living in the Hills of Bandung",
+        description: "Luxury Living in The Hills of Bandung",
         image: "/images/villa-3.jpg",
     },
     {
@@ -37,14 +37,12 @@ const villas: Villa[] = [
 
 export default function HeroSection() {
     return (
-        <section className="max-w-9xl mx-auto px-10 h-[842px] grid grid-cols-3 gap-5 mt-8">
-            <div className="relative w-full h-full col-span-2 font-primary">
+        <section className="max-w-9xl mx-auto mt-8 px-4 flex flex-col md:px-10 md:h-[842px] md:grid md:grid-cols-3 md:gap-5">
+            {/* SLIDER */}
+            <div className="relative w-full h-[400px] font-primary md:h-full md:col-span-2">
                 <Swiper
                     pagination={{ clickable: true }}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }}
+                    autoplay={{ delay: 5000, disableOnInteraction: false }}
                     loop={true}
                     modules={[Pagination, Autoplay]}
                     className="w-full h-full"
@@ -57,11 +55,14 @@ export default function HeroSection() {
                                     alt={villa.name}
                                     className="w-full h-full object-cover"
                                 />
-                                <div className="absolute bottom-6 left-6 text-white">
-                                    <h2 className="text-[32px] md:text-xl font-semibold">
+
+                                {/* TEXT OVERLAY */}
+                                <div className="absolute bottom-4 left-4 text-white">
+                                    <h2 className="text-[16px] md:text-xl font-semibold">
                                         {villa.name}
                                     </h2>
-                                    <p className="mt-5 text-xl md:text-base">
+
+                                    <p className="mt-2 w-3/4 md:w-full text-[10px] md:text-base leading-tight opacity-90">
                                         {villa.description}
                                     </p>
                                 </div>
@@ -71,39 +72,61 @@ export default function HeroSection() {
                 </Swiper>
 
                 <style jsx global>{`
-                    .swiper-pagination {
-                        text-align: right !important;
-                        padding-right: 1.5rem;
-                        bottom: 1.5rem !important;
-                    }
-                    .swiper-pagination-bullet {
-                        width: 24px;
-                        height: 3px;
-                        border-radius: 2px;
-                        background: white;
-                        opacity: 0.4;
-                        transition: all 0.3s ease;
-                        margin: 0 3px !important;
-                    }
-                    .swiper-pagination-bullet-active {
-                        opacity: 1;
-                        background: white;
-                        width: 48px; /* 🔥 aktif lebih panjang */
-                    }
-                `}</style>
+        /* Desktop */
+        .swiper-pagination {
+            text-align: right !important;
+            padding-right: 1.5rem;
+            bottom: 1.5rem !important;
+        }
+        .swiper-pagination-bullet {
+            width: 24px;
+            height: 3px;
+            border-radius: 2px;
+            background: white;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+            margin: 0 3px !important;
+        }
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: white;
+            width: 48px;
+        }
+
+        /* Mobile Optimized Pagination */
+        @media (max-width: 768px) {
+            .swiper-pagination {
+                padding-right: 1rem !important;
+                bottom: 0.8rem !important;
+            }
+            .swiper-pagination-bullet {
+                width: 14px;
+                height: 2px;
+                margin: 0 2px !important;
+                opacity: 0.4;
+            }
+            .swiper-pagination-bullet-active {
+                width: 28px;
+                height: 2px;
+                opacity: 1;
+            }
+        }
+    `}</style>
             </div>
 
-            <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-9 col-start-3 col-span-1 font-primary">
+
+            {/* PANEL COKLAT */}
+            <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-4 font-primary w-full md:p-9 md:col-start-3 md:col-span-1">
                 <div>
-                    <h1 className="text-[40px] font-bold leading-snug">
+                    <h1 className="text-[24px] md:text-[40px] font-bold leading-snug">
                         Discover Your Most Comfortable Curated Villas
                     </h1>
-                    <p className="mt-6 text-[18px] max-w-xl">
+                    <p className="max-w-sm mt-2 md:mt-6 text-[10px] md:text-[18px] md:max-w-xl">
                         Your insider guides of curated boutique villas in Bandung, Indonesia.
                     </p>
                 </div>
 
-                <span className="text-xl font-medium tracking-wide">
+                <span className="mt-30 text-[12px] md:text-xl font-medium tracking-wide">
                     KUNJUNG Family
                 </span>
             </div>

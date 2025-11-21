@@ -11,13 +11,13 @@ import DefiningComport from "@/components/Homepage/DefiningComport";
 export default function HomePage() {
   return (
     <div>
-      <SearchBar />
+      {/* <SearchBar /> */}
       <HeroSection />
       <DefiningComport />
       <ProviderSection />
       <GallerySection />
-      <TestimoniSection />
-      <ProductSection />
+      {/* <TestimoniSection /> */}
+      {/* <ProductSection /> */}
     </div>
   );
 }
