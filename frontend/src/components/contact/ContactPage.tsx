@@ -2,7 +2,6 @@ export default function ContactPage() {
     return (
         <main className="min-h-screen bg-[#FAF8F3] text-[#1E1E1E] font-primary">
             <section className="max-w-9xl mx-auto px-6 md:px-10 lg:px-16 pt-24 pb-32">
-
                 {/* TITLE */}
                 <div className="text-center mb-24">
                     <p className="text-[20px] mb-3">Get in touch</p>
@@ -13,7 +12,6 @@ export default function ContactPage() {
 
                 {/* CONTENT */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-32 items-start">
-
                     {/* LEFT SIDE TEXT */}
                     <div className="max-w-[650px]">
                         <h2 className="text-[30px] leading-snug mb-4">
@@ -21,21 +19,21 @@ export default function ContactPage() {
                             about stays, events, or content production needs
                         </h2>
                         <p className="text-[20px] text-[#4A4A4A] leading-relaxed">
-                            Reach out anytime, we’re here to make your experience seamless
+                            Reach out anytime, we’re here to make your experience seamless 
                             and unforgettable.
                         </p>
                     </div>
 
                     {/* FORM */}
-                    <form className="w-full space-y-5">
-
+                    <form className="w-full space-y-5 font-secondary">
                         {/* Name */}
                         <div>
                             <label className="text-[13px] mb-1 block">Name*</label>
                             <input
                                 type="text"
                                 placeholder="Name"
-                                className="w-full border border-[#7A3E2C] bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px] outline-none focus:ring-2 focus:ring-[#7A3E2C]"
+                                className="w-full border border-black bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px]
+                                outline-none"
                             />
                         </div>
 
@@ -45,8 +43,8 @@ export default function ContactPage() {
                             <input
                                 type="email"
                                 placeholder="E-mail*"
-                                className="w-full border border-[#7A3E2C] bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px]
-            outline-none focus:ring-2 focus:ring-[#7A3E2C]"
+                                className="w-full border border-black bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px]
+                                outline-none"
                             />
                         </div>
 
@@ -56,8 +54,8 @@ export default function ContactPage() {
                             <input
                                 type="tel"
                                 placeholder="Phone number*"
-                                className="w-full border border-[#7A3E2C] bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px]
-            outline-none focus:ring-2 focus:ring-[#7A3E2C]"
+                                className="w-full border border-black bg-[#FAF8F3] rounded-lg px-4 h-[56px] text-[16px]
+                                outline-none"
                             />
                         </div>
 
@@ -66,12 +64,22 @@ export default function ContactPage() {
                             <label className="text-[13px] mb-1 block">Messages*</label>
                             <textarea
                                 placeholder="Messages*"
-                                className="w-full border border-[#7A3E2C] bg-[#FAF8F3] rounded-lg px-4 py-3 h-[200px] text-[16px]
-            outline-none focus:ring-2 focus:ring-[#7A3E2C] resize-none"
+                                className="w-full border border-black bg-[#FAF8F3] rounded-lg px-4 py-3 h-[200px] text-[16px]
+                                outline-none resize-none"
                             />
                         </div>
-                    </form>
 
+                        {/* BUTTON */}
+                        <div className="pt-4">
+                            <button
+                                type="submit"
+                                className="block bg-[#7A3E2C] text-white rounded-lg px-16 py-3 text-[18px]
+                                hover:bg-[#693424] transition font-secondary"
+                            >
+                                send messages
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </section>
         </main>
