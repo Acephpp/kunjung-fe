@@ -228,7 +228,7 @@ export default function Navbar() {
                                     brand ethos
                                 </Link>
                                 <span className="text-white/40">/</span>
-                                <Link href="/contact" className={linkClass("/about")}>
+                                <Link href="/contact" className={linkClass("/contact")}>
                                     contact
                                 </Link>
                                 <span className="text-[#C3A295]">/</span>

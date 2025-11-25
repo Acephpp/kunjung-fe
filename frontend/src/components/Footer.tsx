@@ -31,7 +31,7 @@ export default function Footer() {
                     </Link>
                     <span className="text-[#C3A295]">/</span>
 
-                    <Link href="/contact" className={linkClass("/about")}>
+                    <Link href="/contact" className={linkClass("/contact")}>
                         contact
                     </Link>
                     <span className="text-[#C3A295]">/</span>
@@ -85,6 +85,8 @@ export default function Footer() {
                     <div
                         className="flex flex-row gap-2 text-[10px] sm:text-xl justify-end whitespace-nowrap"
                     >
+                        <a href="/tnc" className="hover:underline mr-8">TnC & Refund policy</a>
+
                         <a href="#" className="hover:underline">instagram</a>
                         <span>/</span>
                         <a href="#" className="hover:underline">tiktok</a>

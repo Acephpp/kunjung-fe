@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const founderData = {
     title: "Founders' Story",
-    image: "/images/founder.jpg",
+    image: "/images/founder.png",
     alt: "Founder Rosihan",
     paragraphs: [
         `From the beginning of his career, Rosihan has believed that a
