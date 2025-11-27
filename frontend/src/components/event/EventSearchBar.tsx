@@ -1,24 +1,24 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FiSearch, FiArrowRight } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import { addDays, format } from "date-fns";
 import Calendar from "react-date-range/dist/components/Calendar";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Link from "next/link";
 
+type CategoryKey = "celebration" | "gathering" | "business" | null;
+
 export default function EventSearchBar() {
     const [showRegion, setShowRegion] = useState(false);
     const [showDate, setShowDate] = useState(false);
     const [showEvent, setShowEvent] = useState(false);
 
-    const [region, setRegion] = useState("Bandung");
+    // region kosong dulu → "Select region"
+    const [region, setRegion] = useState("");
     const [eventType, setEventType] = useState("");
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-    const [customEvent, setCustomEvent] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -40,8 +40,47 @@ export default function EventSearchBar() {
     const weekendStart = addDays(today, 1);
     const weekendEnd = addDays(today, 2);
 
-    // 🧠 Event type options
-    const eventOptions = ["Celebration", "Wedding", "Gathering", "Meeting", "Other"];
+    // 📂 Data kategori & item
+    const eventCategories: {
+        key: CategoryKey;
+        label: string;
+        items: string[];
+    }[] = [
+            {
+                key: "celebration",
+                label: "Celebration",
+                items: [
+                    "Wedding",
+                    "Birthday Party",
+                    "Engagement Party",
+                    "Anniversary",
+                    "Bridal Shower",
+                    "Baby Shower",
+                ],
+            },
+            {
+                key: "gathering",
+                label: "Gathering",
+                items: ["Reunion", "Arisan", "Syukuran"],
+            },
+            {
+                key: "business",
+                label: "Business",
+                items: ["Meeting"],
+            },
+        ];
+
+    // kategori yang sedang terbuka
+    const [openCategory, setOpenCategory] = useState<CategoryKey>(null);
+
+    const toggleCategory = (key: CategoryKey) => {
+        setOpenCategory((prev) => (prev === key ? null : key));
+    };
+
+    const handleSelectEvent = (name: string) => {
+        setEventType(name);
+        setShowEvent(false);
+    };
 
     return (
         <div className="max-w-5xl mx-auto px-4 mt-4 relative" ref={dropdownRef}>
@@ -58,7 +97,9 @@ export default function EventSearchBar() {
                     }}
                 >
                     <p className="text-[16px] font-medium text-gray-800">Where</p>
-                    <p className="text-[15px] text-gray-400">{region || "Select region"}</p>
+                    <p className="text-[15px] text-gray-400">
+                        {region || "Select region"}
+                    </p>
                 </div>
 
                 <div className="w-px h-8 bg-gray-300" />
@@ -75,7 +116,9 @@ export default function EventSearchBar() {
                 >
                     <p className="text-[16px] font-medium text-gray-800">When</p>
                     <p className="text-[15px] text-gray-400">
-                        {selectedDate ? format(selectedDate, "MMMM dd, yyyy") : "Select dates"}
+                        {selectedDate
+                            ? format(selectedDate, "MMMM dd, yyyy")
+                            : "Select dates"}
                     </p>
                 </div>
 
@@ -92,7 +135,9 @@ export default function EventSearchBar() {
                     }}
                 >
                     <p className="text-[16px] font-medium text-gray-800">Type of event</p>
-                    <p className="text-[15px] text-gray-400">{eventType || "Add event"}</p>
+                    <p className="text-[15px] text-gray-400">
+                        {eventType || "Add event"}
+                    </p>
                 </div>
 
                 {/* SEARCH BUTTON */}
@@ -103,67 +148,64 @@ export default function EventSearchBar() {
                 </Link>
             </div>
 
-            {/* === DROPDOWN TYPE OF EVENT === */}
+            {/* === DROPDOWN TYPE OF EVENT (accordion per kategori) === */}
             {showEvent && (
-                <div className="absolute right-3 mt-2 w-[440px] bg-[#FCFBF7] rounded-2xl shadow-[0_6px_25px_rgba(0,0,0,0.08)] border border-gray-200 p-5 z-50 font-secondary transition-all duration-200 ease-in-out">
-
-                    {/* + Stay Button */}
-                    <div className="mb-4">
-                        <button
-                            onClick={() => {
-                                setEventType("+ Stay");
-                                setSelectedCategory("");
-                                setShowEvent(false);
-                            }}
-                            className="px-4 py-[7px] border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition"
-                        >
-                            + Stay
-                        </button>
-                    </div>
-
-                    <hr className="border-gray-200 mb-4" />
-
-                    {/* Category Buttons */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {eventOptions.map((option) => (
+                <div className="absolute right-3 mt-2 w-[360px] bg-[#FCFBF7] rounded-2xl shadow-[0_6px_25px_rgba(0,0,0,0.08)] border border-gray-200 py-4 z-50 font-secondary">
+                    {eventCategories.map((cat, idxCat) => (
+                        <div key={cat.key}>
+                            {/* Header kategori */}
                             <button
-                                key={option}
-                                onClick={() => setSelectedCategory(option)}
-                                className={`px-4 py-[7px] rounded-full text-sm font-medium transition-all ${selectedCategory === option
-                                    ? "bg-gray-300 text-gray-800"
-                                    : "border border-gray-300 text-gray-700 hover:bg-gray-100"
-                                    }`}
+                                type="button"
+                                onClick={() => toggleCategory(cat.key)}
+                                className="w-full px-5 py-2 flex items-center justify-between"
                             >
-                                {option}
+                                <span className="text-[16px] font-semibold text-gray-900">
+                                    {cat.label}
+                                </span>
+                                <span className="text-[18px] leading-none text-gray-800">
+                                    {openCategory === cat.key ? "−" : "+"}
+                                </span>
                             </button>
-                        ))}
-                    </div>
 
-                    {/* Custom Input */}
-                    {selectedCategory && (
-                        <div className="flex items-center border border-gray-300 rounded-full overflow-hidden focus-within:border-gray-400 transition">
-                            <input
-                                type="text"
-                                placeholder="Enter event name"
-                                value={customEvent}
-                                onChange={(e) => setCustomEvent(e.target.value)}
-                                className="flex-1 px-4 py-[10px] text-[15px] outline-none bg-transparent placeholder-gray-400"
-                            />
-                            <button
-                                onClick={() => {
-                                    if (customEvent.trim()) {
-                                        setEventType(customEvent.trim());
-                                        setSelectedCategory("");
-                                        setCustomEvent("");
-                                        setShowEvent(false);
-                                    }
-                                }}
-                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition"
-                            >
-                                <FiArrowRight size={18} className="text-gray-600" />
-                            </button>
+                            {/* List item ketika kategori terbuka */}
+                            {openCategory === cat.key && (
+                                <div className="mt-3 mb-3">
+                                    {cat.items.map((item, idx) => (
+                                        <div key={item} className="px-5">
+                                            {/* ROW ITEM */}
+                                            <div
+                                                className="flex items-center justify-between pl-3 pr-3 py-2 cursor-pointer"
+                                                onClick={() => handleSelectEvent(item)}
+                                            >
+                                                <span className="text-[14px] text-gray-800">{item}</span>
+
+                                                <button
+                                                    type="button"
+                                                    className={`text-[12px] ${eventType === item
+                                                            ? "text-gray-500"
+                                                            : "text-gray-600 underline"
+                                                        }`}
+                                                >
+                                                    {eventType === item ? "selected" : "select"}
+                                                </button>
+                                            </div>
+
+                                            {/* BORDER JARAK KIRI–KANAN */}
+                                            {idx < cat.items.length - 1 && (
+                                                <div className="border-b border-gray-200 mx-3" />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+
+                            {/* Garis pemisah antar kategori */}
+                            {idxCat < eventCategories.length - 1 && (
+                                <div className="border-b border-gray-200 mx-5 my-1" />
+                            )}
                         </div>
-                    )}
+                    ))}
                 </div>
             )}
 
@@ -180,7 +222,9 @@ export default function EventSearchBar() {
                             }}
                         >
                             <p className="font-semibold text-gray-800">Today</p>
-                            <p className="text-sm text-gray-500">{format(today, "MMMM dd")}</p>
+                            <p className="text-sm text-gray-500">
+                                {format(today, "MMMM dd")}
+                            </p>
                         </div>
 
                         <div
@@ -191,7 +235,9 @@ export default function EventSearchBar() {
                             }}
                         >
                             <p className="font-semibold text-gray-800">Tomorrow</p>
-                            <p className="text-sm text-gray-500">{format(tomorrow, "MMMM dd")}</p>
+                            <p className="text-sm text-gray-500">
+                                {format(tomorrow, "MMMM dd")}
+                            </p>
                         </div>
 
                         <div
@@ -203,7 +249,10 @@ export default function EventSearchBar() {
                         >
                             <p className="font-semibold text-gray-800">This weekend</p>
                             <p className="text-sm text-gray-500">
-                                {`${format(weekendStart, "MMMM dd")} - ${format(weekendEnd, "dd")}`}
+                                {`${format(weekendStart, "MMMM dd")} - ${format(
+                                    weekendEnd,
+                                    "dd"
+                                )}`}
                             </p>
                         </div>
                     </div>
@@ -228,9 +277,6 @@ export default function EventSearchBar() {
                 <div className="absolute left-3 mt-2 w-[380px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
                     {[
                         { city: "Bandung", region: "West Java, Indonesia" },
-                        { city: "Jakarta", region: "Capital Region, Indonesia" },
-                        { city: "Bali", region: "Bali, Indonesia" },
-                        { city: "Surabaya", region: "East Java, Indonesia" },
                     ].map((loc) => (
                         <div
                             key={loc.city}
@@ -258,7 +304,9 @@ export default function EventSearchBar() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-[16px] font-medium text-gray-800">{loc.city}</p>
+                                <p className="text-[16px] font-medium text-gray-800">
+                                    {loc.city}
+                                </p>
                                 <p className="text-[14px] text-gray-500">{loc.region}</p>
                             </div>
                         </div>
