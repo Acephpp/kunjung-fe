@@ -76,9 +76,7 @@ export default function SearchBar() {
                 >
                     <p className="text-[16px] font-medium text-gray-800">Check in</p>
                     <p className="text-[16px] text-gray-400">
-                        {dateRange[0].startDate
-                            ? dateRange[0].startDate?.toDateString()
-                            : "Select date"}
+                        Select dates
                     </p>
                 </div>
 
@@ -97,9 +95,7 @@ export default function SearchBar() {
                 >
                     <p className="text-[16px] font-medium text-gray-800">Check out</p>
                     <p className="text-[16px] text-gray-400">
-                        {dateRange[0].endDate
-                            ? dateRange[0].endDate?.toDateString()
-                            : "Select date"}
+                        Select dates
                     </p>
                 </div>
 
