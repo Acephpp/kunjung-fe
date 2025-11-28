@@ -264,7 +264,7 @@ export default function FilterBar() {
                         Sort
                     </button>
 
-                    {/* ✅ Modal Sort */}
+                    {/* Modal Sort */}
                     {showSort && (
                         <div className="absolute right-0 mt-5 w-[280px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-4 z-50">
                             <div className="flex flex-col gap-3 text-gray-800 text-[15px]">

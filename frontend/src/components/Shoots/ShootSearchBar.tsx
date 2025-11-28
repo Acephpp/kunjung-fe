@@ -8,14 +8,33 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Link from "next/link";
 
+type ShootOption =
+    | "instacation"
+    | "session-morning"
+    | "session-afternoon"
+    | "session-fullday"
+    | "";
+
+type ShootSection = "instacation" | "session" | "";
+type ActiveDateField = "single" | "checkin" | "checkout" | null;
+
 export default function ShootSearchBar() {
     const [showRegion, setShowRegion] = useState(false);
     const [showDate, setShowDate] = useState(false);
     const [showShoot, setShowShoot] = useState(false);
 
-    const [region, setRegion] = useState("Bandung");
-    const [shootType, setShootType] = useState("");
+    const [region, setRegion] = useState("");
+    const [shootType, setShootType] = useState<ShootOption>("");
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+    // untuk Instacation (range)
+    const [checkIn, setCheckIn] = useState<Date | null>(null);
+    const [checkOut, setCheckOut] = useState<Date | null>(null);
+    const [activeDateField, setActiveDateField] =
+        useState<ActiveDateField>("single");
+
+    // section yang sedang dibuka di popup type of shoot
+    const [openShootSection, setOpenShootSection] = useState<ShootSection>("");
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,6 +56,56 @@ export default function ShootSearchBar() {
     const weekendStart = addDays(today, 1);
     const weekendEnd = addDays(today, 2);
 
+    const getShootLabel = () => {
+        switch (shootType) {
+            case "instacation":
+                return "Instacation";
+            case "session-morning":
+                return "Morning session";
+            case "session-afternoon":
+                return "Afternoon session";
+            case "session-fullday":
+                return "Full day session";
+            default:
+                return "Add shoot";
+        }
+    };
+
+    const handleSelectShoot = (type: ShootOption) => {
+        setShootType(type);
+        setShowShoot(false);
+
+        // kalau pilih instacation, date field default ke range (checkin/checkout)
+        if (type === "instacation") {
+            setActiveDateField("checkin");
+        } else {
+            setActiveDateField("single");
+        }
+    };
+
+    // helper tampilkan text di check-in / check-out
+    const renderCheckInText = () =>
+        checkIn ? format(checkIn, "MMM dd") : "Select dates";
+
+    const renderCheckOutText = () =>
+        checkOut ? format(checkOut, "MMM dd") : "Select dates";
+
+    // handler untuk quick option & calendar (pakai activeDateField)
+    const applyDate = (date: Date) => {
+        if (shootType === "instacation" && activeDateField !== "single") {
+            if (activeDateField === "checkin") {
+                setCheckIn(date);
+                // kalau check-out belum diisi, next pilihannya otomatis checkout
+                if (!checkOut) setActiveDateField("checkout");
+            } else if (activeDateField === "checkout") {
+                setCheckOut(date);
+            }
+        } else {
+            setSelectedDate(date);
+        }
+        setShowDate(false);
+    };
+
     return (
         <div className="max-w-5xl mx-auto px-4 mt-4 relative" ref={dropdownRef}>
             {/* === Search Bar === */}
@@ -53,27 +122,86 @@ export default function ShootSearchBar() {
                     }}
                 >
                     <p className="text-[16px] font-medium text-gray-800">Where</p>
-                    <p className="text-[15px] text-gray-400">{region || "Select region"}</p>
+                    <p className="text-[15px] text-gray-400">
+                        {region || "Select region"}
+                    </p>
                 </div>
 
                 <div className="w-px h-8 bg-gray-300" />
 
-                {/* WHEN */}
-                <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showDate ? "bg-gray-100" : "hover:bg-gray-100/60"
-                    }`}
-                    onClick={() => {
-                        setShowDate(!showDate);
-                        setShowRegion(false);
-                        setShowShoot(false);
-                    }}
-                >
-                    <p className="text-[16px] font-medium text-gray-800">When</p>
-                    <p className="text-[15px] text-gray-400">
-                        {selectedDate ? format(selectedDate, "MMMM dd, yyyy") : "Select dates"}
-                    </p>
-                </div>
+                {/* === DATE PART === */}
+                {shootType === "instacation" ? (
+                    <>
+                        {/* CHECK IN */}
+                        <div
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
+                                showDate && activeDateField === "checkin"
+                                    ? "bg-gray-100"
+                                    : "hover:bg-gray-100/60"
+                            }`}
+                            onClick={() => {
+                                setActiveDateField("checkin");
+                                setShowDate(true);
+                                setShowRegion(false);
+                                setShowShoot(false);
+                            }}
+                        >
+                            <p className="text-[16px] font-medium text-gray-800">
+                                Check in
+                            </p>
+                            <p className="text-[15px] text-gray-400">
+                                {renderCheckInText()}
+                            </p>
+                        </div>
+
+                        <div className="w-px h-8 bg-gray-300" />
+
+                        {/* CHECK OUT */}
+                        <div
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
+                                showDate && activeDateField === "checkout"
+                                    ? "bg-gray-100"
+                                    : "hover:bg-gray-100/60"
+                            }`}
+                            onClick={() => {
+                                setActiveDateField("checkout");
+                                setShowDate(true);
+                                setShowRegion(false);
+                                setShowShoot(false);
+                            }}
+                        >
+                            <p className="text-[16px] font-medium text-gray-800">
+                                Check out
+                            </p>
+                            <p className="text-[15px] text-gray-400">
+                                {renderCheckOutText()}
+                            </p>
+                        </div>
+                    </>
+                ) : (
+                    // MODE BIASA: hanya "When"
+                    <>
+                        <div className="w-px h-8 bg-gray-300" />
+                        <div
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
+                                showDate ? "bg-gray-100" : "hover:bg-gray-100/60"
+                            }`}
+                            onClick={() => {
+                                setActiveDateField("single");
+                                setShowDate(!showDate);
+                                setShowRegion(false);
+                                setShowShoot(false);
+                            }}
+                        >
+                            <p className="text-[16px] font-medium text-gray-800">When</p>
+                            <p className="text-[15px] text-gray-400">
+                                {selectedDate
+                                    ? format(selectedDate, "MMMM dd, yyyy")
+                                    : "Select dates"}
+                            </p>
+                        </div>
+                    </>
+                )}
 
                 <div className="w-px h-8 bg-gray-300" />
 
@@ -89,7 +217,7 @@ export default function ShootSearchBar() {
                     }}
                 >
                     <p className="text-[16px] font-medium text-gray-800">Type of shoot</p>
-                    <p className="text-[15px] text-gray-400">{shootType || "Add shoot"}</p>
+                    <p className="text-[15px] text-gray-400">{getShootLabel()}</p>
                 </div>
 
                 {/* SEARCH BUTTON */}
@@ -100,34 +228,155 @@ export default function ShootSearchBar() {
                 </Link>
             </div>
 
-            {/* === DROPDOWN TYPE OF SHOOT === */}
+            {/* === DROPDOWN TYPE OF SHOOT (Instacation + Session shoot) === */}
             {showShoot && (
-                <div className="absolute right-3 mt-2 w-[380px] bg-[#FCFBF7] rounded-2xl shadow-[0_6px_25px_rgba(0,0,0,0.08)] border border-gray-200 p-5 z-50 font-secondary transition-all duration-200 ease-in-out">
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => {
-                                setShootType("One day shoot");
-                                setShowShoot(false);
-                            }}
-                            className={`flex-1 px-4 py-[8px] border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition ${
-                                shootType === "One day shoot" ? "bg-gray-200 font-medium" : ""
-                            }`}
-                        >
-                            One day shoot
-                        </button>
+                <div className="absolute right-3 mt-2 w-[380px] bg-[#FCFBF7] rounded-2xl shadow-[0_6px_25px_rgba(0,0,0,0.08)] border border-gray-200 py-4 z-50 font-secondary">
+                    {/* Instacation header */}
+                    <button
+                        type="button"
+                        className="w-full px-5 py-2 flex items-center justify-between"
+                        onClick={() =>
+                            setOpenShootSection((prev) =>
+                                prev === "instacation" ? "" : "instacation"
+                            )
+                        }
+                    >
+                        <span className="text-[16px] font-semibold text-gray-900">
+                            Instacation
+                        </span>
+                        <span className="text-[18px] leading-none text-gray-800">
+                            {openShootSection === "instacation" ? "−" : "+"}
+                        </span>
+                    </button>
 
-                        <button
-                            onClick={() => {
-                                setShootType("Shoot & Stay");
-                                setShowShoot(false);
-                            }}
-                            className={`flex-1 px-4 py-[8px] border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition ${
-                                shootType === "Shoot & Stay" ? "bg-gray-200 font-medium" : ""
-                            }`}
-                        >
-                            Shoot & Stay
-                        </button>
-                    </div>
+                    {/* Instacation content */}
+                    {openShootSection === "instacation" && (
+                        <div className="mt-2 mb-4 px-5">
+                            <div className="flex items-center justify-between">
+                                <p className="text-[13px] text-gray-600 leading-snug">
+                                    This package include
+                                    <br />
+                                    stay &amp; shooting session
+                                </p>
+                                <button
+                                    type="button"
+                                    className={`text-[12px] ${
+                                        shootType === "instacation"
+                                            ? "text-gray-500"
+                                            : "text-gray-600 underline"
+                                    }`}
+                                    onClick={() => handleSelectShoot("instacation")}
+                                >
+                                    {shootType === "instacation" ? "selected" : "select"}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="border-b border-gray-200 mx-5 my-2" />
+
+                    {/* Session shoot header */}
+                    <button
+                        type="button"
+                        className="w-full px-5 py-2 flex items-center justify-between"
+                        onClick={() =>
+                            setOpenShootSection((prev) =>
+                                prev === "session" ? "" : "session"
+                            )
+                        }
+                    >
+                        <span className="text-[16px] font-semibold text-gray-900">
+                            Session shoot
+                        </span>
+                        <span className="text-[18px] leading-none text-gray-800">
+                            {openShootSection === "session" ? "−" : "+"}
+                        </span>
+                    </button>
+
+                    {/* Session shoot list */}
+                    {openShootSection === "session" && (
+                        <div className="mt-3 mb-1">
+                            {/* Morning */}
+                            <div className="px-5">
+                                <div className="flex items-center justify-between pl-3 pr-3 py-2 cursor-pointer">
+                                    <div>
+                                        <p className="text-[13px] text-gray-700">
+                                            Morning session (5hr)
+                                        </p>
+                                        <p className="text-[13px] font-semibold text-gray-900">
+                                            07am—12pm
+                                        </p>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSelectShoot("session-morning")}
+                                        className={`text-[12px] ${
+                                            shootType === "session-morning"
+                                                ? "text-gray-500"
+                                                : "text-gray-600 underline"
+                                        }`}
+                                    >
+                                        {shootType === "session-morning" ? "selected" : "select"}
+                                    </button>
+                                </div>
+                                <div className="border-b border-gray-200 mx-3" />
+                            </div>
+
+                            {/* Afternoon */}
+                            <div className="px-5 mt-1">
+                                <div className="flex items-center justify-between pl-3 pr-3 py-2 cursor-pointer">
+                                    <div>
+                                        <p className="text-[13px] text-gray-700">
+                                            Afternoon session (5hr)
+                                        </p>
+                                        <p className="text-[13px] font-semibold text-gray-900">
+                                            01pm—06pm
+                                        </p>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSelectShoot("session-afternoon")}
+                                        className={`text-[12px] ${
+                                            shootType === "session-afternoon"
+                                                ? "text-gray-500"
+                                                : "text-gray-600 underline"
+                                        }`}
+                                    >
+                                        {shootType === "session-afternoon" ? "selected" : "select"}
+                                    </button>
+                                </div>
+                                <div className="border-b border-gray-200 mx-3" />
+                            </div>
+
+                            {/* Full day */}
+                            <div className="px-5 mt-1">
+                                <div className="flex items-center justify-between pl-3 pr-3 py-2 cursor-pointer">
+                                    <div>
+                                        <p className="text-[13px] text-gray-700">
+                                            Full day session (11hr)
+                                        </p>
+                                        <p className="text-[13px] font-semibold text-gray-900">
+                                            07am—06pm
+                                        </p>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSelectShoot("session-fullday")}
+                                        className={`text-[12px] ${
+                                            shootType === "session-fullday"
+                                                ? "text-gray-500"
+                                                : "text-gray-600 underline"
+                                        }`}
+                                    >
+                                        {shootType === "session-fullday" ? "selected" : "select"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -138,36 +387,34 @@ export default function ShootSearchBar() {
                     <div className="w-[40%] bg-[#F9F8F4] flex flex-col justify-start gap-3 p-5 border-r border-gray-200">
                         <div
                             className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                                setSelectedDate(today);
-                                setShowDate(false);
-                            }}
+                            onClick={() => applyDate(today)}
                         >
                             <p className="font-semibold text-gray-800">Today</p>
-                            <p className="text-sm text-gray-500">{format(today, "MMMM dd")}</p>
+                            <p className="text-sm text-gray-500">
+                                {format(today, "MMMM dd")}
+                            </p>
                         </div>
 
                         <div
                             className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                                setSelectedDate(tomorrow);
-                                setShowDate(false);
-                            }}
+                            onClick={() => applyDate(tomorrow)}
                         >
                             <p className="font-semibold text-gray-800">Tomorrow</p>
-                            <p className="text-sm text-gray-500">{format(tomorrow, "MMMM dd")}</p>
+                            <p className="text-sm text-gray-500">
+                                {format(tomorrow, "MMMM dd")}
+                            </p>
                         </div>
 
                         <div
                             className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                                setSelectedDate(weekendStart);
-                                setShowDate(false);
-                            }}
+                            onClick={() => applyDate(weekendStart)}
                         >
                             <p className="font-semibold text-gray-800">This weekend</p>
                             <p className="text-sm text-gray-500">
-                                {`${format(weekendStart, "MMMM dd")} - ${format(weekendEnd, "dd")}`}
+                                {`${format(weekendStart, "MMMM dd")} - ${format(
+                                    weekendEnd,
+                                    "dd"
+                                )}`}
                             </p>
                         </div>
                     </div>
@@ -175,11 +422,17 @@ export default function ShootSearchBar() {
                     {/* RIGHT CALENDAR */}
                     <div className="flex-1 bg-white p-5">
                         <Calendar
-                            date={selectedDate || new Date()}
-                            onChange={(date: Date) => {
-                                setSelectedDate(date);
-                                setShowDate(false);
-                            }}
+                            date={
+                                (shootType === "instacation" &&
+                                    activeDateField === "checkout" &&
+                                    checkOut) ||
+                                (shootType === "instacation" &&
+                                    activeDateField === "checkin" &&
+                                    checkIn) ||
+                                selectedDate ||
+                                new Date()
+                            }
+                            onChange={(date: Date) => applyDate(date)}
                             color="#7A3E2C"
                             monthDisplayFormat="MMMM yyyy"
                         />
@@ -190,12 +443,7 @@ export default function ShootSearchBar() {
             {/* === DROPDOWN REGION === */}
             {showRegion && (
                 <div className="absolute left-3 mt-2 w-[380px] bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
-                    {[
-                        { city: "Bandung", region: "West Java, Indonesia" },
-                        { city: "Jakarta", region: "Capital Region, Indonesia" },
-                        { city: "Bali", region: "Bali, Indonesia" },
-                        { city: "Surabaya", region: "East Java, Indonesia" },
-                    ].map((loc) => (
+                    {[{ city: "Bandung", region: "West Java, Indonesia" }].map((loc) => (
                         <div
                             key={loc.city}
                             onClick={() => {
@@ -222,7 +470,9 @@ export default function ShootSearchBar() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-[16px] font-medium text-gray-800">{loc.city}</p>
+                                <p className="text-[16px] font-medium text-gray-800">
+                                    {loc.city}
+                                </p>
                                 <p className="text-[14px] text-gray-500">{loc.region}</p>
                             </div>
                         </div>
