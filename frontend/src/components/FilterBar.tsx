@@ -15,12 +15,13 @@ export default function FilterBar() {
     const [showGuests, setShowGuests] = useState(false);
 
     const [destination, setDestination] = useState("");
-    const [guests, setGuests] = useState(0);
-    const [price, setPrice] = useState([0, 6430000]);
-    const [amenities, setAmenities] = useState<string[]>([]);
-    const [propertyType, setPropertyType] = useState("any");
-    const [sortOption, setSortOption] = useState("Relevance");
 
+    // guests detail (SAMA DENGAN SearchBar)
+    const [adults, setAdults] = useState(0);
+    const [children, setChildren] = useState(0);
+    const [infants, setInfants] = useState(0);
+
+    // date state (SAMA DENGAN SearchBar)
     const [dateRange, setDateRange] = useState<Range[]>([
         {
             startDate: new Date(),
@@ -28,6 +29,15 @@ export default function FilterBar() {
             key: "selection",
         },
     ]);
+
+    const [checkInDate, setCheckInDate] = useState<Date | null>(null);
+    const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+
+    // filter lain
+    const [price, setPrice] = useState([0, 6430000]);
+    const [amenities, setAmenities] = useState<string[]>([]);
+    const [propertyType, setPropertyType] = useState("any");
+    const [sortOption, setSortOption] = useState("Relevance");
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +65,86 @@ export default function FilterBar() {
         );
     };
 
+    const getGuestText = () => {
+        const guestCount = adults + children;
+        const infantCount = infants;
+
+        if (guestCount === 0 && infantCount === 0) return "Add guests";
+        if (infantCount === 0)
+            return `${guestCount} guest${guestCount > 1 ? "s" : ""}`;
+        if (guestCount === 0)
+            return `${infantCount} infant${infantCount > 1 ? "s" : ""}`;
+
+        return `${guestCount} guest${guestCount > 1 ? "s" : ""}, ${infantCount} infant${
+            infantCount > 1 ? "s" : ""
+        }`;
+    };
+
+    const formatLabelDate = (date: Date | null) => {
+        if (!date) return "Select dates";
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+        });
+    };
+
+    const handleDateChange = (item: any) => {
+        const sel = item.selection as Range;
+        setDateRange([sel]);
+
+        const start = sel.startDate ?? null;
+        const end = sel.endDate ?? null;
+
+        if (showCheckIn) {
+            setCheckInDate(start);
+            setCheckOutDate(null);
+            setShowCheckIn(false);
+            setShowCheckOut(true);
+            return;
+        }
+
+        if (showCheckOut) {
+            setCheckOutDate(end);
+            setShowCheckOut(false);
+            return;
+        }
+    };
+
+    const GuestRow = ({
+        title,
+        subtitle,
+        value,
+        onChange,
+    }: {
+        title: string;
+        subtitle: string;
+        value: number;
+        onChange: (val: number) => void;
+    }) => (
+        <div className="flex items-center justify-between py-4 border-b border-gray-200 last:border-b-0">
+            <div>
+                <p className="text-[15px] font-medium text-gray-800">{title}</p>
+                <p className="text-[13px] text-gray-500">{subtitle}</p>
+            </div>
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={() => onChange(Math.max(0, value - 1))}
+                    className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled={value === 0}
+                >
+                    <FiMinus size={14} />
+                </button>
+                <span className="w-6 text-center text-gray-800">{value}</span>
+                <button
+                    onClick={() => onChange(value + 1)}
+                    className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100"
+                >
+                    <FiPlus size={14} />
+                </button>
+            </div>
+        </div>
+    );
+
     return (
         <div className="mx-auto mt-4 relative font-secondary" ref={dropdownRef}>
             <div className="flex items-center justify-between gap-3 relative">
@@ -64,6 +154,10 @@ export default function FilterBar() {
                         onClick={() => {
                             setShowFilter(!showFilter);
                             setShowSort(false);
+                            setShowWhere(false);
+                            setShowCheckIn(false);
+                            setShowCheckOut(false);
+                            setShowGuests(false);
                         }}
                         className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition"
                     >
@@ -71,7 +165,6 @@ export default function FilterBar() {
                         Filter
                     </button>
 
-                    {/* ✅ Modal muncul di bawah tombol Filter */}
                     {showFilter && (
                         <div className="absolute left-0 mt-5 w-[400px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-6 z-50">
                             <h2 className="text-center font-primary text-2xl font-semibold mb-10">
@@ -154,25 +247,66 @@ export default function FilterBar() {
                 </div>
 
                 {/* Main Search Bar */}
-                <div className="flex flex-1 items-center justify-between bg-[#FCFBF7] border border-gray-300 rounded-2xl shadow-sm overflow-hidden h-[70px]">
+                <div className="flex flex-1 items-center justify-between bg-[#FCFBF7] border border-gray-300 rounded-2xl shadow-sm h-[70px] overflow-visible">
                     {/* Where */}
-                    <div
-                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                            showWhere ? "bg-gray-200" : "hover:bg-gray-100/70"
-                        }`}
-                        onClick={() => {
-                            setShowWhere(!showWhere);
-                            setShowCheckIn(false);
-                            setShowCheckOut(false);
-                            setShowGuests(false);
-                            setShowFilter(false);
-                            setShowSort(false);
-                        }}
-                    >
-                        <p className="text-[15px] font-semibold text-gray-800">Where</p>
-                        <p className="text-[15px] text-gray-400">
-                            {destination ? destination : "Select region"}
-                        </p>
+                    <div className="relative flex-1 max-w-[400px]">
+                        <div
+                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${
+                                showWhere ? "bg-gray-200" : "hover:bg-gray-100/70"
+                            }`}
+                            onClick={() => {
+                                setShowWhere(!showWhere);
+                                setShowCheckIn(false);
+                                setShowCheckOut(false);
+                                setShowGuests(false);
+                                setShowFilter(false);
+                                setShowSort(false);
+                            }}
+                        >
+                            <p className="text-[16px] font-medium text-gray-800">Where</p>
+                            <p className="text-[16px] text-gray-400">
+                                {destination ? destination : "Select region"}
+                            </p>
+                        </div>
+
+                        {/* Popup WHERE – width 400, sejajar kiri dengan kolom */}
+                        {showWhere && (
+                            <div className="absolute left-0 mt-2 w-[400px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
+                                <div
+                                    onClick={() => {
+                                        setDestination("Bandung");
+                                        setShowWhere(false);
+                                    }}
+                                    className="flex items-center gap-4 p-3 hover:bg-gray-100 rounded-xl cursor-pointer"
+                                >
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={2}
+                                            stroke="currentColor"
+                                            className="w-6 h-6 text-gray-700"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M12 21c0 0 6-6.75 6-11.25A6 6 0 0 0 6 9.75C6 14.25 12 21 12 21z"
+                                            />
+                                            <circle cx="12" cy="9.75" r="2.25" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p className="text-[16px] font-medium text-gray-800">
+                                            Bandung
+                                        </p>
+                                        <p className="text-[14px] text-gray-500">
+                                            West Java, Indonesia
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="w-px h-8 bg-gray-300" />
@@ -191,11 +325,9 @@ export default function FilterBar() {
                             setShowSort(false);
                         }}
                     >
-                        <p className="text-[15px] font-semibold text-gray-800">Check in</p>
-                        <p className="text-[15px] text-gray-400">
-                            {dateRange[0].startDate
-                                ? dateRange[0].startDate?.toDateString()
-                                : "Select dates"}
+                        <p className="text-[16px] font-medium text-gray-800">Check in</p>
+                        <p className="text-[16px] text-gray-400">
+                            {formatLabelDate(checkInDate)}
                         </p>
                     </div>
 
@@ -215,34 +347,56 @@ export default function FilterBar() {
                             setShowSort(false);
                         }}
                     >
-                        <p className="text-[15px] font-semibold text-gray-800">Check out</p>
-                        <p className="text-[15px] text-gray-400">
-                            {dateRange[0].endDate
-                                ? dateRange[0].endDate?.toDateString()
-                                : "Select dates"}
+                        <p className="text-[16px] font-medium text-gray-800">Check out</p>
+                        <p className="text-[16px] text-gray-400">
+                            {formatLabelDate(checkOutDate)}
                         </p>
                     </div>
 
                     <div className="w-px h-8 bg-gray-300" />
 
                     {/* Who */}
-                    <div
-                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                            showGuests ? "bg-gray-200" : "hover:bg-gray-100/70"
-                        }`}
-                        onClick={() => {
-                            setShowGuests(!showGuests);
-                            setShowWhere(false);
-                            setShowCheckIn(false);
-                            setShowCheckOut(false);
-                            setShowFilter(false);
-                            setShowSort(false);
-                        }}
-                    >
-                        <p className="text-[15px] font-semibold text-gray-800">Who</p>
-                        <p className="text-[15px] text-gray-400">
-                            {guests > 0 ? `${guests} guests` : "Add guest"}
-                        </p>
+                    <div className="relative flex-1 max-w-[380px]">
+                        <div
+                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${
+                                showGuests ? "bg-gray-200" : "hover:bg-gray-100/70"
+                            }`}
+                            onClick={() => {
+                                setShowGuests(!showGuests);
+                                setShowWhere(false);
+                                setShowCheckIn(false);
+                                setShowCheckOut(false);
+                                setShowFilter(false);
+                                setShowSort(false);
+                            }}
+                        >
+                            <p className="text-[16px] font-medium text-gray-800">Who</p>
+                            <p className="text-[16px] text-gray-400">{getGuestText()}</p>
+                        </div>
+
+                        {/* Popup WHO – width 380, sejajar KANAN dengan kolom */}
+                        {showGuests && (
+                            <div className="absolute right-0 mt-2 w-[380px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 px-7 py-5 z-50 font-secondary">
+                                <GuestRow
+                                    title="Adults"
+                                    subtitle="Age 13 or above"
+                                    value={adults}
+                                    onChange={setAdults}
+                                />
+                                <GuestRow
+                                    title="Children"
+                                    subtitle="Age 2–12"
+                                    value={children}
+                                    onChange={setChildren}
+                                />
+                                <GuestRow
+                                    title="Infants"
+                                    subtitle="Under 2"
+                                    value={infants}
+                                    onChange={setInfants}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Search Button */}
@@ -257,6 +411,10 @@ export default function FilterBar() {
                         onClick={() => {
                             setShowSort(!showSort);
                             setShowFilter(false);
+                            setShowWhere(false);
+                            setShowCheckIn(false);
+                            setShowCheckOut(false);
+                            setShowGuests(false);
                         }}
                         className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-xl bg-[#F8F6F2] text-gray-800 font-medium hover:bg-gray-100 transition"
                     >
@@ -264,7 +422,6 @@ export default function FilterBar() {
                         Sort
                     </button>
 
-                    {/* Modal Sort */}
                     {showSort && (
                         <div className="absolute right-0 mt-5 w-[280px] bg-[#FCFBF7] rounded-3xl shadow-lg border border-gray-200 p-4 z-50">
                             <div className="flex flex-col gap-3 text-gray-800 text-[15px]">
@@ -294,6 +451,21 @@ export default function FilterBar() {
                     )}
                 </div>
             </div>
+
+            {/* Dropdown Date (Check in & Check out) */}
+            {(showCheckIn || showCheckOut) && (
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
+                    <DateRange
+                        ranges={dateRange}
+                        onChange={handleDateChange}
+                        rangeColors={["#7A3E2C"]}
+                        months={2}
+                        direction="horizontal"
+                        moveRangeOnFirstSelection={false}
+                        editableDateInputs={true}
+                    />
+                </div>
+            )}
         </div>
     );
 }

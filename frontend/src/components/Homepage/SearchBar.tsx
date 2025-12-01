@@ -5,6 +5,7 @@ import { FiSearch, FiMinus, FiPlus } from "react-icons/fi";
 import { DateRange, Range } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Link from "next/link";
 
 export default function SearchBar() {
     const [showWhere, setShowWhere] = useState(false);
@@ -62,9 +63,8 @@ export default function SearchBar() {
         if (guestCount === 0)
             return `${infantCount} infant${infantCount > 1 ? "s" : ""}`;
 
-        return `${guestCount} guest${guestCount > 1 ? "s" : ""}, ${infantCount} infant${
-            infantCount > 1 ? "s" : ""
-        }`;
+        return `${guestCount} guest${guestCount > 1 ? "s" : ""}, ${infantCount} infant${infantCount > 1 ? "s" : ""
+            }`;
     };
 
     // label tanggal
@@ -140,9 +140,8 @@ export default function SearchBar() {
             <div className="flex items-center bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 overflow-hidden h-[70px] font-secondary">
                 {/* Where */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showWhere ? "bg-gray-200" : "hover:bg-gray-200/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showWhere ? "bg-gray-200" : "hover:bg-gray-200/60"
+                        }`}
                     onClick={() => {
                         setShowWhere(!showWhere);
                         setShowCheckIn(false);
@@ -160,9 +159,8 @@ export default function SearchBar() {
 
                 {/* Check in */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showCheckIn ? "bg-gray-200" : "hover:bg-gray-200/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showCheckIn ? "bg-gray-200" : "hover:bg-gray-200/60"
+                        }`}
                     onClick={() => {
                         setShowCheckIn(!showCheckIn);
                         setShowWhere(false);
@@ -180,9 +178,8 @@ export default function SearchBar() {
 
                 {/* Check out */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showCheckOut ? "bg-gray-200" : "hover:bg-gray-200/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showCheckOut ? "bg-gray-200" : "hover:bg-gray-200/60"
+                        }`}
                     onClick={() => {
                         setShowCheckOut(!showCheckOut);
                         setShowWhere(false);
@@ -200,9 +197,8 @@ export default function SearchBar() {
 
                 {/* Who */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showGuests ? "bg-gray-200" : "hover:bg-gray-200/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showGuests ? "bg-gray-200" : "hover:bg-gray-200/60"
+                        }`}
                     onClick={() => {
                         setShowGuests(!showGuests);
                         setShowWhere(false);
@@ -215,9 +211,11 @@ export default function SearchBar() {
                 </div>
 
                 {/* Button Search */}
-                <button className="bg-[#7A3E2C] text-white w-[50px] h-[50px] rounded-2xl m-3 flex items-center justify-center hover:bg-[#5c2e20] transition">
-                    <FiSearch size={22} />
-                </button>
+                <Link href="/searchResult">
+                    <button className="bg-[#7A3E2C] text-white w-[50px] h-[50px] rounded-2xl m-3 flex items-center justify-center hover:bg-[#5c2e20] transition">
+                        <FiSearch size={22} />
+                    </button>
+                </Link>
             </div>
 
             {/* Dropdown Where */}

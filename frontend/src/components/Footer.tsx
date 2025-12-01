@@ -21,7 +21,7 @@ export default function Footer() {
                     </Link>
                     <span className="text-[#C3A295]">/</span>
 
-                    <Link href="/houses" className={linkClass("/houses")}>
+                    <Link href="/searchResult" className={linkClass("/searchResult")}>
                         houses
                     </Link>
                     <span className="text-[#C3A295]">/</span>
@@ -36,7 +36,7 @@ export default function Footer() {
                     </Link>
                     <span className="text-[#C3A295]">/</span>
 
-                    <Link href="/stays" className={linkClass("/stays")}>
+                    <Link href="/" className={linkClass("/")}>
                         stays
                     </Link>
                     <span className="text-[#C3A295]">/</span>
