@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiSearch } from "react-icons/fi";
 import { addDays, format } from "date-fns";
 import Calendar from "react-date-range/dist/components/Calendar";
+import { DateRange, Range } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Link from "next/link";
@@ -33,6 +34,15 @@ export default function ShootSearchBar() {
     const [activeDateField, setActiveDateField] =
         useState<ActiveDateField>("single");
 
+    // state DateRange khusus Instacation (rule & tampilan seperti SearchBar)
+    const [range, setRange] = useState<Range[]>([
+        {
+            startDate: new Date(),
+            endDate: addDays(new Date(), 1),
+            key: "selection",
+        },
+    ]);
+
     // section yang sedang dibuka di popup type of shoot
     const [openShootSection, setOpenShootSection] = useState<ShootSection>("");
 
@@ -50,7 +60,7 @@ export default function ShootSearchBar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // 📅 Quick date options
+    // 📅 Quick date options (dipakai hanya untuk popup WHEN)
     const today = new Date();
     const tomorrow = addDays(today, 1);
     const weekendStart = addDays(today, 1);
@@ -75,7 +85,7 @@ export default function ShootSearchBar() {
         setShootType(type);
         setShowShoot(false);
 
-        // kalau pilih instacation, date field default ke range (checkin/checkout)
+        // kalau instacation → pakai range (check in / check out)
         if (type === "instacation") {
             setActiveDateField("checkin");
         } else {
@@ -90,19 +100,33 @@ export default function ShootSearchBar() {
     const renderCheckOutText = () =>
         checkOut ? format(checkOut, "MMM dd") : "Select dates";
 
-    // handler untuk quick option & calendar (pakai activeDateField)
-    const applyDate = (date: Date) => {
-        if (shootType === "instacation" && activeDateField !== "single") {
-            if (activeDateField === "checkin") {
-                setCheckIn(date);
-                // kalau check-out belum diisi, next pilihannya otomatis checkout
-                if (!checkOut) setActiveDateField("checkout");
-            } else if (activeDateField === "checkout") {
-                setCheckOut(date);
-            }
-        } else {
-            setSelectedDate(date);
+    // handler DateRange untuk Instacation (rule mirip SearchBar)
+    const handleRangeChange = (item: any) => {
+        const sel = item.selection as Range;
+        setRange([sel]);
+
+        const start = sel.startDate ?? null;
+        const end = sel.endDate ?? null;
+
+        if (activeDateField === "checkin") {
+            setCheckIn(start);
+            setCheckOut(null);
+            // setelah pilih check-in, fokus otomatis ke checkout
+            setActiveDateField("checkout");
+            return;
         }
+
+        if (activeDateField === "checkout") {
+            setCheckOut(end);
+            // selesai pilih checkout → tutup popup date
+            setShowDate(false);
+            setActiveDateField(null);
+        }
+    };
+
+    // handler untuk quick option & calendar pada popup WHEN (single date)
+    const applyDate = (date: Date) => {
+        setSelectedDate(date);
         setShowDate(false);
     };
 
@@ -141,6 +165,14 @@ export default function ShootSearchBar() {
                             }`}
                             onClick={() => {
                                 setActiveDateField("checkin");
+                                // sync range dengan state sekarang
+                                setRange([
+                                    {
+                                        startDate: checkIn || new Date(),
+                                        endDate: checkOut || addDays(new Date(), 1),
+                                        key: "selection",
+                                    },
+                                ]);
                                 setShowDate(true);
                                 setShowRegion(false);
                                 setShowShoot(false);
@@ -165,6 +197,13 @@ export default function ShootSearchBar() {
                             }`}
                             onClick={() => {
                                 setActiveDateField("checkout");
+                                setRange([
+                                    {
+                                        startDate: checkIn || new Date(),
+                                        endDate: checkOut || addDays(new Date(), 1),
+                                        key: "selection",
+                                    },
+                                ]);
                                 setShowDate(true);
                                 setShowRegion(false);
                                 setShowShoot(false);
@@ -179,12 +218,14 @@ export default function ShootSearchBar() {
                         </div>
                     </>
                 ) : (
-                    // MODE BIASA: hanya "When"
+                    // MODE BIASA: hanya "When" (JANGAN DIUBAH RULE & TAMPILANNYA)
                     <>
                         <div className="w-px h-8 bg-gray-300" />
                         <div
                             className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showDate ? "bg-gray-100" : "hover:bg-gray-100/60"
+                                showDate && activeDateField === "single"
+                                    ? "bg-gray-100"
+                                    : "hover:bg-gray-100/60"
                             }`}
                             onClick={() => {
                                 setActiveDateField("single");
@@ -337,14 +378,18 @@ export default function ShootSearchBar() {
 
                                     <button
                                         type="button"
-                                        onClick={() => handleSelectShoot("session-afternoon")}
+                                        onClick={() =>
+                                            handleSelectShoot("session-afternoon")
+                                        }
                                         className={`text-[12px] ${
                                             shootType === "session-afternoon"
                                                 ? "text-gray-500"
                                                 : "text-gray-600 underline"
                                         }`}
                                     >
-                                        {shootType === "session-afternoon" ? "selected" : "select"}
+                                        {shootType === "session-afternoon"
+                                            ? "selected"
+                                            : "select"}
                                     </button>
                                 </div>
                                 <div className="border-b border-gray-200 mx-3" />
@@ -381,7 +426,8 @@ export default function ShootSearchBar() {
             )}
 
             {/* === DROPDOWN DATE === */}
-            {showDate && (
+            {/* 1) Popup WHEN (single date) – TIDAK DIUBAH */}
+            {showDate && activeDateField === "single" && (
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[580px] bg-[#FCFBF7] rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-gray-200 p-0 z-50 font-secondary flex overflow-hidden">
                     {/* LEFT QUICK OPTIONS */}
                     <div className="w-[40%] bg-[#F9F8F4] flex flex-col justify-start gap-3 p-5 border-r border-gray-200">
@@ -422,21 +468,27 @@ export default function ShootSearchBar() {
                     {/* RIGHT CALENDAR */}
                     <div className="flex-1 bg-white p-5">
                         <Calendar
-                            date={
-                                (shootType === "instacation" &&
-                                    activeDateField === "checkout" &&
-                                    checkOut) ||
-                                (shootType === "instacation" &&
-                                    activeDateField === "checkin" &&
-                                    checkIn) ||
-                                selectedDate ||
-                                new Date()
-                            }
+                            date={selectedDate || new Date()}
                             onChange={(date: Date) => applyDate(date)}
                             color="#7A3E2C"
                             monthDisplayFormat="MMMM yyyy"
                         />
                     </div>
+                </div>
+            )}
+
+            {/* 2) Popup CHECK IN / CHECK OUT – tampilan & rule seperti SearchBar */}
+            {showDate && activeDateField !== "single" && (
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-gray-200 p-4 z-50 font-secondary">
+                    <DateRange
+                        ranges={range}
+                        onChange={handleRangeChange}
+                        rangeColors={["#7A3E2C"]}
+                        months={2}
+                        direction="horizontal"
+                        moveRangeOnFirstSelection={false}
+                        editableDateInputs={true}
+                    />
                 </div>
             )}
 

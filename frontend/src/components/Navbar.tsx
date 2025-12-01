@@ -133,24 +133,24 @@ export default function Navbar() {
 
                         {/* DROPDOWN */}
                         {openMenu && (
-                            <div className="absolute p-2 right-0 top-10 lg:top-12 w-64 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
+                            <div className="absolute p-2 right-0 top-10 lg:top-12 w-70 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
                                 {user ? (
                                     <>
                                         <Link
                                             href="/reservations"
-                                            className="block px-6 py-3 hover:bg-[#E9E8E4]"
+                                            className="block px-6 py-3 hover:bg-[#E9E8E4] hover:rounded-xl"
                                         >
                                             Reservations
                                         </Link>
                                         <Link
                                             href="/edit-profile"
-                                            className="block px-6 py-3 hover:bg-[#E9E8E4]"
+                                            className="block px-6 py-3 hover:bg-[#E9E8E4] hover:rounded-xl"
                                         >
                                             Edit Personal Information
                                         </Link>
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full text-left px-6 py-3 hover:bg-[#E9E8E4]"
+                                            className="w-full text-left px-6 py-3 hover:bg-[#E9E8E4] hover:rounded-xl"
                                         >
                                             Log out
                                         </button>
@@ -159,13 +159,13 @@ export default function Navbar() {
                                     <>
                                         <Link
                                             href="/auth/login/guest"
-                                            className="block px-6 py-3 hover:bg-[#E9E8E4]"
+                                            className="block px-6 py-3 hover:bg-[#E9E8E4] hover:rounded-xl"
                                         >
                                             Guest
                                         </Link>
                                         <Link
                                             href="/auth/login/homeOwner"
-                                            className="block px-6 py-3 hover:bg-[#E9E8E4]"
+                                            className="block px-6 py-3 hover:bg-[#E9E8E4] hover:rounded-xl"
                                         >
                                             Home Owner
                                         </Link>
