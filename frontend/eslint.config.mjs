@@ -9,14 +9,15 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+// ⚠️ HATI-HATI: Flat config HARUS export array langsung.
+// BUKAN pakai variable eslintConfig lagi.
+export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "warn", // opsional biar warning saja
+      "@typescript-eslint/no-unused-vars": "warn",
     },
   },
 ];
-
-export default eslintConfig;
