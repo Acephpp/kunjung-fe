@@ -3,22 +3,18 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-    BadgePercent,
-    Bath,
-    Bed,
-    Check,
-    Star,
-    User,
-} from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { BadgePercent, Bath, Bed, Check, Star, User } from "lucide-react";
+// Calendar untuk section Availability
+import { Calendar as AvailabilityCalendar } from "@/components/ui/calendar";
 import type { villas } from "@/app/data/villas";
 import Link from "next/link";
 
 import { DateRange, Range } from "react-date-range";
+import Calendar from "react-date-range/dist/components/Calendar";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { addDays, format } from "date-fns";
 
 type Villa = (typeof villas)[number];
 
@@ -35,7 +31,7 @@ interface DetailProps {
 }
 
 export default function ShootDetail({ villa, date, setDate }: DetailProps) {
-    // date range
+    // date range (untuk instacation)
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [checkIn, setCheckIn] = useState<Date | undefined>(undefined);
     const [checkOut, setCheckOut] = useState<Date | undefined>(undefined);
@@ -54,7 +50,25 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
         "instacation"
     );
 
+    const isSessionShoot =
+        shootType === "session-morning" ||
+        shootType === "session-afternoon" ||
+        shootType === "session-fullday";
+
+    // quick options untuk popup single date (WHEN-style)
+    const today = new Date();
+    const tomorrow = addDays(today, 1);
+    const weekendStart = addDays(today, 1);
+    const weekendEnd = addDays(today, 2);
+
     const formatDateRangeText = () => {
+        // 🔹 Kalau SESSION SHOOT → pakai single date text (mirip When)
+        if (isSessionShoot) {
+            if (!date) return "Select dates";
+            return format(date, "dd MMM yyyy");
+        }
+
+        // 🔹 Kalau Instacation → pakai range seperti sebelumnya
         if (!checkIn || !checkOut) return "Add Dates";
 
         const startStr = checkIn.toLocaleDateString("en-GB", {
@@ -118,6 +132,12 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
             default:
                 return "Instacation";
         }
+    };
+
+    // handler pilih single date (SESSION SHOOT) – sama konsep dengan WHEN
+    const applySingleDate = (d: Date) => {
+        setDate(d);
+        setShowDatePicker(false);
     };
 
     return (
@@ -214,7 +234,7 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                             Availability
                         </h2>
                         <div className="rounded-md border inline-block p-4 mt-5">
-                            <Calendar
+                            <AvailabilityCalendar
                                 mode="single"
                                 selected={date}
                                 onSelect={setDate}
@@ -331,8 +351,10 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                 </div>
             </div>
 
-            {/* DATE RANGE MODAL */}
-            {showDatePicker && (
+            {/* === DATE MODALS === */}
+
+            {/* 1) INSTACATION → RANGE (seperti sebelumnya) */}
+            {showDatePicker && !isSessionShoot && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
                     onClick={() => setShowDatePicker(false)}
@@ -356,6 +378,69 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                             moveRangeOnFirstSelection={false}
                             editableDateInputs={false}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* 2) SESSION SHOOT → SINGLE DATE POPUP (layout seperti WHEN) */}
+            {showDatePicker && isSessionShoot && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+                    onClick={() => setShowDatePicker(false)}
+                >
+                    <div
+                        className="bg-[#FCFBF7] rounded-2xl shadow-xl border border-gray-200 p-0"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="w-[580px] bg-[#FCFBF7] rounded-2xl font-secondary flex overflow-hidden">
+                            {/* LEFT QUICK OPTIONS */}
+                            <div className="w-[40%] bg-[#F9F8F4] flex flex-col justify-start gap-3 p-5 border-r border-gray-200">
+                                <div
+                                    className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => applySingleDate(today)}
+                                >
+                                    <p className="font-semibold text-gray-800">Today</p>
+                                    <p className="text-sm text-gray-500">
+                                        {format(today, "MMMM dd")}
+                                    </p>
+                                </div>
+
+                                <div
+                                    className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => applySingleDate(tomorrow)}
+                                >
+                                    <p className="font-semibold text-gray-800">Tomorrow</p>
+                                    <p className="text-sm text-gray-500">
+                                        {format(tomorrow, "MMMM dd")}
+                                    </p>
+                                </div>
+
+                                <div
+                                    className="p-3 rounded-xl hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => applySingleDate(weekendStart)}
+                                >
+                                    <p className="font-semibold text-gray-800">
+                                        This weekend
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        {`${format(weekendStart, "MMMM dd")} - ${format(
+                                            weekendEnd,
+                                            "dd"
+                                        )}`}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* RIGHT CALENDAR (single date) */}
+                            <div className="flex-1 bg-white p-5">
+                                <Calendar
+                                    date={date || new Date()}
+                                    onChange={(d: Date) => applySingleDate(d)}
+                                    color="#7A3E2C"
+                                    monthDisplayFormat="MMMM yyyy"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
