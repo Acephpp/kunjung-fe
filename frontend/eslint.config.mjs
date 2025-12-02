@@ -9,8 +9,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-// ⚠️ HATI-HATI: Flat config HARUS export array langsung.
-// BUKAN pakai variable eslintConfig lagi.
+// Flat config: export array langsung
 export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 
