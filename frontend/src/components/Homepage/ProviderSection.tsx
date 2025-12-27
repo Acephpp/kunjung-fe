@@ -2,7 +2,7 @@ export default function ProviderSection() {
     return (
         <section className="
             relative bg-[#753C27] text-white 
-            h-[520px] md:h-[1080px]   
+            h-[490px] sm:h-[520px] md:h-[800px]   
             flex flex-col justify-between 
             mt-5 w-full
         ">
@@ -10,7 +10,7 @@ export default function ProviderSection() {
             <div className="px-4 pt-8 md:px-12 md:pt-12">
                 <h1 className="
                     font-serif leading-[1] tracking-tight
-                    text-[48px] sm:text-[48px]   
+                    text-[45px] sm:text-[48px]   
                     md:text-[140px]            
                 ">
                     Warm and Inspired

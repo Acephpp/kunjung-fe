@@ -37,13 +37,14 @@ const villas: Villa[] = [
 
 export default function HeroSection() {
     return (
-        <section className="max-w-9xl mx-auto mt-8 px-4 flex flex-col md:px-10 md:h-[842px] md:grid md:grid-cols-3 md:gap-5">
+        <section className="max-w-9xl mx-auto mt-4 sm:mt-5 md:mt-5 px-4 flex flex-col md:px-10 md:h-[720px] md:grid md:grid-cols-3 md:gap-5">
+
             {/* SLIDER */}
-            <div className="relative w-full h-[400px] font-primary md:h-full md:col-span-2">
+            <div className="relative w-full h-[350px] sm:h-[420px] font-primary md:h-[720px] md:col-span-2">
                 <Swiper
                     pagination={{ clickable: true }}
                     autoplay={{ delay: 5000, disableOnInteraction: false }}
-                    loop={true}
+                    loop
                     modules={[Pagination, Autoplay]}
                     className="w-full h-full"
                 >
@@ -57,12 +58,12 @@ export default function HeroSection() {
                                 />
 
                                 {/* TEXT OVERLAY */}
-                                <div className="absolute bottom-4 left-4 text-white">
-                                    <h2 className="text-[16px] md:text-xl font-semibold">
+                                <div className="absolute bottom-4 left-4 right-4 text-white">
+                                    <h2 className="text-base sm:text-lg md:text-xl font-semibold">
                                         {villa.name}
                                     </h2>
 
-                                    <p className="mt-2 w-3/4 md:w-full text-[10px] md:text-base leading-tight opacity-90">
+                                    <p className="mt-1 sm:mt-2 max-w-md text-xs sm:text-sm md:text-base leading-snug opacity-90">
                                         {villa.description}
                                     </p>
                                 </div>
@@ -72,53 +73,50 @@ export default function HeroSection() {
                 </Swiper>
 
                 <style jsx global>{`
-        /* Desktop */
-        .swiper-pagination {
-            text-align: right !important;
-            padding-right: 1.5rem;
-            bottom: 1.5rem !important;
-        }
-        .swiper-pagination-bullet {
-            width: 24px;
-            height: 3px;
-            border-radius: 2px;
-            background: white;
-            opacity: 0.4;
-            transition: all 0.3s ease;
-            margin: 0 3px !important;
-        }
-        .swiper-pagination-bullet-active {
-            opacity: 1;
-            background: white;
-            width: 48px;
-        }
+                    /* Desktop */
+                    .swiper-pagination {
+                        text-align: right !important;
+                        padding-right: 1.5rem;
+                        bottom: 1.5rem !important;
+                    }
+                    .swiper-pagination-bullet {
+                        width: 24px;
+                        height: 3px;
+                        border-radius: 2px;
+                        background: white;
+                        opacity: 0.4;
+                        transition: all 0.3s ease;
+                        margin: 0 3px !important;
+                    }
+                    .swiper-pagination-bullet-active {
+                        opacity: 1;
+                        background: white;
+                        width: 48px;
+                    }
 
-        /* Mobile Optimized Pagination */
-        @media (max-width: 768px) {
-            .swiper-pagination {
-                padding-right: 1rem !important;
-                bottom: 0.8rem !important;
-            }
-            .swiper-pagination-bullet {
-                width: 14px;
-                height: 2px;
-                margin: 0 2px !important;
-                opacity: 0.4;
-            }
-            .swiper-pagination-bullet-active {
-                width: 28px;
-                height: 2px;
-                opacity: 1;
-            }
-        }
-    `}</style>
+                    /* Mobile */
+                    @media (max-width: 768px) {
+                        .swiper-pagination {
+                            padding-right: 1rem !important;
+                            bottom: 0.8rem !important;
+                        }
+                        .swiper-pagination-bullet {
+                            width: 14px;
+                            height: 2px;
+                            margin: 0 2px !important;
+                        }
+                        .swiper-pagination-bullet-active {
+                            width: 28px;
+                            height: 2px;
+                        }
+                    }
+                `}</style>
             </div>
-
 
             {/* PANEL COKLAT */}
             <div className="bg-[#7A3E2C] text-white flex flex-col justify-between p-4 font-primary w-full md:p-9 md:col-start-3 md:col-span-1">
                 <div>
-                    <h1 className="text-[24px] md:text-[40px] font-bold leading-snug">
+                    <h1 className="text-[20px] md:text-[40px] font-bold leading-snug">
                         Discover Your Most Comfortable Curated Villas
                     </h1>
                     <p className="max-w-sm mt-2 md:mt-6 text-[10px] md:text-[18px] md:max-w-xl">
@@ -126,7 +124,7 @@ export default function HeroSection() {
                     </p>
                 </div>
 
-                <span className="mt-30 text-[12px] md:text-xl font-medium tracking-wide">
+                <span className="mt-25 text-[12px] md:text-xl font-medium tracking-wide">
                     KUNJUNG Family
                 </span>
             </div>

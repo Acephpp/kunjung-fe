@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function Page() {
     return (
-        <div className="max-w-9xl mx-auto px-10 py-5 bg-[#FCFBF7]">
+        <div className="max-w-9xl mx-auto px-4 md:px-10 py-5 bg-[#FCFBF7]">
             <HeroAbout />
             <AboutIntro/>
             <FounderStory/>

@@ -19,22 +19,44 @@ export default function VisiMisi() {
     return (
         <main className="text-[#222] font-serif">
             {sections.map((section, index) => (
-                <section key={index} className="py-16">
-                    <div className="grid md:grid-cols-2 gap-12 items-start">
-                        <div className="max-w-xl sticky top-24 self-start">
-                            <h2 className="text-[32px] font-medium leading-relaxed font-primary">
+                <section key={index} className="pt-8 sm:pt-12 md:pt-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-8 md:gap-12 items-start">
+                        
+                        {/* TITLE */}
+                        <div className="
+                            max-w-xl
+                            self-start
+                            md:sticky md:top-24
+                        ">
+                            <h2 className="
+                                text-[24px] sm:text-[28px]
+                                md:text-[32px]
+                                font-medium
+                                leading-relaxed
+                                font-primary
+                            ">
                                 {section.title}
                             </h2>
                         </div>
 
-                        <div className="space-y-6 text-[22px] leading-relaxed whitespace-pre-line font-secondary">
+                        {/* CONTENT */}
+                        <div className="
+                            space-y-3
+                            md:space-y-6
+                            text-[16px] sm:text-[18px]
+                            md:text-[22px]
+                            leading-relaxed
+                            whitespace-pre-line
+                            font-secondary
+                        ">
                             <p>{section.content}</p>
+
                             <Image
                                 src={section.image}
                                 alt={section.title}
                                 width={800}
                                 height={600}
-                                className="object-cover"
+                                className="object-cover w-full h-auto"
                             />
                         </div>
                     </div>

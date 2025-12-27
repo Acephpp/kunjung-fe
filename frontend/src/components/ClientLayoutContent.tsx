@@ -21,7 +21,9 @@ export default function ClientLayoutContent({
     return (
         <>
             {!hideLayout && <Navbar />}
-            <main className={!hideLayout ? "pt-20" : ""}>{children}</main>
+            <main className={!hideLayout ? "pt-19 md:pt-20" : ""}>
+                {children}
+            </main>
             {!hideLayout && <Footer />}
         </>
     );

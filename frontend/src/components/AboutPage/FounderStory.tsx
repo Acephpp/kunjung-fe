@@ -21,35 +21,58 @@ const founderData = {
         vision: to create curated stays that are not only beautiful but
         also warm, welcoming, and memorable. For him, every guest is part
         of a story, and every space is an invitation to feel at home.`,
-        
     ],
 };
 
 export default function FounderStory() {
     return (
-        <section className="w-full py-24 bg-[#FCFBF7] text-[#222] font-primary">
-            <div className="grid grid-cols-2 gap-16 items-start">
-                {/* Gambar kiri */}
-                <div className="w-full h-[600px] relative bg-gray-200">
+        <section className="w-full py-8 sm:py-16 md:py-24 bg-[#FCFBF7] text-[#222] font-primary border-b border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 md:gap-16 items-start">
+                
+                {/* IMAGE */}
+                <div className="
+                    w-full 
+                    h-[320px] sm:h-[420px] 
+                    md:h-[600px]
+                    relative
+                ">
                     <Image
                         src={founderData.image}
                         alt={founderData.alt}
                         fill
-                        className="object-cover rounded-lg"
+                        className="object-cover"
                     />
                 </div>
 
-                {/* Konten kanan */}
-                <div className="flex flex-col justify-between h-[600px]">
-                    {/* Judul di atas */}
-                    <h2 className="text-5xl text-[#2b2b2b] font-primary">
+                {/* CONTENT */}
+                <div className="
+                    flex flex-col 
+                    gap-6
+                    md:justify-between 
+                    md:h-[600px]
+                ">
+                    {/* TITLE */}
+                    <h2 className="
+                        text-[40px] sm:text-[44px]
+                        md:text-5xl
+                        text-[#2b2b2b]
+                        font-primary
+                    ">
                         {founderData.title}
                     </h2>
 
-                    {/* Paragraf di bawah */}
+                    {/* PARAGRAPHS */}
                     <div className="space-y-6">
                         {founderData.paragraphs.map((text, index) => (
-                            <p key={index} className="text-[20px] leading-relaxed font-secondary">
+                            <p
+                                key={index}
+                                className="
+                                    text-base sm:text-lg
+                                    md:text-[20px]
+                                    leading-relaxed
+                                    font-secondary
+                                "
+                            >
                                 {text}
                             </p>
                         ))}

@@ -13,7 +13,7 @@ export default function GallerySection() {
                             alt="Stays"
                             width={600}
                             height={400}
-                            className="object-cover w-full h-[350px] md:h-[420px]"
+                            className="object-cover w-full h-[250px] sm:[350px] md:h-[420px]"
                         />
                         <div className="flex justify-between md:mt-3 text-[18px] md:text-[32px]">
                             <span className="text-[#4A3B2D]">stays</span>
@@ -30,7 +30,7 @@ export default function GallerySection() {
                             alt="Stays"
                             width={600}
                             height={400}
-                            className="object-cover w-full h-[350px] md:h-[420px]"
+                            className="object-cover w-full h-[250px] sm:[350px] md:h-[420px]"
                         />
                         <div className="flex justify-between md:mt-3 text-[18px] md:text-[32px]">
                             <span className="text-[#4A3B2D]">weddings</span>
@@ -57,7 +57,7 @@ export default function GallerySection() {
                             alt="Shoots"
                             width={1200}
                             height={600}
-                            className="object-cover w-full h-[420px] md:h-[500px]"
+                            className="object-cover w-full h-[250px] sm:[350px] md:h-[500px]"
                         />
                         <div className="flex justify-between md:mt-3 text-[18px] md:text-[32px]">
                             <span className="text-[#4A3B2D]">shoots</span>
@@ -68,7 +68,7 @@ export default function GallerySection() {
                     </div>
                 </div>
 
-                <h2 className="block sm:hidden mt-3 text-[32px] font-medium text-[#8B4C3A]/40 leading-tight tracking-tight">
+                <h2 className="block sm:hidden mt-3 text-[32px] font-medium text-[#956452] leading-tight tracking-tight">
                     All houses
                 </h2>
             </div>
