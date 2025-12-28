@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Share2 } from "lucide-react";
 
 export default function NavbarPhotos() {
@@ -20,15 +19,26 @@ export default function NavbarPhotos() {
         }
     };
 
-    // Dapatkan ID villa dari URL
     const id = pathname?.split("/")[3];
 
     return (
-        <nav className="flex items-center justify-between w-full px-10 py-5 border-b-2 border-gray-200 bg-[#FCFBF7]">
-            {/* Tombol Kembali */}
+        <nav
+            className="
+                flex items-center justify-between w-full
+                px-4 py-4
+                md:px-10 md:py-5
+                border-b-2 border-gray-200
+                bg-[#FCFBF7]
+            "
+        >
+            {/* Back Button */}
             <button
                 onClick={() => router.push(`/houses/villa/${id}`)}
-                className="group text-gray-800 hover:text-[#7A3E2C] transition-all duration-200 flex items-center gap-1"
+                className="
+                    group text-gray-800 hover:text-[#7A3E2C]
+                    transition-all duration-200
+                    flex items-center gap-1
+                "
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +46,11 @@ export default function NavbarPhotos() {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-5 h-5 transform transition-transform duration-200 group-hover:-translate-x-1"
+                    className="
+                        w-6 h-6 md:w-5 md:h-5
+                        transform transition-transform duration-200
+                        group-hover:-translate-x-1
+                    "
                 >
                     <path
                         strokeLinecap="round"
@@ -46,14 +60,26 @@ export default function NavbarPhotos() {
                 </svg>
             </button>
 
-
-            {/* Tombol Share */}
+            {/* Share Button */}
             <button
                 onClick={handleShare}
-                className="flex items-center gap-2 border border-gray-300 px-4 py-1.5 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition font-secondary"
+                className="
+                    flex items-center gap-2
+                    border border-gray-300
+                    px-3 py-2 md:px-4 md:py-1.5
+                    rounded-full
+                    text-gray-700
+                    hover:bg-gray-100
+                    transition
+                    font-secondary
+                "
             >
-                <Share2 className="w-4 h-4" />
-                share
+                <Share2 className="w-5 h-5 md:w-4 md:h-4" />
+
+                {/* Text hanya di desktop */}
+                <span className="hidden md:inline text-sm">
+                    share
+                </span>
             </button>
         </nav>
     );

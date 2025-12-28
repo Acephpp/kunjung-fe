@@ -5,8 +5,10 @@ import NavbarPhotos from "@/components/villa/gallery/NavbarPhotos";
 import VillaGalleryHeader from "@/components/villa/gallery/VillaGalleryHeader";
 import VillaImageDetail from "@/components/villa/gallery/VillaImageDetail";
 
-export default function PhotosPage({ params }: any) {
-    const villa = villas.find((v) => v.id === Number(params.id));
+export default async function PhotosPage({ params }: any) {
+    const { id } = await params;
+
+    const villa = villas.find((v) => v.id === Number(id));
 
     if (!villa) {
         return <div className="p-10 text-center">Villa not found.</div>;

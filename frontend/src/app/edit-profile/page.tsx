@@ -2,11 +2,33 @@ import EditProfileComponent from "@/components/edit-profile/EditProfileComponent
 
 export default function EditProfilePage() {
     return (
-        <div className="h-[600px] bg-[#FCFBF7] flex flex-col items-center justify-center px-4 py-5 mb-20">
-            <h1 className="text-[64px] font-serif text-black mb-12 text-center">
-                Edit personal information
-            </h1>
-            <EditProfileComponent />
+        <div className="bg-[#FCFBF7] text-gray-900 font-secondary">
+            <main
+                className="
+                    flex
+                    flex-col
+                    items-center
+                    justify-start lg:justify-center
+                    px-4 sm:px-6
+                    py-20
+                "
+            >
+                <h1
+                    className="
+                        font-serif
+                        text-gray-900
+                        mb-10
+                        text-center
+                        text-[36px]
+                        sm:text-[48px]
+                        lg:text-[64px]
+                    "
+                >
+                    Edit personal information
+                </h1>
+
+                <EditProfileComponent />
+            </main>
         </div>
     );
 }

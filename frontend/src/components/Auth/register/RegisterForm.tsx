@@ -7,104 +7,160 @@ export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const inputBase = `
+        peer
+        w-full
+        h-[56px]
+        rounded-2xl
+        border border-gray-400
+        bg-[#FAF8F3]
+        px-5
+        text-[16px]
+        outline-none
+        transition-all
+        duration-200
+        ease-out
+        focus:border-black
+        focus:shadow-sm
+    `;
+
+    const labelBase = `
+        absolute
+        left-4
+        top-1/2
+        -translate-y-1/2
+        text-gray-400
+        text-[16px]
+        px-2
+        bg-[#FAF8F3]
+        pointer-events-none
+        transition-all
+        duration-200
+        ease-out
+
+        peer-focus:top-0
+        peer-focus:text-[12px]
+        peer-focus:text-black
+
+        peer-not-placeholder-shown:top-0
+        peer-not-placeholder-shown:text-[12px]
+        peer-not-placeholder-shown:text-black
+    `;
+
     return (
-        <form className="w-full max-w-3xl space-y-6">
-            {/* Grid 2 kolom */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form className="w-full max-w-3xl space-y-8">
+            {/* GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* First Name */}
-                <div>
+                <div className="relative">
                     <input
                         type="text"
-                        placeholder="First name*"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="first-name"
+                        placeholder=" "
                         required
+                        className={inputBase}
                     />
+                    <label htmlFor="first-name" className={labelBase}>
+                        First name*
+                    </label>
                 </div>
 
                 {/* Last Name */}
-                <div>
+                <div className="relative">
                     <input
                         type="text"
-                        placeholder="Last name"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="last-name"
+                        placeholder=" "
+                        className={inputBase}
                     />
+                    <label htmlFor="last-name" className={labelBase}>
+                        Last name
+                    </label>
                 </div>
 
                 {/* Email */}
-                <div>
+                <div className="relative">
                     <input
                         type="email"
-                        placeholder="Email*"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="email"
+                        placeholder=" "
                         required
+                        className={inputBase}
                     />
+                    <label htmlFor="email" className={labelBase}>
+                        Email*
+                    </label>
                 </div>
 
                 {/* Confirm Email */}
-                <div>
+                <div className="relative">
                     <input
                         type="email"
-                        placeholder="Confirm email*"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="confirm-email"
+                        placeholder=" "
                         required
+                        className={inputBase}
                     />
+                    <label htmlFor="confirm-email" className={labelBase}>
+                        Confirm email*
+                    </label>
                 </div>
 
                 {/* Password */}
-                <div className="relative flex items-center">
+                <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Password*"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 pr-10 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="password"
+                        placeholder=" "
                         required
+                        className={`${inputBase} pr-12`}
                     />
+                    <label htmlFor="password" className={labelBase}>
+                        Password*
+                    </label>
+
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 text-gray-500 hover:text-gray-700"
-                        aria-label="Toggle password visibility"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 transition"
                     >
-                        {showPassword ? (
-                            <EyeOff size={18} strokeWidth={1.5} />
-                        ) : (
-                            <Eye size={18} strokeWidth={1.5} />
-                        )}
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                 </div>
 
                 {/* Confirm Password */}
-                <div className="relative flex items-center">
+                <div className="relative">
                     <input
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm password*"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 pr-10 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                        id="confirm-password"
+                        placeholder=" "
                         required
+                        className={`${inputBase} pr-12`}
                     />
+                    <label htmlFor="confirm-password" className={labelBase}>
+                        Confirm password*
+                    </label>
+
                     <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 text-gray-500 hover:text-gray-700"
-                        aria-label="Toggle confirm password visibility"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 transition"
                     >
-                        {showConfirmPassword ? (
-                            <EyeOff size={18} strokeWidth={1.5} />
-                        ) : (
-                            <Eye size={18} strokeWidth={1.5} />
-                        )}
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                 </div>
             </div>
 
             {/* Newsletter */}
-            <div className="flex items-center pt-2">
+            <div className="flex items-start gap-2 pt-2">
                 <input
                     type="checkbox"
                     id="newsletter"
-                    className="w-4 h-4 border-gray-300 text-brown-600 focus:ring-gray-400"
+                    className="mt-1 w-4 h-4 border-gray-300 focus:ring-gray-400"
                 />
                 <label
                     htmlFor="newsletter"
-                    className="ml-2 text-[16px] text-gray-700 select-none"
+                    className="text-[14px] md:text-[16px] text-gray-700"
                 >
                     Subscribe to newsletter
                 </label>
@@ -114,11 +170,43 @@ export default function RegisterForm() {
             <div className="flex justify-start">
                 <button
                     type="submit"
-                    className="w-[200px] bg-[#7A3E2C] hover:bg-[#6c3827] text-white py-2.5 rounded-md transition-all"
+                    className="
+                        w-full md:w-[200px]
+                        bg-[#7A3E2C]
+                        hover:bg-[#6c3827]
+                        active:scale-[0.98]
+                        text-white
+                        py-3 md:py-2.5
+                        rounded-md
+                        transition-all
+                        duration-200
+                    "
                 >
                     Register
                 </button>
             </div>
+            {/* Divider + Login link */}
+            <div className="flex flex-col items-center">
+                <div className="w-full border-t border-gray-200 mb-6"></div>
+
+                <p className="text-[14px] md:text-[16px] text-gray-500 text-center">
+                    Have an account?{" "}
+                    <a
+                        href="/auth/login/guest"
+                        className="
+                text-gray-900
+                font-medium
+                underline-offset-4
+                hover:underline
+                hover:text-black
+                transition
+            "
+                    >
+                        Log in here
+                    </a>
+                </p>
+            </div>
+
         </form>
     );
 }

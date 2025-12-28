@@ -23,76 +23,145 @@ export default function ForgotPassword({ role }: ForgotPasswordFormProps) {
         setError("");
         setSent(true);
 
-        // Simulasi pengiriman email reset password
         setTimeout(() => {
             alert(`Password reset email sent to ${email}`);
         }, 500);
     };
 
-    // Tentukan link login berdasarkan role
-    const loginLink = role === "guest" ? "/login/guest" : "/login/home-owner";
+    const loginLink =
+        role === "guest"
+            ? "/auth/login/guest"
+            : "/auth/login/home-owner";
 
     return (
         <div className="w-full max-w-md text-center">
-            {/* 🔹 Title */}
-            <h1 className="text-[48px] font-serif text-gray-900 mb-3 text-center font-primary leading-tight">
-                <span className="block">Forgot</span>
-                <span className="block -mt-2">your password?</span>
+            {/* TITLE */}
+            <h1
+                className="
+                    font-serif
+                    text-gray-900
+                    leading-tight
+                    mb-3
+                    text-[36px]
+                    sm:text-[48px]
+                "
+            >
+                Forgot your password?
             </h1>
 
-            {/* 🔹 Deskripsi */}
-            <p className="text-gray-600 text-[15px] leading-relaxed mb-10 font-secondary">
+            {/* DESCRIPTION */}
+            <p className="text-gray-600 text-[14px] sm:text-[16px] mb-10">
                 Please enter your email address. You will receive a link to
-                create a new password via email.
+                create a new password.
             </p>
 
-            {/* 🔹 Form */}
+            {/* FORM */}
             {!sent ? (
-                <form onSubmit={handleSubmit} className="space-y-6 text-left">
-                    <div>
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-7 text-left"
+                >
+                    {/* Email */}
+                    <div className="relative">
                         <input
                             type="email"
-                            placeholder="Email*"
+                            id="forgot-email"
+                            placeholder=" "
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full border border-gray-300 rounded-md px-4 py-2 bg-transparent focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                            required
+                            className="
+                                peer
+                                w-full
+                                h-[56px]
+                                rounded-2xl
+                                border border-gray-400
+                                bg-[#FAF8F3]
+                                px-5
+                                text-[16px]
+                                outline-none
+                                transition-all
+                                duration-200
+                                focus:border-black
+                                focus:shadow-sm
+                            "
                         />
+
+                        <label
+                            htmlFor="forgot-email"
+                            className="
+                                absolute
+                                left-4
+                                top-1/2
+                                -translate-y-1/2
+                                text-gray-400
+                                text-[16px]
+                                px-2
+                                bg-[#FAF8F3]
+                                pointer-events-none
+                                transition-all
+                                duration-200
+
+                                peer-focus:top-0
+                                peer-focus:text-[12px]
+                                peer-focus:text-black
+
+                                peer-not-placeholder-shown:top-0
+                                peer-not-placeholder-shown:text-[12px]
+                                peer-not-placeholder-shown:text-black
+                            "
+                        >
+                            Email*
+                        </label>
+
                         {error && (
-                            <p className="text-red-600 text-sm mt-1">{error}</p>
+                            <p className="text-red-600 text-sm mt-2">
+                                {error}
+                            </p>
                         )}
                     </div>
 
-                    {/* Tombol dikiri */}
-                    <div className="flex justify-start">
+                    {/* Button */}
+                    <div className="flex flex-col items-center md:items-start">
                         <button
                             type="submit"
-                            className="bg-[#7A3E2C] hover:bg-[#6c3827] text-white px-6 py-2.5 rounded-md transition-all text-[15px] font-medium font-secondary"
+                            className="
+                                w-full md:w-[200px]
+                                bg-[#7A3E2C]
+                                hover:bg-[#6c3827]
+                                active:scale-[0.98]
+                                text-white
+                                py-3 md:py-2.5
+                                rounded-md
+                                transition-all
+                                duration-200
+                            "
                         >
-                            send reset email
+                            Send reset email
                         </button>
                     </div>
                 </form>
             ) : (
-                <div className="text-center">
-                    <p className="text-green-700 font-medium">
-                        ✅ A reset link has been sent to your email!
-                    </p>
-                </div>
+                <p className="text-green-700 font-medium text-center">
+                    ✅ A reset link has been sent to your email!
+                </p>
             )}
 
-            {/* 🔹 Divider */}
-            <div className="w-full border-t border-gray-300 my-10"></div>
+            {/* DIVIDER */}
+            <div className="w-full mt-10 border-t border-gray-300" />
 
-            {/* 🔹 Link to Login */}
-            <p className="text-[15px] text-gray-700 font-secondary">
-                Remember your password?{" "}
-                <Link
-                    href={loginLink}
-                    className="underline hover:text-gray-900"
-                >
-                    Log in
-                </Link>
-            </p>
+            {/* BACK TO LOGIN */}
+            <div className="pt-6 text-center">
+                <p className="text-[14px] sm:text-[16px] text-gray-600">
+                    Remember your password?{" "}
+                    <Link
+                        href={loginLink}
+                        className="underline text-gray-800 hover:text-black transition"
+                    >
+                        Log in
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }
