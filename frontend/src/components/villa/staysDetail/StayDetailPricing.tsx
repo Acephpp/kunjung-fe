@@ -1,0 +1,287 @@
+"use client"
+
+import { useState } from "react"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { BadgePercent } from "lucide-react"
+import { DateRange, type Range } from "react-date-range"
+import "react-date-range/dist/styles.css"
+import "react-date-range/dist/theme/default.css"
+import Link from "next/link"
+import { FiMinus, FiPlus } from "react-icons/fi"
+import type { villas } from "@/app/data/villas"
+
+type Villa = (typeof villas)[number]
+
+interface StaysDetailPricingProps {
+    villa: Villa
+    showDatePicker: boolean
+    setShowDatePicker: (show: boolean) => void
+    checkIn: Date | undefined
+    setCheckIn: (date: Date | undefined) => void
+    checkOut: Date | undefined
+    setCheckOut: (date: Date | undefined) => void
+    dateRange: Range[]
+    setDateRange: (range: Range[]) => void
+}
+
+export default function StaysDetailPricing({
+    villa,
+    showDatePicker,
+    setShowDatePicker,
+    checkIn,
+    setCheckIn,
+    checkOut,
+    setCheckOut,
+    dateRange,
+    setDateRange,
+}: StaysDetailPricingProps) {
+    const [showGuestModal, setShowGuestModal] = useState(false)
+    const [guests, setGuests] = useState<number>(0)
+
+    const formatDate = (d?: Date) => {
+        if (!d) return "Add Dates"
+        return d.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+        })
+    }
+
+    const getCheckInText = () => formatDate(checkIn)
+    const getCheckOutText = () => formatDate(checkOut)
+
+    const formatMobileDateRange = () => {
+        if (!checkIn && !checkOut) return "Add dates"
+        if (checkIn && !checkOut) return formatDate(checkIn)
+        if (checkIn && checkOut) {
+            const startDay = checkIn.getDate()
+            const endDay = checkOut.getDate()
+            const endMonth = checkOut.toLocaleDateString("en-US", { month: "short" })
+            const year = checkOut.getFullYear()
+            return `${startDay}-${endDay} ${endMonth}, ${year}`
+        }
+        return "Add dates"
+    }
+
+    const handleDateChange = (item: any) => {
+        const sel = item.selection as Range
+
+        if (!checkIn && !checkOut) {
+            if (sel.startDate) {
+                setCheckIn(sel.startDate)
+                setDateRange([
+                    {
+                        ...sel,
+                        endDate: sel.startDate,
+                    },
+                ])
+            }
+            return
+        }
+
+        if (checkIn && !checkOut) {
+            const start = sel.startDate ?? checkIn
+            const end = sel.endDate ?? sel.startDate ?? checkIn
+
+            const startDate = start && end && start > end ? end : start
+            const endDate = start && end && start > end ? start : end
+
+            setCheckIn(startDate || undefined)
+            setCheckOut(endDate || undefined)
+
+            setDateRange([
+                {
+                    ...sel,
+                    startDate: startDate || undefined,
+                    endDate: endDate || undefined,
+                },
+            ])
+
+            if (startDate && endDate) {
+                setShowDatePicker(false)
+            }
+            return
+        }
+
+        if (checkIn && checkOut) {
+            if (sel.startDate) {
+                setCheckIn(sel.startDate)
+                setCheckOut(undefined)
+                setDateRange([
+                    {
+                        ...sel,
+                        endDate: sel.startDate,
+                    },
+                ])
+            }
+        }
+    }
+
+    return (
+        <>
+            {/* DESKTOP VERSION - Hidden on mobile, sticky on desktop */}
+            <div className="hidden lg:block lg:col-span-1 mt-5">
+                <Card className="sticky top-2/12 py-10 px-10 rounded-xl shadow-xl bg-[#fcfbf7] border-[#E7E6E2]">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <p className="text-[16px] font-primary font-bold text-[#2D2A29]">Weekdays</p>
+                            <p className="font-secondary text-[18px] text-[#959290]">
+                                From <span className="font-bold text-black">{villa.weekdayPrice}</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-[16px] font-primary font-bold text-[#2D2A29]">Weekends</p>
+                            <p className="font-secondary text-[18px] text-[#959290]">
+                                From <span className="font-bold text-black">{villa.weekdayPrice}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p className="text-[18px] font-secondary text-gray-500 italic flex items-center justify-center gap-1">
+                        <BadgePercent className="w-5 h-5" />
+                        Prices include all fees
+                    </p>
+
+                    {/* CARD RESERVATION */}
+                    <div className="rounded-lg overflow-hidden border border-gray-200 text-sm text-gray-500">
+                        {/* Dates */}
+                        <div className="grid grid-cols-2 divide-x divide-gray-200 border-b border-gray-200">
+                            <div className="flex flex-col p-4 bg-[#F8F7F2] border-[#E7E6E2]">
+                                <span className="font-medium font-secondary">
+                                    Check in <span className="text-gray-400">(Optional)</span>
+                                </span>
+                                <span className="text-gray-400 font-secondary cursor-pointer" onClick={() => setShowDatePicker(true)}>
+                                    {getCheckInText()}
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col p-4 bg-[#F8F7F2] border-[#E7E6E2]">
+                                <span className="font-medium font-secondary">
+                                    Check out <span className="text-gray-400">(Optional)</span>
+                                </span>
+                                <span className="text-gray-400 font-secondary cursor-pointer" onClick={() => setShowDatePicker(true)}>
+                                    {getCheckOutText()}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Who */}
+                        <div
+                            className="flex justify-between items-center p-4 bg-[#F8F7F2] border-[#E7E6E2] cursor-pointer"
+                            onClick={() => setShowGuestModal(true)}
+                        >
+                            <div className="flex flex-col">
+                                <span className="font-medium font-secondary">
+                                    Who <span className="text-gray-400">(Optional)</span>
+                                </span>
+                                <span className="text-gray-400 font-secondary">{guests > 0 ? `${guests} Guests` : "Add Guests"}</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-[#eee9df] px-4 py-4 font-secondary flex justify-between items-center">
+                            <p className="text-[12px] font-medium">Three Nights Weekdays</p>
+                            <p className="font-bold text-lg">{villa.totalPrice}</p>
+                        </div>
+                    </div>
+
+                    <Link href={`/houses/villa/${villa.id}/reserve`} className="block">
+                        <Button className="w-full bg-[#7A3E2C] hover:bg-[#693424] text-white rounded-lg py-8">
+                            <span className="text-3xl font-secondary">Reserve</span>
+                        </Button>
+                    </Link>
+
+                    <p className="text-sm text-center font-secondary font-bold text-black italic">You won't be charged yet</p>
+                </Card>
+            </div>
+
+            <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-[#fcfbf7] border-t border-[#E7E6E2] shadow-lg">
+                <div className="flex items-center justify-between px-4 py-5 md:py-3 max-w-7xl mx-auto w-full">
+                    {/* Left side - Price and date info */}
+                    <div className="flex-1">
+                        <p className="text-sm font-bold text-[#2D2A29] font-secondary">{villa.weekdayPrice}</p>
+                        <p className="text-xs text-[#959290] font-secondary">for 1 night — {formatMobileDateRange()}</p>
+                    </div>
+
+                    {/* Right side - Reserve button */}
+                    <Link href={`/houses/villa/${villa.id}/reserve`} className="ml-4 flex-shrink-0">
+                        <Button className="bg-[#7A3E2C] hover:bg-[#693424] text-white rounded-full px-10 md:px-6 py-5 md:py-2 font-secondary font-bold text-sm">
+                            reserve
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Add padding to body to prevent content overlap with sticky footer on mobile */}
+            <style>{`
+                @media (max-width: 1024px) {
+                    body {
+                        padding-bottom: 75px;
+                    }
+                }
+            `}</style>
+
+            {/* MODAL KALENDER RANGE */}
+            {showDatePicker && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+                    onClick={() => setShowDatePicker(false)}
+                >
+                    <div
+                        className="bg-[#FCFBF7] rounded-2xl shadow-xl border border-gray-200 p-6"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <DateRange
+                            ranges={[
+                                {
+                                    startDate: checkIn || new Date(),
+                                    endDate: checkOut || checkIn || new Date(),
+                                    key: "selection",
+                                },
+                            ]}
+                            onChange={handleDateChange}
+                            rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
+                            months={2}
+                            direction="horizontal"
+                            moveRangeOnFirstSelection={false}
+                            editableDateInputs={false}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL WHO (GUESTS) */}
+            {showGuestModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+                    onClick={() => setShowGuestModal(false)}
+                >
+                    <div
+                        className="bg-[#FDFBF6] rounded-3xl shadow-2xl border border-[#E5E2DD] px-8 py-6 w-[420px]"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between font-secondary">
+                            <span className="text-[15px] font-medium text-[#2D2A29]">Add Guests</span>
+
+                            <div className="flex items-center gap-3 text-[13px] text-[#7A7A75]">
+                                <button
+                                    onClick={() => setGuests(Math.max(0, guests - 1))}
+                                    disabled={guests === 0}
+                                    className="text-[15px] hover:text-gray-800 disabled:opacity-40 transition"
+                                >
+                                    <FiMinus size={14} />
+                                </button>
+                                <span className="text-[15px] w-3 text-center">{guests}</span>
+                                <button onClick={() => setGuests(guests + 1)} className="text-[15px] hover:text-gray-800 transition">
+                                    <FiPlus size={14} />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-3 border-b border-[#CFCBC5]" />
+                    </div>
+                </div>
+            )}
+        </>
+    )
+}

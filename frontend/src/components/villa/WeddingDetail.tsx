@@ -89,9 +89,8 @@ export default function WeddingDetail({ villa, date, setDate }: DetailProps) {
                     cells.push(
                         <div
                             key={col}
-                            className={`py-2 text-center text-sm font-medium ${
-                                unavailable ? "text-gray-300" : "text-[#2D2A29]"
-                            }`}
+                            className={`py-2 text-center text-sm font-medium ${unavailable ? "text-gray-300" : "text-[#2D2A29]"
+                                }`}
                         >
                             {day}
                         </div>
@@ -216,13 +215,18 @@ export default function WeddingDetail({ villa, date, setDate }: DetailProps) {
 
                         <div className="grid grid-cols-3 text-gray-700">
                             {villa.amenities.map((a, i) => (
-                                <div key={i} className="flex items-center gap-2 mt-5">
-                                    <Check className="w-5 h-5" />
-                                    <span className="font-secondary text-[23px]">
-                                        {a}
+                                <div
+                                    key={i}
+                                    className={`flex items-start gap-3 ${a.available ? "text-[#2D2A29]" : "text-[#9B9894] line-through"
+                                        }`}
+                                >
+                                    <Check className="w-5 h-5 mt-1 shrink-0" />
+                                    <span className="font-secondary text-[23px] leading-snug">
+                                        {a.label}
                                     </span>
                                 </div>
                             ))}
+
                         </div>
                     </div>
 

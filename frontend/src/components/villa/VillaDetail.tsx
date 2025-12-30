@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { villas } from "@/app/data/villas";
 import { useParams, notFound } from "next/navigation";
-import StaysDetail from "./StaysDetail";
 import WeddingDetail from "./WeddingDetail";
 import ShootDetail from "./ShootDetail";
+import StaysDetail from "./staysDetail/StayDetail";
 
 type Villa = (typeof villas)[number];
 
@@ -25,7 +25,7 @@ export default function VillaDetail() {
     const inactive = "text-[#A3A09C] hover:text-[#2D2A29]";
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-9xl mx-auto px-6 md:px-10 py-5 bg-[#FCFBF7] ">
             {/* TAB MENU */}
             <div className="border-b border-[#E4E1DC]">
                 <div className="flex w-full">
@@ -78,6 +78,8 @@ export default function VillaDetail() {
             {activeTab === "shoot" && (
                 <ShootDetail villa={villa} date={date} setDate={setDate} />
             )}
+
+            
         </div>
     );
 }

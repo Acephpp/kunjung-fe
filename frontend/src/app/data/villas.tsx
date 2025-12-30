@@ -4,6 +4,11 @@ type VillaDetail = {
     images: string[];
 };
 
+type Amenity = {
+    label: string;
+    available: boolean;
+};
+
 type Villa = {
     id: number;
     name: string;
@@ -18,7 +23,7 @@ type Villa = {
     weekdayPrice: string;
     rating: number;
     reviews: number;
-    amenities: string[];
+    amenities: Amenity[]; 
     thingsToDo: string;
     address: string;
     mapUrl: string;
@@ -59,13 +64,19 @@ export const villas: Villa[] = [
         rating: 4.9,
         reviews: 154,
         amenities: [
-            "Catering Available",
-            "Pet Friendly",
-            "WiFi",
-            "Countryside Walks",
-            "Working Fireplace",
-            "Wedding Facilities",
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
         ],
+
         thingsToDo:
             "Silas House is located in the additional part of Bandung city, where daily life continues in a typical urban structure.",
         address:
@@ -117,7 +128,20 @@ export const villas: Villa[] = [
         weekdayPrice: "IDR 3.500.000",
         rating: 4.7,
         reviews: 87,
-        amenities: ["WiFi", "Pet Friendly", "Wedding Facilities"],
+        amenities: [
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
+        ],
+
         thingsToDo:
             "Explore modern Bandung with stylish interiors and spacious common areas.",
         address: "Jl. Setiabudi No. 88, Bandung",
@@ -148,7 +172,20 @@ export const villas: Villa[] = [
         weekdayPrice: "IDR 3.800.000",
         rating: 4.8,
         reviews: 102,
-        amenities: ["WiFi", "Pet Friendly", "Working Fireplace"],
+        amenities: [
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
+        ],
+
         thingsToDo:
             "Enjoy the fresh mountain air and green valley landscapes while relaxing indoors.",
         address: "Jl. Raya Lembang No. 45, Bandung",
@@ -179,7 +216,20 @@ export const villas: Villa[] = [
         weekdayPrice: "IDR 3.200.000",
         rating: 4.7,
         reviews: 65,
-        amenities: ["WiFi", "Pet Friendly", "Countryside Walks"],
+        amenities: [
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
+        ],
+
         thingsToDo:
             "Take a walk in the surrounding countryside or relax by the indoor fireplace.",
         address: "Jl. Parongpong No. 27, Bandung Barat",
@@ -210,7 +260,20 @@ export const villas: Villa[] = [
         weekdayPrice: "IDR 6.500.000",
         rating: 4.6,
         reviews: 78,
-        amenities: ["WiFi", "Catering Available", "Wedding Facilities"],
+        amenities: [
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
+        ],
+
         thingsToDo:
             "Enjoy city views from the balcony and explore the vibrant neighborhood of Dago.",
         address: "Jl. Ir. H. Juanda No. 100, Dago, Bandung",
@@ -241,7 +304,20 @@ export const villas: Villa[] = [
         weekdayPrice: "IDR 5.500.000",
         rating: 4.8,
         reviews: 92,
-        amenities: ["WiFi", "Pet Friendly", "Countryside Walks"],
+        amenities: [
+            { label: "Hot tub", available: true },
+            { label: "TV", available: true },
+            { label: "Exterior security cameras on property", available: true },
+
+            { label: "Kitchen", available: true },
+            { label: "Free parking on premises", available: true },
+            { label: "Wifi", available: true },
+
+            { label: "Dedicated workspace", available: true },
+            { label: "Air conditioning", available: true },
+            { label: "Smoke alarm", available: false },
+        ],
+
         thingsToDo:
             "Relax with outdoor activities, garden walks, and enjoy fresh Ciwidey air.",
         address: "Jl. Raya Ciwidey No. 12, Ciwidey, Bandung",

@@ -219,9 +219,15 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                         </h2>
                         <div className="grid grid-cols-3 text-gray-700">
                             {villa.amenities.map((a, i) => (
-                                <div key={i} className="flex items-center gap-2 mt-5">
-                                    <Check className="w-5 h-5" />
-                                    <span className="font-secondary text-[23px]">{a}</span>
+                                <div
+                                    key={i}
+                                    className={`flex items-start gap-3 ${a.available ? "text-[#2D2A29]" : "text-[#9B9894] line-through"
+                                        }`}
+                                >
+                                    <Check className="w-5 h-5 mt-1 shrink-0" />
+                                    <span className="font-secondary text-[23px] leading-snug">
+                                        {a.label}
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -522,11 +528,10 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                                         setShootType("instacation");
                                         setShowTypeModal(false);
                                     }}
-                                    className={`text-[12px] ${
-                                        shootType === "instacation"
+                                    className={`text-[12px] ${shootType === "instacation"
                                             ? "text-gray-500"
                                             : "text-gray-700 underline"
-                                    }`}
+                                        }`}
                                 >
                                     {shootType === "instacation" ? "selected" : "select"}
                                 </button>
@@ -572,11 +577,10 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                                             setShootType("session-morning");
                                             setShowTypeModal(false);
                                         }}
-                                        className={`text-[12px] ${
-                                            shootType === "session-morning"
+                                        className={`text-[12px] ${shootType === "session-morning"
                                                 ? "text-gray-500"
                                                 : "text-gray-700 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-morning"
                                             ? "selected"
@@ -600,11 +604,10 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                                             setShootType("session-afternoon");
                                             setShowTypeModal(false);
                                         }}
-                                        className={`text-[12px] ${
-                                            shootType === "session-afternoon"
+                                        className={`text-[12px] ${shootType === "session-afternoon"
                                                 ? "text-gray-500"
                                                 : "text-gray-700 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-afternoon"
                                             ? "selected"
@@ -628,11 +631,10 @@ export default function ShootDetail({ villa, date, setDate }: DetailProps) {
                                             setShootType("session-fullday");
                                             setShowTypeModal(false);
                                         }}
-                                        className={`text-[12px] ${
-                                            shootType === "session-fullday"
+                                        className={`text-[12px] ${shootType === "session-fullday"
                                                 ? "text-gray-500"
                                                 : "text-gray-700 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-fullday"
                                             ? "selected"

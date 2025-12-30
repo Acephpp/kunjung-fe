@@ -60,7 +60,7 @@ export default function TestimoniSection() {
     ]
 
     return (
-        <section className="px-4 md:px-12 pt-6 md:pt-14 pb-6 md:pb-16">
+        <section className="px-4 md:px-10 pt-6 md:pt-14 pb-6 md:pb-16">
             {/* HEADER */}
             <div
                 className="
