@@ -22,13 +22,13 @@ export default function StaysDetailIntro({ villa }: StaysDetailIntroProps) {
     return (
         <div>
             <h1 className="sm:hidden text-[28px] font-primary font-semibold text-[#2D2A29]">{villa.name}</h1>
-                <h2 className="font-primary font-semibold text-[#2D2A29]
+            <h2 className="font-primary font-semibold text-[#2D2A29]
                 text-[18px] sm:text-[28px] md:text-[40px] mb-5 sm:mb-10">
-                    A tranquil stay in the city
-                </h2>
+                A tranquil stay in the city
+            </h2>
             <div className="space-y-6">
                 {/* TITLE */}
-                
+
 
                 {/* RATING */}
                 <div className="inline-flex flex-wrap items-center gap-3
@@ -46,46 +46,57 @@ export default function StaysDetailIntro({ villa }: StaysDetailIntroProps) {
 
                 {/* GUEST / BEDROOM / BATHROOM */}
                 <div
-                    className="flex flex-wrap sm:flex-nowrap items-center
-                border border-[#D6D3CE] rounded-xl
-                px-4 sm:px-6 py-4 sm:py-5
-                font-secondary text-[#2D2A29]
-                text-[14px] sm:text-[16px] md:text-[18px] gap-y-3"
+                    className="
+        flex flex-wrap sm:grid sm:grid-cols-3
+        items-center
+        border border-[#D6D3CE] rounded-xl
+        px-4 sm:px-8 py-4 sm:py-5
+        font-secondary text-[#2D2A29]
+        text-[14px] sm:text-[16px] md:text-[18px]
+        gap-y-3
+    "
                 >
-                    <div className="flex items-center gap-2 w-1/2 sm:w-auto">
+                    {/* GUEST — LEFT */}
+                    <div className="flex items-center gap-2 w-1/2 sm:w-auto sm:justify-self-start">
                         <User className="w-5 h-5" />
-                        {villa.guests} Guest
+                        <span>{villa.guests} Guest</span>
                     </div>
 
-                    <span className="hidden sm:block mx-6 h-6 w-px bg-[#D6D3CE]" />
-
-                    <div className="flex items-center gap-2 w-1/2 sm:w-auto">
+                    {/* BEDROOM — CENTER */}
+                    <div className="flex items-center gap-2 w-1/2 sm:w-auto sm:justify-self-center">
                         <Bed className="w-5 h-5" />
-                        {villa.bedrooms} Bedrooms
+                        <span>{villa.bedrooms} Bedrooms</span>
                     </div>
 
-                    <span className="hidden sm:block mx-6 h-6 w-px bg-[#D6D3CE]" />
-
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                    {/* BATHROOM — RIGHT */}
+                    <div className="flex items-center gap-2 w-full sm:w-auto sm:justify-self-end">
                         <Bath className="w-5 h-5" />
-                        {villa.bathrooms} Bathrooms
+                        <span>{villa.bathrooms} Bathrooms</span>
                     </div>
                 </div>
 
+
                 {/* VIRTUAL TOUR CARD */}
                 <div
-                    className="relative flex flex-col sm:flex-row
-                border border-[#D6D3CE] rounded-2xl p-4 bg-[#FAF9F5]"
+                    className="
+                        relative flex flex-col sm:flex-row
+                        border border-[#D6D3CE] rounded-2xl
+                        p-4 bg-[#FAF9F5]
+                    "
                 >
-                    {/* ICON */}
-                    <div className="absolute top-4 right-4 text-[#2D2A29]">
-                        <ImageIcon className="w-5 h-5" strokeWidth={1.5} />
+                    {/* ICON — DESKTOP ONLY (pojok kanan) */}
+                    <div className="hidden sm:block absolute top-4 right-4 text-[#2D2A29]">
+                        <ImageIcon className="w-8 h-8" strokeWidth={1.5} />
                     </div>
 
                     {/* IMAGE */}
                     <div className="w-full sm:w-1/2 sm:pr-4">
-                        <div className="relative h-[200px] sm:h-full sm:min-h-[220px]
-                        rounded-xl overflow-hidden bg-[#EDEBE6]">
+                        <div
+                            className="
+                                relative h-[200px] sm:h-full sm:min-h-[220px]
+                                rounded-xl overflow-hidden bg-[#EDEBE6]
+                            "
+                        >
                             <Image
                                 src="/images/villa-1.jpg"
                                 alt="Silas House"
@@ -100,28 +111,48 @@ export default function StaysDetailIntro({ villa }: StaysDetailIntroProps) {
                     {/* CONTENT */}
                     <div className="w-full sm:w-1/2 sm:pl-2 flex flex-col justify-between mt-4 sm:mt-0">
                         <div>
-                            <p className="font-primary font-semibold
-                            text-[22px] sm:text-[24px] md:text-[28px]
-                            leading-tight text-[#2D2A29]">
-                                Silas House
-                            </p>
+                            {/* TITLE ROW (MOBILE ICON DI SINI) */}
+                            <div className="flex items-center justify-between gap-3">
+                                <p
+                                    className="
+                                        font-primary font-semibold
+                                        text-[22px] sm:text-[24px] md:text-[28px]
+                                        leading-tight text-[#2D2A29]
+                                    "
+                                >
+                                    Silas House
+                                </p>
 
-                            <p className="text-[14px] sm:text-[16px] md:text-[18px]
-                            font-primary text-[#8B8883] mt-1">
+                                {/* ICON — MOBILE ONLY */}
+                                <div className="sm:hidden text-[#2D2A29]">
+                                    <ImageIcon className="w-7 h-7" strokeWidth={1.5} />
+                                </div>
+                            </div>
+
+                            <p
+                                className="
+                                    text-[14px] sm:text-[16px] md:text-[18px]
+                                    font-primary text-[#8B8883] mt-1
+                                "
+                            >
                                 Virtual tour available
                             </p>
                         </div>
 
                         <button
-                            className="w-full bg-[#E6E4DE] hover:bg-[#DCDAD4]
-                        text-[16px] md:text-[18px]
-                        py-3 md:py-4 rounded-xl
-                        font-secondary text-[#2D2A29] mt-4 sm:mt-0"
+                            className="
+                                w-full bg-[#E6E4DE] hover:bg-[#DCDAD4]
+                                text-[16px] md:text-[18px]
+                                py-3 md:py-4 rounded-xl
+                                font-secondary text-[#2D2A29]
+                                mt-4 sm:mt-0
+                            "
                         >
                             Take virtual tour
                         </button>
                     </div>
                 </div>
+
 
                 {/* SELF CHECK-IN */}
                 <div className="flex items-start gap-4 border-y border-[#E4E1DC] py-5">

@@ -80,16 +80,16 @@ export default function StaysDetailContent({
                             key={i}
                             className={`flex items-start gap-4 font-secondary
                             ${item.available
-                                ? "text-[#2D2A29]"
-                                : "text-[#9B9894] line-through"}`}
+                                    ? "text-[#2D2A29]"
+                                    : "text-[#9B9894] line-through"}`}
                         >
                             {/* ICON */}
                             <div
                                 className={`flex items-center justify-center
                                 w-6 h-6 rounded-sm border shrink-0 mt-1
                                 ${item.available
-                                    ? "border-[#2D2A29]"
-                                    : "bg-[#2D2A29] border-[#2D2A29]"}`}
+                                        ? "border-[#2D2A29]"
+                                        : "bg-[#2D2A29] border-[#2D2A29]"}`}
                             >
                                 {item.available ? (
                                     <Check className="w-4 h-4" />
@@ -130,30 +130,65 @@ export default function StaysDetailContent({
 
             {/* AVAILABILITY */}
             <div>
-                <h2 className="font-primary font-semibold mt-8 md:mt-10
-                    text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]">
+                <h2
+                    className="font-primary font-semibold mt-8 md:mt-10
+        text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]"
+                >
                     Availability
                 </h2>
 
-                <div className="rounded-md border w-full p-4 mt-5">
+                {/* CALENDAR WRAPPER */}
+                <div
+                    className="mt-5 w-full
+        border border-[#2D2A29]
+        rounded-xl
+        overflow-hidden
+        bg-[#FCFBF7]"
+                >
+                    {/* MOBILE */}
                     <Calendar
                         mode="single"
                         selected={date}
                         onSelect={setDate}
                         numberOfMonths={1}
-                        className="w-full md:hidden"
+                        className="
+                w-full md:hidden
+                p-4
+                [&_.rdp-caption]:mb-4
+                [&_.rdp-caption_label]:font-secondary
+                [&_.rdp-caption_label]:text-[16px]
+                [&_.rdp-nav_button]:text-[#2D2A29]
+                [&_.rdp-head_cell]:text-[12px]
+                [&_.rdp-head_cell]:font-secondary
+                [&_.rdp-cell]:h-10
+                [&_.rdp-cell]:w-10
+            "
                     />
 
+                    {/* DESKTOP */}
                     <Calendar
                         mode="single"
                         selected={date}
                         onSelect={setDate}
                         numberOfMonths={2}
                         pagedNavigation
-                        className="hidden md:block w-full"
+                        className="
+                hidden md:block w-full
+                p-6
+                [&_.rdp-months]:gap-12
+                [&_.rdp-caption]:mb-6
+                [&_.rdp-caption_label]:font-secondary
+                [&_.rdp-caption_label]:text-[16px]
+                [&_.rdp-nav_button]:text-[#2D2A29]
+                [&_.rdp-head_cell]:text-[12px]
+                [&_.rdp-head_cell]:font-secondary
+                [&_.rdp-cell]:h-10
+                [&_.rdp-cell]:w-10
+            "
                     />
                 </div>
             </div>
+
 
             <hr className="border-gray-300 md:my-10" />
 

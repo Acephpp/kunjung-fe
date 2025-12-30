@@ -19,8 +19,9 @@ export default function ThingsToKnowSection() {
 
     return (
         <>
-            <section className="max-w-9xl mx-auto px-6 md:px-10 py-6 md:py-0 bg-[#FCFBF7]">
-                <div className="md:py-20">
+            <section className="max-w-9xl px-6 md:px-12 md:pt-10 bg-[#FCFBF7]">
+                {/* BORDER TOP & BOTTOM */}
+                <div className="border-y border-[#D8D6D0] py-6 md:py-20">
                     {/* TITLE */}
                     <h2 className="text-left md:text-center text-[28px] md:text-[40px] font-primary font-semibold mb-6 md:mb-10">
                         Things to know
@@ -74,7 +75,7 @@ export default function ThingsToKnowSection() {
                         </button>
                     </div>
 
-                    {/* ================= DESKTOP GRID (UNCHANGED) ================= */}
+                    {/* ================= DESKTOP GRID ================= */}
                     <div className="hidden md:grid grid-cols-3 gap-16 max-w-6xl mx-auto">
                         {/* ITEM 1 */}
                         <div className="flex items-start gap-6">
