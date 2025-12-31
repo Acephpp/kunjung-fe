@@ -127,7 +127,7 @@ export default function TestimoniSection() {
                 {reviews.map((review) => (
                     <SwiperSlide key={review.id}>
                         {/* 🔥 FIX: TINGGI KARTU DIPAKSA */}
-                        <div className="h-[180px] md:h-[250px] border border-gray-300 rounded-sm bg-white p-5 md:p-6 flex flex-col">
+                        <div className="h-[180px] md:h-[250px] border border-gray-300 rounded-sm bg-[#FCFBF7] p-5 md:p-6 flex flex-col">
                             {/* HEADER CARD */}
                             <div className="flex justify-between items-start md:mb-5">
                                 <div>

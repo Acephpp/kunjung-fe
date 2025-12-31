@@ -85,7 +85,7 @@ export default function TestimoniVilla() {
             >
                 {reviews.map((review) => (
                     <SwiperSlide key={review.id} className="h-full">
-                        <div className="border border-gray-300 p-6 h-full flex flex-col bg-white rounded-lg">
+                        <div className="border border-gray-300 p-6 h-full flex flex-col bg-[#FCFBF7] rounded-lg">
                             <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 className="font-semibold text-[#4A3B2D]">{review.name}</h3>

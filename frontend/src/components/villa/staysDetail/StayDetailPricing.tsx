@@ -406,64 +406,243 @@ export default function StaysDetailPricing({
             {/* MODAL KALENDER RANGE */}
             {showDatePicker && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+                    className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
                     onClick={() => setShowDatePicker(false)}
                 >
                     <div
-                        className="bg-[#FCFBF7] rounded-2xl shadow-xl border border-gray-200 p-6"
+                        className="
+                relative
+                w-full md:w-auto
+                bg-white md:bg-[#FCFBF7]
+                rounded-t-3xl md:rounded-2xl
+                shadow-xl
+                border border-gray-200
+                p-4 md:p-6
+                md:px-10
+
+                h-[85vh] md:h-auto
+                min-h-[70vh] md:min-h-[20vh]
+                max-h-[90vh]
+
+                overflow-y-auto
+                pb-24
+            "
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <DateRange
-                            ranges={[
-                                {
-                                    startDate: checkIn || new Date(),
-                                    endDate: checkOut || checkIn || new Date(),
-                                    key: "selection",
-                                },
-                            ]}
-                            onChange={handleDateChange}
-                            rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
-                            months={2}
-                            direction="horizontal"
-                            moveRangeOnFirstSelection={false}
-                            editableDateInputs={false}
-                        />
+                        {/* DRAG INDICATOR (MOBILE) */}
+                        <div className="md:hidden flex justify-center mb-3">
+                            <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        {/* 🔥 MOBILE – 2 BULAN */}
+                        <div className="md:hidden flex justify-center">
+                            <DateRange
+                                ranges={[
+                                    {
+                                        startDate: checkIn || new Date(),
+                                        endDate: checkOut || checkIn || new Date(),
+                                        key: "selection",
+                                    },
+                                ]}
+                                onChange={handleDateChange}
+                                rangeColors={["#7A3E2C"]}
+                                months={2}
+                                direction="vertical"
+                                moveRangeOnFirstSelection={false}
+                                editableDateInputs={false}
+                            />
+                        </div>
+
+                        {/* 🔥 DESKTOP – 2 BULAN */}
+                        <div className="hidden md:flex justify-center calendar-wrapper">
+                            <DateRange
+                                ranges={[
+                                    {
+                                        startDate: checkIn || new Date(),
+                                        endDate: checkOut || checkIn || new Date(),
+                                        key: "selection",
+                                    },
+                                ]}
+                                onChange={handleDateChange}
+                                rangeColors={["#7A3E2C"]}
+                                months={2}
+                                direction="horizontal"
+                                moveRangeOnFirstSelection={false}
+                                editableDateInputs={false}
+                            />
+
+                            <style jsx global>{`
+                    .calendar-wrapper .rdrCalendarWrapper {
+                        background-color: #FCFBF7;
+                    }
+                `}</style>
+                        </div>
+
+                        {/* ===================== */}
+                        {/* 🔥 FOOTER – MOBILE ONLY */}
+                        {/* ===================== */}
+                        <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
+
+                            {/* Cancel */}
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowDatePicker(false)}
+                                className="flex-1 h-12 border-[#2D2A29] text-[#2D2A29] font-secondary font-bold"
+                            >
+                                cancel
+                            </Button>
+
+                            {/* Next */}
+                            <Button
+                                onClick={() => setShowDatePicker(false)}
+                                className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold"
+                            >
+                                next
+                            </Button>
+                        </div>
                     </div>
                 </div>
             )}
-
+            {/* MODAL WHO (GUESTS) */}
             {/* MODAL WHO (GUESTS) */}
             {showGuestModal && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
+                    className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
                     onClick={() => setShowGuestModal(false)}
                 >
+                    {/* ===================== */}
+                    {/* 🔥 MOBILE – BOTTOM PANEL (SAMA DENGAN KALENDER) */}
+                    {/* ===================== */}
                     <div
-                        className="bg-[#FDFBF6] rounded-3xl shadow-2xl border border-[#E5E2DD] px-8 py-6 w-[420px]"
+                        className="
+                md:hidden
+                w-full
+                bg-[#FCFBF7]
+                rounded-t-3xl
+                shadow-xl
+                border border-gray-200
+                p-4
+
+                h-[65vh]
+                min-h-[60vh]
+                max-h-[85vh]
+
+                overflow-y-auto
+            "
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between font-secondary">
-                            <span className="text-[15px] font-medium text-[#2D2A29]">Add Guests</span>
+                        {/* DRAG INDICATOR */}
+                        <div className="flex justify-center mb-4">
+                            <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
 
-                            <div className="flex items-center gap-3 text-[13px] text-[#7A7A75]">
-                                <button
-                                    onClick={() => setGuests(Math.max(0, guests - 1))}
-                                    disabled={guests === 0}
-                                    className="text-[15px] hover:text-gray-800 disabled:opacity-40 transition"
-                                >
-                                    <FiMinus size={14} />
-                                </button>
-                                <span className="text-[15px] w-3 text-center">{guests}</span>
-                                <button onClick={() => setGuests(guests + 1)} className="text-[15px] hover:text-gray-800 transition">
-                                    <FiPlus size={14} />
-                                </button>
+                        {/* CONTENT */}
+                        <div className="px-1">
+                            <div className="border border-gray-700 rounded-2xl p-5">
+                                <h2 className="font-serif text-2xl text-[#4A3B2D] mb-4">
+                                    Who?
+                                </h2>
+
+                                <div className="border border-gray-400 rounded-xl px-4 py-4 flex items-center justify-between">
+                                    {/* LEFT */}
+                                    <div>
+                                        <p className="font-medium text-[#4A3B2D]">
+                                            Add Guests
+                                        </p>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Children above 5 years are counted
+                                        </p>
+                                    </div>
+
+                                    {/* RIGHT */}
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => setGuests(Math.max(1, guests - 1))}
+                                            className="w-9 h-9 rounded-full border flex items-center justify-center"
+                                        >
+                                            <FiMinus size={14} />
+                                        </button>
+
+                                        <span className="w-6 text-center font-medium">
+                                            {guests}
+                                        </span>
+
+                                        <button
+                                            onClick={() => setGuests(guests + 1)}
+                                            className="w-9 h-9 rounded-full border flex items-center justify-center"
+                                        >
+                                            <FiPlus size={14} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="mt-3 border-b border-[#CFCBC5]" />
+                        {/* FOOTER */}
+                        {/* FOOTER – SAME STYLE AS MOBILE PANEL */}
+                        <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
+
+                            {/* Cancel */}
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowGuestModal(false)}
+                                className="flex-1 h-12 border-[#2D2A29] text-[#2D2A29] font-secondary font-bold"
+                            >
+                                cancel
+                            </Button>
+
+                            {/* Next */}
+                            <Button
+                                onClick={() => setShowGuestModal(false)}
+                                className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold"
+                            >
+                                next
+                            </Button>
+                        </div>
+
+                    </div>
+
+                    {/* ===================== */}
+                    {/* 🔥 DESKTOP – TETAP MODAL LAMA */}
+                    {/* ===================== */}
+                    <div
+                        className="hidden md:flex items-center justify-center h-full"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="bg-[#FDFBF6] rounded-3xl shadow-2xl border border-[#E5E2DD] px-8 py-6 w-[420px]">
+                            <div className="flex items-center justify-between font-secondary">
+                                <span className="text-[15px] font-medium text-[#2D2A29]">
+                                    Add Guests
+                                </span>
+
+                                <div className="flex items-center gap-3 text-[13px] text-[#7A7A75]">
+                                    <button
+                                        onClick={() => setGuests(Math.max(0, guests - 1))}
+                                        disabled={guests === 0}
+                                        className="hover:text-gray-800 disabled:opacity-40 transition"
+                                    >
+                                        <FiMinus size={14} />
+                                    </button>
+
+                                    <span className="text-[15px] w-3 text-center">
+                                        {guests}
+                                    </span>
+
+                                    <button
+                                        onClick={() => setGuests(guests + 1)}
+                                        className="hover:text-gray-800 transition"
+                                    >
+                                        <FiPlus size={14} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="mt-3 border-b border-[#CFCBC5]" />
+                        </div>
                     </div>
                 </div>
             )}
+
         </>
     )
 }
