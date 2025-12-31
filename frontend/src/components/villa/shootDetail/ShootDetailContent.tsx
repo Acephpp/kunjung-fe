@@ -1,27 +1,21 @@
 "use client"
 
 import { Check } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar as AvailabilityCalendar, Calendar } from "@/components/ui/calendar"
 import type { villas } from "@/app/data/villas"
-import SleepArrangementSection from "./SleepArrangement"
 import { useState } from "react"
-import AmenitiesModal from "./AmenitiesModal"
+import AmenitiesModal from "../staysDetail/AmenitiesModal"
 
 type Villa = (typeof villas)[number]
 
-interface StaysDetailContentProps {
+interface ShootDetailContentProps {
     villa: Villa
     date: Date | undefined
     setDate: (date: Date | undefined) => void
 }
 
-export default function StaysDetailContent({
-    villa,
-    date,
-    setDate,
-}: StaysDetailContentProps) {
+export default function ShootDetailContent({ villa, date, setDate }: ShootDetailContentProps) {
     const [showAmenities, setShowAmenities] = useState(false)
-
     return (
         <div className="space-y-8">
 
@@ -30,8 +24,10 @@ export default function StaysDetailContent({
                 {villa.description.split("\n\n").map((p, i) => (
                     <p
                         key={i}
-                        className="text-gray-700 mb-4 font-secondary
-                        text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]"
+                        className="
+                            text-gray-700 mb-4 font-secondary
+                            text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]
+                        "
                     >
                         {p}
                     </p>
@@ -40,29 +36,24 @@ export default function StaysDetailContent({
 
             {/* THINGS TO-DO */}
             <div>
-                <h2 className="font-primary font-semibold mt-8 md:mt-10
-                    text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]">
+                <h2
+                    className="
+                        font-primary font-semibold mt-8 md:mt-10
+                        text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]
+                    "
+                >
                     Things To-Do
                 </h2>
 
-                <p className="text-gray-700 mt-3
-                    text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]">
+                <p
+                    className="
+                        text-gray-700 mt-3
+                        text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]
+                    "
+                >
                     {villa.thingsToDo}
                 </p>
             </div>
-
-            {/* ================= SLEEP ARRANGEMENT ================= */}
-            <SleepArrangementSection
-                rooms={[
-                    { title: "Bedroom 1", description: "1 queen bed", image: "/images/villa-1.jpg" },
-                    { title: "Bedroom 2", description: "1 queen bed, 2 double beds, 1 couch", image: "/images/villa-2.jpg" },
-                    { title: "Bedroom 3", description: "1 double bed", image: "/images/villa-3.jpg" },
-                    { title: "Bedroom 4", description: "1 single bed", image: "/images/villa-4.jpg" },
-                    { title: "Living Area", description: "1 couch", image: "/images/villa-1.jpg" },
-                    { title: "Extra Room", description: "Flexible sleeping space", image: "/images/villa-2.jpg" },
-                ]}
-            />
-            {/* ================= END SLEEP ARRANGEMENT ================= */}
 
             <hr className="border-gray-300 md:my-10" />
 
@@ -140,27 +131,30 @@ export default function StaysDetailContent({
                 >
                     Show all amenities
                 </button>
-
             </div>
+
 
             <hr className="border-gray-300 md:my-10" />
 
             {/* AVAILABILITY */}
             <div>
                 <h2
-                    className="font-primary font-semibold mt-8 md:mt-10
-        text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]"
+                    className="
+                        font-primary font-semibold mt-8 md:mt-10
+                        text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]
+                    "
                 >
                     Availability
                 </h2>
 
-                {/* CALENDAR WRAPPER */}
                 <div
-                    className="mt-5 w-full
-        border border-[#2D2A29]
-        rounded-xl
-        overflow-hidden
-        bg-[#FCFBF7]"
+                    className="
+                        mt-5 w-full
+                        border border-[#2D2A29]
+                        rounded-xl
+                        overflow-hidden
+                        bg-[#FCFBF7]
+                    "
                 >
                     {/* MOBILE */}
                     <Calendar
@@ -169,17 +163,17 @@ export default function StaysDetailContent({
                         onSelect={setDate}
                         numberOfMonths={1}
                         className="
-                w-full md:hidden
-                p-4
-                [&_.rdp-caption]:mb-4
-                [&_.rdp-caption_label]:font-secondary
-                [&_.rdp-caption_label]:text-[16px]
-                [&_.rdp-nav_button]:text-[#2D2A29]
-                [&_.rdp-head_cell]:text-[12px]
-                [&_.rdp-head_cell]:font-secondary
-                [&_.rdp-cell]:h-10
-                [&_.rdp-cell]:w-10
-            "
+                            w-full md:hidden
+                            p-4
+                            [&_.rdp-caption]:mb-4
+                            [&_.rdp-caption_label]:font-secondary
+                            [&_.rdp-caption_label]:text-[16px]
+                            [&_.rdp-nav_button]:text-[#2D2A29]
+                            [&_.rdp-head_cell]:text-[12px]
+                            [&_.rdp-head_cell]:font-secondary
+                            [&_.rdp-cell]:h-10
+                            [&_.rdp-cell]:w-10
+                        "
                     />
 
                     {/* DESKTOP */}
@@ -190,41 +184,50 @@ export default function StaysDetailContent({
                         numberOfMonths={2}
                         pagedNavigation
                         className="
-                hidden md:block w-full
-                p-6
-                [&_.rdp-months]:gap-12
-                [&_.rdp-caption]:mb-6
-                [&_.rdp-caption_label]:font-secondary
-                [&_.rdp-caption_label]:text-[16px]
-                [&_.rdp-nav_button]:text-[#2D2A29]
-                [&_.rdp-head_cell]:text-[12px]
-                [&_.rdp-head_cell]:font-secondary
-                [&_.rdp-cell]:h-10
-                [&_.rdp-cell]:w-10
-            "
+                            hidden md:block w-full
+                            p-6
+                            [&_.rdp-months]:gap-12
+                            [&_.rdp-caption]:mb-6
+                            [&_.rdp-caption_label]:font-secondary
+                            [&_.rdp-caption_label]:text-[16px]
+                            [&_.rdp-nav_button]:text-[#2D2A29]
+                            [&_.rdp-head_cell]:text-[12px]
+                            [&_.rdp-head_cell]:font-secondary
+                            [&_.rdp-cell]:h-10
+                            [&_.rdp-cell]:w-10
+                        "
                     />
                 </div>
             </div>
-
 
             <hr className="border-gray-300 md:my-10" />
 
             {/* LOCATION */}
             <div>
-                <h2 className="font-primary font-semibold mt-8 md:mt-10
-                    text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]">
+                <h2
+                    className="
+                        font-primary font-semibold mt-8 md:mt-10
+                        text-[26px] sm:text-[30px] md:text-[36px] lg:text-[40px]
+                    "
+                >
                     Location
                 </h2>
 
-                <p className="text-gray-700 mt-4 font-secondary
-                    text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]">
+                <p
+                    className="
+                        text-gray-700 mt-4 font-secondary
+                        text-[16px] sm:text-[18px] md:text-[22px] lg:text-[25px]
+                    "
+                >
                     {villa.address}
                 </p>
 
                 <iframe
                     src={villa.mapUrl}
-                    className="rounded-sm mt-5 w-full
-                    h-[280px] sm:h-[360px] md:h-[500px]"
+                    className="
+                        rounded-sm mt-5 w-full
+                        h-[280px] sm:h-[360px] md:h-[500px]
+                    "
                     loading="lazy"
                 />
             </div>
@@ -321,8 +324,6 @@ export default function StaysDetailContent({
                     { label: "Hot water", available: false },
                 ]}
             />
-
         </div>
-
     )
 }

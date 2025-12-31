@@ -4,8 +4,9 @@ import { useState } from "react";
 import { villas } from "@/app/data/villas";
 import { useParams, notFound } from "next/navigation";
 import WeddingDetail from "./WeddingDetail";
-import ShootDetail from "./ShootDetail";
 import StaysDetail from "./staysDetail/StayDetail";
+import EventDetail from "./eventDetail/EventDetail";
+import ShootDetail from "./shootDetail/ShootDetail";
 
 type Villa = (typeof villas)[number];
 
@@ -72,7 +73,7 @@ export default function VillaDetail() {
             )}
 
             {activeTab === "event" && (
-                <WeddingDetail villa={villa} date={date} setDate={setDate} />
+                <EventDetail villa={villa} date={date} setDate={setDate} />
             )}
 
             {activeTab === "shoot" && (

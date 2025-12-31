@@ -3,13 +3,14 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { BadgePercent } from "lucide-react"
+import { BadgePercent, ChevronLeft, MapPin, Star } from "lucide-react"
 import { DateRange, type Range } from "react-date-range"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
 import { FiMinus, FiPlus } from "react-icons/fi"
 import type { villas } from "@/app/data/villas"
+import Image from "next/image"
 
 type Villa = (typeof villas)[number]
 
@@ -38,6 +39,7 @@ export default function StaysDetailPricing({
 }: StaysDetailPricingProps) {
     const [showGuestModal, setShowGuestModal] = useState(false)
     const [guests, setGuests] = useState<number>(0)
+    const [showMobilePanel, setShowMobilePanel] = useState(false)
 
     const formatDate = (d?: Date) => {
         if (!d) return "Add Dates"
@@ -57,6 +59,7 @@ export default function StaysDetailPricing({
         if (checkIn && checkOut) {
             const startDay = checkIn.getDate()
             const endDay = checkOut.getDate()
+            const startMonth = checkIn.toLocaleDateString("en-US", { month: "short" })
             const endMonth = checkOut.toLocaleDateString("en-US", { month: "short" })
             const year = checkOut.getFullYear()
             return `${startDay}-${endDay} ${endMonth}, ${year}`
@@ -120,7 +123,7 @@ export default function StaysDetailPricing({
 
     return (
         <>
-            {/* DESKTOP VERSION - Hidden on mobile, sticky on desktop */}
+            {/* DESKTOP VERSION */}
             <div className="hidden lg:block lg:col-span-1 mt-5">
                 <Card className="sticky top-2/12 py-10 px-10 rounded-xl shadow-xl bg-[#fcfbf7] border-[#E7E6E2]">
                     <div className="grid grid-cols-2 gap-4">
@@ -195,31 +198,210 @@ export default function StaysDetailPricing({
                 </Card>
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-[#fcfbf7] border-t border-[#E7E6E2] shadow-lg">
-                <div className="flex items-center justify-between px-4 py-5 md:py-3 max-w-7xl mx-auto w-full">
-                    {/* Left side - Price and date info */}
-                    <div className="flex-1">
-                        <p className="text-sm font-bold text-[#2D2A29] font-secondary">{villa.weekdayPrice}</p>
-                        <p className="text-xs text-[#959290] font-secondary">for 1 night — {formatMobileDateRange()}</p>
+            {/* MOBILE STICKY FOOTER */}
+            <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-[#FCFBF7] border-t border-[#E7E6E2] shadow-lg">
+                <div className="flex items-center justify-between px-4 py-4 md:py-2 max-w-7xl mx-auto w-full">
+                    {/* LEFT */}
+                    <div className="flex flex-col">
+                        <p className="text-[18px] font-semibold text-[#2D2A29] font-secondary leading-tight">
+                            {villa.weekdayPrice}
+                        </p>
+                        <p className="text-[12px] text-[#959290] font-secondary leading-tight">
+                            1 night, {formatMobileDateRange()}
+                        </p>
                     </div>
 
-                    {/* Right side - Reserve button */}
-                    <Link href={`/houses/villa/${villa.id}/reserve`} className="ml-4 flex-shrink-0">
-                        <Button className="bg-[#7A3E2C] hover:bg-[#693424] text-white rounded-full px-10 md:px-6 py-5 md:py-2 font-secondary font-bold text-sm">
-                            reserve
-                        </Button>
-                    </Link>
+                    {/* RIGHT */}
+                    <button
+                        onClick={() => setShowMobilePanel(true)}
+                        className="ml-4 flex-shrink-0 bg-[#7A3E2C] hover:bg-[#693424]
+                       text-white rounded-full px-12 py-3
+                       font-secondary font-bold text-sm transition"
+                    >
+                        reserve
+                    </button>
                 </div>
             </div>
 
+
+
+            {showMobilePanel && (
+                <div className="fixed inset-0 lg:hidden z-50 bg-white flex flex-col">
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-[#E7E6E2] sticky top-0 bg-white">
+                        {/* LEFT - BACK (START) */}
+                        <button
+                            onClick={() => setShowMobilePanel(false)}
+                            className="text-[#2D2A29] hover:bg-gray-100
+                   py-2 pr-2 pl-0 
+                   rounded-full transition"
+                        >
+                            <ChevronLeft size={24} />
+                        </button>
+
+                        {/* RIGHT - LOGO ICON */}
+                        <Image
+                            src="/images/kunjung.svg"
+                            alt="Kunjung"
+                            width={130}
+                            height={28}
+                            priority
+                        />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 overflow-y-auto px-4 py-6 pb-32 font-secondary">
+
+                        {/* MAIN CARD */}
+                        <div className="border border-[#E7E6E2] rounded-2xl p-4 mb-6">
+
+                            {/* Villa Info */}
+                            <div className="flex gap-4 mb-4">
+                                <div className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+                                    <Image
+                                        src={villa.image || "/placeholder.svg"}
+                                        alt={villa.name}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+
+                                <div className="flex-1 flex flex-col justify-between">
+                                    {/* TOP: Name & Location */}
+                                    <div>
+                                        <h3 className="font-primary font-semibold text-[22px] text-[#2D2A29] mb-1">
+                                            {villa.name}
+                                        </h3>
+
+                                        <p className="text-sm text-[#959290] flex items-center gap-1">
+                                            <MapPin size={14} className="text-[#959290]" />
+                                            {villa.location}
+                                        </p>
+                                    </div>
+
+                                    {/* BOTTOM: Rating */}
+                                    <div className="flex items-center gap-1 text-[#2D2A29] mt-2">
+                                        <Star size={14} className="fill-[#2D2A29]" />
+                                        <span className="text-sm font-medium">
+                                            {villa.rating} ({villa.reviews})
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <p className="text-sm text-[#7A7A75] leading-relaxed mb-6">
+                                {villa.description}
+                            </p>
+
+                            <div className="border-t border-[#E7E6E2] my-2" />
+
+                            {/* Dates */}
+                            <div className="flex items-center justify-between">
+                                <h4 className="font-semibold text-[#2D2A29]">Dates</h4>
+                                <button
+                                    onClick={() => setShowDatePicker(true)}
+                                    className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
+                                >
+                                    change
+                                </button>
+                            </div>
+
+                            <p className="text-[#959290] mb-4">
+                                {checkIn && checkOut
+                                    ? `${checkIn.toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "short",
+                                    })} - ${checkOut.toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "short",
+                                    })}, ${checkOut.getFullYear()}`
+                                    : "Add dates"}
+                            </p>
+
+                            <div className="border-t border-[#E7E6E2] my-2" />
+
+                            {/* Guests */}
+                            <div className="flex items-center justify-between">
+                                <h4 className="font-semibold text-[#2D2A29]">Guests</h4>
+                                <button
+                                    onClick={() => setShowGuestModal(true)}
+                                    className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
+                                >
+                                    change
+                                </button>
+                            </div>
+
+                            <p className="text-[#959290] mb-4">
+                                {guests > 0 ? `${guests} Guests` : "Add guests"}
+                            </p>
+
+                            <div className="border-t border-[#E7E6E2] my-2" />
+
+                            {/* Price */}
+                            <div className="flex items-center justify-between">
+                                <span className="font-medium text-[#2D2A29]">Price</span>
+                                <span className="font-medium text-[#2D2A29]">
+                                    {villa.weekdayPrice}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* PRICE DETAILS (OUTSIDE CARD) */}
+                        <div className="px-1">
+
+                            <p className="text-[16px] font-medium text-[#2D2A29] mb-1">Price details</p>
+
+                            <div className="flex items-center justify-between text-[16px] mb-4 text-[#2D2A29]">
+                                <span>1 night x {villa.weekdayPrice}</span>
+                                <span>{villa.weekdayPrice}</span>
+                            </div>
+
+                            <div className="border-t border-[#E7E6E2] pt-4 flex items-center justify-between">
+                                <span className="font-bold text-[20px] text-[#2D2A29]">TOTAL</span>
+                                <span className="font-bold text-[20px] text-[#2D2A29]">
+                                    {villa.totalPrice}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {/* Footer with Buttons */}
+                    <div className="fixed bottom-0 left-0 right-0 lg:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
+
+                        {/* Cancel */}
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowMobilePanel(false)}
+                            className="flex-1 h-12 border-[#2D2A29] text-[#2D2A29] font-secondary font-bold"
+                        >
+                            cancel
+                        </Button>
+
+                        {/* Next */}
+                        <Button
+                            asChild
+                            className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold"
+                        >
+                            <Link href={`/houses/villa/${villa.id}/reserve`}>
+                                next
+                            </Link>
+                        </Button>
+                    </div>
+
+                </div>
+            )}
+
             {/* Add padding to body to prevent content overlap with sticky footer on mobile */}
             <style>{`
-                @media (max-width: 1024px) {
-                    body {
-                        padding-bottom: 75px;
-                    }
-                }
-            `}</style>
+        @media (max-width: 1024px) {
+          body {
+            padding-bottom: 75px;
+          }
+        }
+      `}</style>
 
             {/* MODAL KALENDER RANGE */}
             {showDatePicker && (
