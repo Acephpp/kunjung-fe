@@ -14,6 +14,7 @@ export default function FilterBar() {
     const [showCheckOut, setShowCheckOut] = useState(false);
     const [showGuests, setShowGuests] = useState(false);
 
+
     const [destination, setDestination] = useState("");
 
     // guests detail (SAMA DENGAN SearchBar)
@@ -34,7 +35,10 @@ export default function FilterBar() {
     const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
 
     // filter lain
-    const [price, setPrice] = useState([0, 6430000]);
+    const MIN = 0;
+    const MAX = 5000000;
+    const STEP = 100000;
+    const [price, setPrice] = useState<[number, number]>([1000000, 4000000]);
     const [amenities, setAmenities] = useState<string[]>([]);
     const [propertyType, setPropertyType] = useState("any");
     const [sortOption, setSortOption] = useState("Relevance");
@@ -75,9 +79,8 @@ export default function FilterBar() {
         if (guestCount === 0)
             return `${infantCount} infant${infantCount > 1 ? "s" : ""}`;
 
-        return `${guestCount} guest${guestCount > 1 ? "s" : ""}, ${infantCount} infant${
-            infantCount > 1 ? "s" : ""
-        }`;
+        return `${guestCount} guest${guestCount > 1 ? "s" : ""}, ${infantCount} infant${infantCount > 1 ? "s" : ""
+            }`;
     };
 
     const formatLabelDate = (date: Date | null) => {
@@ -174,24 +177,83 @@ export default function FilterBar() {
 
                             {/* Price Range */}
                             <div className="mb-10">
-                                <label className="text-[16px] font-semibold font-secondary text-gray-700">
-                                    Weekend pricing
+                                <label className="text-[16px] font-semibold text-gray-700">
+                                    Price range
                                 </label>
-                                <input
-                                    type="range"
-                                    min={0}
-                                    max={6430000}
-                                    value={price[1]}
-                                    onChange={(e) =>
-                                        setPrice([price[0], Number(e.target.value)])
-                                    }
-                                    className="w-full accent-[#7A3E2C] mt-2"
-                                />
-                                <div className="flex justify-between text-sm text-gray-700 mt-1">
+
+                                <div className="relative mt-8">
+                                    {/* Track */}
+                                    <div className="relative h-2 rounded-full bg-gray-200">
+                                        {/* Active range */}
+                                        <div
+                                            className="absolute h-2 rounded-full bg-[#7A3E2C]"
+                                            style={{
+                                                left: `${((price[0] - MIN) / (MAX - MIN)) * 100}%`,
+                                                right: `${100 - ((price[1] - MIN) / (MAX - MIN)) * 100}%`,
+                                            }}
+                                        />
+                                    </div>
+
+                                    {/* Min thumb */}
+                                    <input
+                                        type="range"
+                                        min={MIN}
+                                        max={MAX}
+                                        step={STEP}
+                                        value={price[0]}
+                                        onChange={(e) =>
+                                            setPrice([
+                                                Math.min(Number(e.target.value), price[1] - STEP),
+                                                price[1],
+                                            ])
+                                        }
+                                        className="absolute top-0 w-full h-2 appearance-none bg-transparent pointer-events-none
+                       [&::-webkit-slider-thumb]:pointer-events-auto
+                       [&::-webkit-slider-thumb]:appearance-none
+                       [&::-webkit-slider-thumb]:h-5
+                       [&::-webkit-slider-thumb]:w-5
+                       [&::-webkit-slider-thumb]:rounded-full
+                       [&::-webkit-slider-thumb]:bg-white
+                       [&::-webkit-slider-thumb]:border
+                       [&::-webkit-slider-thumb]:border-gray-300
+                       [&::-webkit-slider-thumb]:shadow"
+                                    />
+
+                                    {/* Max thumb */}
+                                    <input
+                                        type="range"
+                                        min={MIN}
+                                        max={MAX}
+                                        step={STEP}
+                                        value={price[1]}
+                                        onChange={(e) =>
+                                            setPrice([
+                                                price[0],
+                                                Math.max(Number(e.target.value), price[0] + STEP),
+                                            ])
+                                        }
+                                        className="absolute top-0 w-full h-2 appearance-none bg-transparent pointer-events-none
+                       [&::-webkit-slider-thumb]:pointer-events-auto
+                       [&::-webkit-slider-thumb]:appearance-none
+                       [&::-webkit-slider-thumb]:h-5
+                       [&::-webkit-slider-thumb]:w-5
+                       [&::-webkit-slider-thumb]:rounded-full
+                       [&::-webkit-slider-thumb]:bg-white
+                       [&::-webkit-slider-thumb]:border
+                       [&::-webkit-slider-thumb]:border-gray-300
+                       [&::-webkit-slider-thumb]:shadow"
+                                    />
+                                </div>
+
+                                {/* Labels */}
+                                <div className="flex justify-between text-sm text-gray-700 mt-4">
                                     <span>Rp{price[0].toLocaleString()}</span>
                                     <span>Rp{price[1].toLocaleString()}</span>
                                 </div>
                             </div>
+
+
+
 
                             <hr className="my-4" />
 
@@ -232,11 +294,10 @@ export default function FilterBar() {
                                     <button
                                         key={type.id}
                                         onClick={() => setPropertyType(type.id)}
-                                        className={`px-5 py-2 rounded-xl border text-sm font-medium ${
-                                            propertyType === type.id
-                                                ? "bg-gray-200 border-gray-300 text-gray-800"
-                                                : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
-                                        }`}
+                                        className={`px-5 py-2 rounded-xl border text-sm font-medium ${propertyType === type.id
+                                            ? "bg-gray-200 border-gray-300 text-gray-800"
+                                            : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
+                                            }`}
                                     >
                                         {type.label}
                                     </button>
@@ -251,9 +312,8 @@ export default function FilterBar() {
                     {/* Where */}
                     <div className="relative flex-1 max-w-[400px]">
                         <div
-                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showWhere ? "bg-gray-200" : "hover:bg-gray-100/70"
-                            }`}
+                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${showWhere ? "bg-gray-200" : "hover:bg-gray-100/70"
+                                }`}
                             onClick={() => {
                                 setShowWhere(!showWhere);
                                 setShowCheckIn(false);
@@ -313,9 +373,8 @@ export default function FilterBar() {
 
                     {/* Check In */}
                     <div
-                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                            showCheckIn ? "bg-gray-200" : "hover:bg-gray-100/70"
-                        }`}
+                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showCheckIn ? "bg-gray-200" : "hover:bg-gray-100/70"
+                            }`}
                         onClick={() => {
                             setShowCheckIn(!showCheckIn);
                             setShowWhere(false);
@@ -335,9 +394,8 @@ export default function FilterBar() {
 
                     {/* Check Out */}
                     <div
-                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                            showCheckOut ? "bg-gray-200" : "hover:bg-gray-100/70"
-                        }`}
+                        className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showCheckOut ? "bg-gray-200" : "hover:bg-gray-100/70"
+                            }`}
                         onClick={() => {
                             setShowCheckOut(!showCheckOut);
                             setShowWhere(false);
@@ -358,9 +416,8 @@ export default function FilterBar() {
                     {/* Who */}
                     <div className="relative flex-1 max-w-[380px]">
                         <div
-                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showGuests ? "bg-gray-200" : "hover:bg-gray-100/70"
-                            }`}
+                            className={`px-6 py-3 cursor-pointer transition rounded-xl ${showGuests ? "bg-gray-200" : "hover:bg-gray-100/70"
+                                }`}
                             onClick={() => {
                                 setShowGuests(!showGuests);
                                 setShowWhere(false);

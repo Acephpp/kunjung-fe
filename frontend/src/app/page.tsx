@@ -7,17 +7,22 @@ import GallerySection from "@/components/Homepage/GallerySection";
 import TestimoniSection from "@/components/Homepage/TestimoniSection";
 import ProductSection from "@/components/Homepage/ProductSection";
 import DefiningComport from "@/components/Homepage/DefiningComport";
+import PromoPopup from "@/components/Homepage/PromoPopup";
 
 export default function HomePage() {
-  return (
-    <div>
-      <SearchBar />
-      <HeroSection />
-      <DefiningComport />
-      <ProviderSection />
-      <GallerySection />
-      <TestimoniSection />
-      <ProductSection />
-    </div>
-  );
+    return (
+        <>
+            <PromoPopup />
+
+            <div>
+                <SearchBar />
+                <HeroSection />
+                <DefiningComport />
+                <ProviderSection />
+                <GallerySection />
+                <TestimoniSection />
+                <ProductSection />
+            </div>
+        </>
+    );
 }

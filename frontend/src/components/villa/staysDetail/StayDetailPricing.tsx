@@ -503,7 +503,7 @@ export default function StaysDetailPricing({
                     </div>
                 </div>
             )}
-            {/* MODAL WHO (GUESTS) */}
+            
             {/* MODAL WHO (GUESTS) */}
             {showGuestModal && (
                 <div

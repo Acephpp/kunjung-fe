@@ -459,7 +459,9 @@ export default function SearchBar() {
 
                 {/* Dropdown Date (check in & check out) */}
                 {(showCheckIn || showCheckOut) && (
-                    <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary">
+                    <div
+                        className="absolute left-1/2 -translate-x-1/2 mt-2 bg-[#FCFBF7] rounded-2xl shadow-lg border border-gray-200 p-4 z-50 font-secondary"
+                    >
                         <DateRange
                             ranges={dateRange}
                             onChange={handleDateChange}
@@ -469,8 +471,15 @@ export default function SearchBar() {
                             moveRangeOnFirstSelection={false}
                             editableDateInputs={true}
                         />
+
+                        <style jsx global>{`
+                            .rdrCalendarWrapper {
+                                background-color: #FCFBF7;
+                            }
+                        `}</style>
                     </div>
                 )}
+
 
                 {/* Dropdown Guests */}
                 {showGuests && (

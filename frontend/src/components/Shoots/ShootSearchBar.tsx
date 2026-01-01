@@ -136,9 +136,8 @@ export default function ShootSearchBar() {
             <div className="flex items-center bg-[#FCFBF7] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-200 overflow-hidden h-[70px] font-secondary">
                 {/* WHERE */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showRegion ? "bg-gray-100" : "hover:bg-gray-100/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showRegion ? "bg-gray-100" : "hover:bg-gray-100/60"
+                        }`}
                     onClick={() => {
                         setShowRegion(!showRegion);
                         setShowDate(false);
@@ -158,11 +157,10 @@ export default function ShootSearchBar() {
                     <>
                         {/* CHECK IN */}
                         <div
-                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showDate && activeDateField === "checkin"
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showDate && activeDateField === "checkin"
                                     ? "bg-gray-100"
                                     : "hover:bg-gray-100/60"
-                            }`}
+                                }`}
                             onClick={() => {
                                 setActiveDateField("checkin");
                                 // sync range dengan state sekarang
@@ -190,11 +188,10 @@ export default function ShootSearchBar() {
 
                         {/* CHECK OUT */}
                         <div
-                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showDate && activeDateField === "checkout"
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showDate && activeDateField === "checkout"
                                     ? "bg-gray-100"
                                     : "hover:bg-gray-100/60"
-                            }`}
+                                }`}
                             onClick={() => {
                                 setActiveDateField("checkout");
                                 setRange([
@@ -222,11 +219,10 @@ export default function ShootSearchBar() {
                     <>
                         <div className="w-px h-8 bg-gray-300" />
                         <div
-                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                                showDate && activeDateField === "single"
+                            className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showDate && activeDateField === "single"
                                     ? "bg-gray-100"
                                     : "hover:bg-gray-100/60"
-                            }`}
+                                }`}
                             onClick={() => {
                                 setActiveDateField("single");
                                 setShowDate(!showDate);
@@ -248,9 +244,8 @@ export default function ShootSearchBar() {
 
                 {/* TYPE OF SHOOT */}
                 <div
-                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${
-                        showShoot ? "bg-gray-100" : "hover:bg-gray-100/60"
-                    }`}
+                    className={`flex-1 px-6 py-3 cursor-pointer transition rounded-xl ${showShoot ? "bg-gray-100" : "hover:bg-gray-100/60"
+                        }`}
                     onClick={() => {
                         setShowShoot(!showShoot);
                         setShowRegion(false);
@@ -301,11 +296,10 @@ export default function ShootSearchBar() {
                                 </p>
                                 <button
                                     type="button"
-                                    className={`text-[12px] ${
-                                        shootType === "instacation"
+                                    className={`text-[12px] ${shootType === "instacation"
                                             ? "text-gray-500"
                                             : "text-gray-600 underline"
-                                    }`}
+                                        }`}
                                     onClick={() => handleSelectShoot("instacation")}
                                 >
                                     {shootType === "instacation" ? "selected" : "select"}
@@ -352,11 +346,10 @@ export default function ShootSearchBar() {
                                     <button
                                         type="button"
                                         onClick={() => handleSelectShoot("session-morning")}
-                                        className={`text-[12px] ${
-                                            shootType === "session-morning"
+                                        className={`text-[12px] ${shootType === "session-morning"
                                                 ? "text-gray-500"
                                                 : "text-gray-600 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-morning" ? "selected" : "select"}
                                     </button>
@@ -381,11 +374,10 @@ export default function ShootSearchBar() {
                                         onClick={() =>
                                             handleSelectShoot("session-afternoon")
                                         }
-                                        className={`text-[12px] ${
-                                            shootType === "session-afternoon"
+                                        className={`text-[12px] ${shootType === "session-afternoon"
                                                 ? "text-gray-500"
                                                 : "text-gray-600 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-afternoon"
                                             ? "selected"
@@ -410,11 +402,10 @@ export default function ShootSearchBar() {
                                     <button
                                         type="button"
                                         onClick={() => handleSelectShoot("session-fullday")}
-                                        className={`text-[12px] ${
-                                            shootType === "session-fullday"
+                                        className={`text-[12px] ${shootType === "session-fullday"
                                                 ? "text-gray-500"
                                                 : "text-gray-600 underline"
-                                        }`}
+                                            }`}
                                     >
                                         {shootType === "session-fullday" ? "selected" : "select"}
                                     </button>
@@ -466,13 +457,18 @@ export default function ShootSearchBar() {
                     </div>
 
                     {/* RIGHT CALENDAR */}
-                    <div className="flex-1 bg-white p-5">
+                    <div className="flex-1 p-5">
                         <Calendar
                             date={selectedDate || new Date()}
                             onChange={(date: Date) => applyDate(date)}
                             color="#7A3E2C"
                             monthDisplayFormat="MMMM yyyy"
                         />
+                        <style jsx global>{`
+                            .rdrCalendarWrapper {
+                                background-color: #FCFBF7;
+                            }
+                        `}</style>
                     </div>
                 </div>
             )}
@@ -489,6 +485,11 @@ export default function ShootSearchBar() {
                         moveRangeOnFirstSelection={false}
                         editableDateInputs={true}
                     />
+                    <style jsx global>{`
+                            .rdrCalendarWrapper {
+                                background-color: #FCFBF7;
+                            }
+                        `}</style>
                 </div>
             )}
 

@@ -27,3 +27,23 @@
   display: none; /* Chrome, Safari */
 }
 
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border: 2px solid #7A3E2C;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    z-index: 30;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border: 2px solid #7A3E2C;
+    border-radius: 50%;
+    cursor: pointer;
+}

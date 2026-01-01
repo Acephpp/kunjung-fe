@@ -89,7 +89,7 @@ export default function EventSearchBar() {
             <div className="lg:hidden px-4">
                 <button
                     onClick={() => setOpenMobile(true)}
-                    className="w-full flex items-center justify-between px-5 py-4 rounded-full border bg-white shadow"
+                    className="w-full flex items-center justify-between px-5 py-4 rounded-full border shadow"
                 >
                     <span className="text-gray-500">Find events</span>
                     <FiSearch />
@@ -99,7 +99,7 @@ export default function EventSearchBar() {
             {/* ================= MOBILE MODAL WITH STEP FLOW ================= */}
             {openMobile && (
                 <div className="fixed inset-0 bg-black/40 z-50 lg:hidden">
-                    <div className="absolute inset-0 w-full bg-white flex flex-col transition-all duration-300">
+                    <div className="absolute inset-0 w-full flex flex-col transition-all duration-300">
                         {/* Header */}
                         <div className="border-b border-gray-200 px-4 py-4">
                             <div className="flex items-center justify-between">
@@ -436,7 +436,7 @@ export default function EventSearchBar() {
                             </div>
                         </div>
 
-                        <div className="flex-1 bg-white p-5">
+                        <div className="flex-1 p-5">
                             <Calendar
                                 date={selectedDate || new Date()}
                                 onChange={(date: Date) => {
@@ -446,8 +446,14 @@ export default function EventSearchBar() {
                                 color="#7A3E2C"
                                 monthDisplayFormat="MMMM yyyy"
                             />
+                            <style jsx global>{`
+                            .rdrCalendarWrapper {
+                                background-color: #FCFBF7;
+                            }
+                        `}</style>
                         </div>
                     </div>
+                    
                 )}
 
                 {/* === DROPDOWN REGION === */}
