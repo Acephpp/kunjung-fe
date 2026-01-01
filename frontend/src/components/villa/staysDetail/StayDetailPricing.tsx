@@ -407,7 +407,7 @@ export default function StaysDetailPricing({
             {showDatePicker && (
                 <div
                     className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
-                    onClick={() => setShowDatePicker(false)}
+                    onClick={() => setShowDatePicker(false)} // backdrop close
                 >
                     <div
                         className="
@@ -417,8 +417,7 @@ export default function StaysDetailPricing({
                 rounded-t-3xl md:rounded-2xl
                 shadow-xl
                 border border-gray-200
-                p-4 md:p-6
-                md:px-10
+                p-4 md:p-6 md:px-10
 
                 h-[85vh] md:h-auto
                 min-h-[70vh] md:min-h-[20vh]
@@ -427,14 +426,18 @@ export default function StaysDetailPricing({
                 overflow-y-auto
                 pb-24
             "
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()} // prevent close on content click
                     >
-                        {/* DRAG INDICATOR (MOBILE) */}
+                        {/* ===================== */}
+                        {/* DRAG INDICATOR – MOBILE */}
+                        {/* ===================== */}
                         <div className="md:hidden flex justify-center mb-3">
                             <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
                         </div>
 
-                        {/* 🔥 MOBILE – 2 BULAN */}
+                        {/* ===================== */}
+                        {/* MOBILE – 2 MONTHS (VERTICAL) */}
+                        {/* ===================== */}
                         <div className="md:hidden flex justify-center">
                             <DateRange
                                 ranges={[
@@ -444,8 +447,12 @@ export default function StaysDetailPricing({
                                         key: "selection",
                                     },
                                 ]}
-                                onChange={handleDateChange}
-                                rangeColors={["#7A3E2C"]}
+                                onChange={(item) => {
+                                    setCheckIn(item.selection.startDate)
+                                    setCheckOut(item.selection.endDate)
+                                    // ❌ JANGAN TUTUP MODAL DI SINI
+                                }}
+                                rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
                                 months={2}
                                 direction="vertical"
                                 moveRangeOnFirstSelection={false}
@@ -453,7 +460,9 @@ export default function StaysDetailPricing({
                             />
                         </div>
 
-                        {/* 🔥 DESKTOP – 2 BULAN */}
+                        {/* ===================== */}
+                        {/* DESKTOP – CENTER MODAL */}
+                        {/* ===================== */}
                         <div className="hidden md:flex justify-center calendar-wrapper">
                             <DateRange
                                 ranges={[
@@ -463,14 +472,18 @@ export default function StaysDetailPricing({
                                         key: "selection",
                                     },
                                 ]}
-                                onChange={handleDateChange}
-                                rangeColors={["#7A3E2C"]}
+                                onChange={(item) => {
+                                    setCheckIn(item.selection.startDate)
+                                    setCheckOut(item.selection.endDate)
+                                }}
+                                rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
                                 months={2}
                                 direction="horizontal"
                                 moveRangeOnFirstSelection={false}
                                 editableDateInputs={false}
                             />
 
+                            {/* FIX BACKGROUND DESKTOP */}
                             <style jsx global>{`
                     .calendar-wrapper .rdrCalendarWrapper {
                         background-color: #FCFBF7;
@@ -479,31 +492,36 @@ export default function StaysDetailPricing({
                         </div>
 
                         {/* ===================== */}
-                        {/* 🔥 FOOTER – MOBILE ONLY */}
+                        {/* MOBILE FOOTER */}
                         {/* ===================== */}
                         <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
-
                             {/* Cancel */}
-                            <Button
-                                variant="outline"
+                            <button
                                 onClick={() => setShowDatePicker(false)}
-                                className="flex-1 h-12 border-[#2D2A29] text-[#2D2A29] font-secondary font-bold"
+                                className="flex-1 h-12 border border-[#2D2A29] text-[#2D2A29] font-secondary font-bold rounded-ms text-sm"
                             >
                                 cancel
-                            </Button>
+                            </button>
 
                             {/* Next */}
-                            <Button
+                            <button
+                                disabled={!checkIn}
                                 onClick={() => setShowDatePicker(false)}
-                                className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold"
+                                className="
+                        flex-1 h-12 rounded-md text-sm
+                        bg-[#7A3E2C] hover:bg-[#693424]
+                        text-white font-secondary font-bold
+                        disabled:opacity-40 disabled:cursor-not-allowed
+                    "
                             >
                                 next
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
-            
+
+
             {/* MODAL WHO (GUESTS) */}
             {showGuestModal && (
                 <div
@@ -517,7 +535,7 @@ export default function StaysDetailPricing({
                         className="
                 md:hidden
                 w-full
-                bg-[#FCFBF7]
+                bg-white md:bg-[#FCFBF7]
                 rounded-t-3xl
                 shadow-xl
                 border border-gray-200

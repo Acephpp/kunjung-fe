@@ -631,7 +631,7 @@ export default function ShootDetailBooking({
                                 </p>
 
                                 <div
-                                    className="p-4 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer transition"
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
                                     onClick={() => setDate(today)}
                                 >
                                     <p className="font-semibold text-gray-900">Today</p>
@@ -641,7 +641,7 @@ export default function ShootDetailBooking({
                                 </div>
 
                                 <div
-                                    className="p-4 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer transition"
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
                                     onClick={() => setDate(tomorrow)}
                                 >
                                     <p className="font-semibold text-gray-900">
@@ -653,7 +653,7 @@ export default function ShootDetailBooking({
                                 </div>
 
                                 <div
-                                    className="p-4 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer transition"
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
                                     onClick={() => setDate(weekendStart)}
                                 >
                                     <p className="font-semibold text-gray-900">
@@ -669,8 +669,8 @@ export default function ShootDetailBooking({
                             </div>
 
                             {/* RIGHT */}
-                            <div className="flex-1 bg-white p-6">
-                                <div className="rounded-2xl border border-gray-200 p-3">
+                            <div className="flex-1 bg-[#F9F8F4] p-6 calendar-wrapper">
+                                <div className="rounded-2xl border border-gray-200 p-3 bg-[#F9F8F4]">
                                     <Calendar
                                         date={date || new Date()}
                                         onChange={(d: Date) => setDate(d)}
@@ -678,7 +678,24 @@ export default function ShootDetailBooking({
                                         monthDisplayFormat="MMMM yyyy"
                                     />
                                 </div>
+
+                                {/* FORCE CALENDAR BG */}
+                                <style jsx global>{`
+                                    .calendar-wrapper .rdrCalendarWrapper {
+                                        background-color: #F9F8F4;
+                                    }
+
+                                    .calendar-wrapper .rdrMonth {
+                                        background-color: #F9F8F4;
+                                    }
+
+                                    .calendar-wrapper .rdrWeekDays,
+                                    .calendar-wrapper .rdrDays {
+                                        background-color: #F9F8F4;
+                                    }
+                                `}</style>
                             </div>
+
                         </div>
 
                         {/* ===================== */}
@@ -728,7 +745,7 @@ export default function ShootDetailBooking({
                         className="
                 md:hidden
                 w-full
-                bg-[#FCFBF7]
+                bg-white md:bg-[#FCFBF7]
                 rounded-t-3xl
                 shadow-xl
                 border border-gray-200
@@ -749,7 +766,7 @@ export default function ShootDetailBooking({
 
                         {/* CONTENT */}
                         <div className="px-1 pb-28">
-                            <div className="border border-gray-700 rounded-2xl p-5 bg-[#FCFBF7]">
+                            <div className="border border-gray-700 rounded-2xl p-5 bg-white md:bg-[#FCFBF7]">
                                 <h2 className="font-serif text-2xl text-[#4A3B2D] mb-4">
                                     Who?
                                 </h2>

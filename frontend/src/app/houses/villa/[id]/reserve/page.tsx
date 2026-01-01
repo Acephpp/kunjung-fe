@@ -8,7 +8,9 @@ export default function page() {
         <div>
             <NavbarReserve/>
             <ReservePage/>
-            <Footer/>
+            <div className='hidden md:block'>
+                <Footer/>
+            </div>
         </div>
     )
 }

@@ -12,19 +12,26 @@ export default function NavbarReserve() {
     const id = pathname?.split("/")[3];
 
     return (
-        <nav className="flex items-center justify-between w-full px-10 py-5 border-b-2 border-gray-200 bg-[#FCFBF7]">
-            {/* Tombol Kembali */}
+        <nav className="flex items-center justify-between w-full px-4 py-3 border-b border-[#E7E6E2] bg-[#FCFBF7] sticky top-0 z-40">
+            {/* LEFT – BACK BUTTON */}
             <button
                 onClick={() => router.push(`/houses/villa/${id}`)}
-                className="group text-gray-800 hover:text-[#7A3E2C] transition-all duration-200 flex items-center gap-1"
+                className="
+            text-[#2D2A29]
+            hover:bg-gray-100
+            py-2 pr-2 pl-0
+            rounded-full
+            transition
+        "
+                aria-label="Back"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    strokeWidth={1.5}
+                    strokeWidth={1.8}
                     stroke="currentColor"
-                    className="w-5 h-5 transform transition-transform duration-200 group-hover:-translate-x-1"
+                    className="w-6 h-6"
                 >
                     <path
                         strokeLinecap="round"
@@ -34,17 +41,15 @@ export default function NavbarReserve() {
                 </svg>
             </button>
 
-            {/* Ganti tombol Share dengan Logo Kunjung */}
-            <div className="flex items-center justify-center">
-                <Image
-                    src="/images/logo-kunjung.png"
-                    alt="Kunjung Logo"
-                    width={125}
-                    height={50}
-                    className="object-contain"
-                    priority
-                />
-            </div>
+            {/* RIGHT – LOGO */}
+            <Image
+                src="/images/logo-kunjung.png"
+                alt="Kunjung"
+                width={130}
+                height={28}
+                priority
+            />
         </nav>
+
     );
 }
