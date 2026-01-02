@@ -202,7 +202,7 @@ export default function ShootDetailBooking({
                 </p>
 
                 {/* DESKTOP ONLY BUTTON */}
-                <Link href={`/houses/villa/${villa.id}/reserve`} className="hidden lg:block">
+                <Link href={`/houses/villa/${villa.id}/reserve-shoot`} className="hidden lg:block">
                     <Button className="w-full bg-[#7A3E2C] hover:bg-[#693424] text-white rounded-lg py-8">
                         <span className="text-3xl font-secondary">Reserve</span>
                     </Button>
@@ -383,7 +383,7 @@ export default function ShootDetailBooking({
 
                         {/* Next */}
                         <Button asChild className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold">
-                            <Link href={`/houses/villa/${villa.id}/reserve`}>next</Link>
+                            <Link href={`/houses/villa/${villa.id}/reserve-shoot`}>next</Link>
                         </Button>
                     </div>
                 </div>

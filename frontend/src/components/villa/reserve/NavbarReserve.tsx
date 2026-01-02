@@ -12,7 +12,7 @@ export default function NavbarReserve() {
     const id = pathname?.split("/")[3];
 
     return (
-        <nav className="flex items-center justify-between w-full px-4 py-3 border-b border-[#E7E6E2] bg-[#FCFBF7] sticky top-0 z-40">
+        <nav className="flex items-center justify-between w-full px-4 sm:px-10 py-3 border-b border-[#E7E6E2] bg-[#FCFBF7] sticky top-0 z-40">
             {/* LEFT – BACK BUTTON */}
             <button
                 onClick={() => router.push(`/houses/villa/${id}`)}

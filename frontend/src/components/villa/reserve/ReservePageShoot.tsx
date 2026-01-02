@@ -4,12 +4,16 @@ import { useState } from "react"
 import Image from "next/image"
 import { CreditCard, Banknote, MapPin, Star, ChevronRight } from "lucide-react"
 import { DateRange, type Range } from "react-date-range"
+import Calendar from "react-date-range/dist/components/Calendar"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import { FiMinus, FiPlus } from "react-icons/fi"
 import { Button } from "@/components/ui/button"
+import { addDays, format } from "date-fns"
 
-export default function ReservePage() {
+type ShootType = "instacation" | "session-morning" | "session-afternoon" | "session-fullday"
+
+export default function ReservePageShoot() {
     const [selected, setSelected] = useState<string | null>(null)
     const [selectedBank, setSelectedBank] = useState<string | null>(null)
     const [confirmed, setConfirmed] = useState(false)
@@ -17,13 +21,25 @@ export default function ReservePage() {
     const [mobileStep, setMobileStep] = useState(0)
 
     const [showDateModal, setShowDateModal] = useState(false)
-    const [showGuestModal, setShowGuestModal] = useState(false)
+    const [showCrewModal, setShowCrewModal] = useState(false)
+    const [showTypeModal, setShowTypeModal] = useState(false)
+    const [date, setDate] = useState<Date | undefined>(undefined)
     const [checkIn, setCheckIn] = useState<Date | undefined>(undefined)
     const [checkOut, setCheckOut] = useState<Date | undefined>(undefined)
     const [dateRange, setDateRange] = useState<Range[]>([
         { startDate: new Date(), endDate: new Date(), key: "selection" },
     ])
-    const [guests, setGuests] = useState(10)
+    const [crew, setCrew] = useState(10)
+    const [shootType, setShootType] = useState<ShootType>("instacation")
+    const [openShootSection, setOpenShootSection] = useState<"instacation" | "session">("instacation")
+
+    const isSessionShoot =
+        shootType === "session-morning" || shootType === "session-afternoon" || shootType === "session-fullday"
+
+    const today = new Date()
+    const tomorrow = addDays(today, 1)
+    const weekendStart = addDays(today, 1)
+    const weekendEnd = addDays(today, 2)
 
     const handlePaymentSelect = (option: string) => {
         setSelected(selected === option ? null : option)
@@ -62,6 +78,41 @@ export default function ReservePage() {
             return "Bank transfer (Virtual Account)"
         }
         return ""
+    }
+
+    const getShootTypeLabel = () => {
+        switch (shootType) {
+            case "instacation":
+                return "Instacation"
+            case "session-morning":
+                return "Session shoot – Morning"
+            case "session-afternoon":
+                return "Session shoot – Afternoon"
+            case "session-fullday":
+                return "Session shoot – Full day"
+            default:
+                return "Instacation"
+        }
+    }
+
+    const formatDateRangeText = () => {
+        if (isSessionShoot) {
+            if (!date) return "Select dates"
+            return format(date, "dd MMM yyyy")
+        }
+
+        if (!checkIn || !checkOut) return "Add Dates"
+
+        const startStr = checkIn.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+        })
+        const endStr = checkOut.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        })
+        return `${startStr} - ${endStr}`
     }
 
     const StepIndicator = ({
@@ -126,14 +177,7 @@ export default function ReservePage() {
                         <div>
                             <p className="text-[14px] font-semibold text-gray-800">Dates</p>
                             <p className="text-[14px] text-gray-700">
-                                {`${dateRange[0].startDate?.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                })} - ${dateRange[0].endDate?.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                })}`}
+                                {formatDateRangeText()}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -148,14 +192,30 @@ export default function ReservePage() {
 
                     <div className="border-t border-gray-200 my-4"></div>
 
-                    {/* Guests */}
-                    <div className="flex justify-between items-center">
+                    {/* Type of Shoot */}
+                    <div className="flex justify-between items-center mb-4">
                         <div>
-                            <p className="text-[14px] font-semibold text-gray-800">Guests</p>
-                            <p className="text-[14px] text-gray-700">{guests} Guests</p>
+                            <p className="text-[14px] font-semibold text-gray-800">Type of shoot</p>
+                            <p className="text-[14px] text-gray-700">{getShootTypeLabel()}</p>
                         </div>
                         <button
-                            onClick={() => setShowGuestModal(true)}
+                            onClick={() => setShowTypeModal(true)}
+                            className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
+                        >
+                            change
+                        </button>
+                    </div>
+
+                    <div className="border-t border-gray-200 my-4"></div>
+
+                    {/* Crew */}
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <p className="text-[14px] font-semibold text-gray-800">Crew</p>
+                            <p className="text-[14px] text-gray-700">{crew} person</p>
+                        </div>
+                        <button
+                            onClick={() => setShowCrewModal(true)}
                             className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
                         >
                             change
@@ -424,14 +484,7 @@ export default function ReservePage() {
                         <div>
                             <p className="text-[14px] font-semibold text-gray-800">Dates</p>
                             <p className="text-[14px] text-gray-700">
-                                {`${dateRange[0].startDate?.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                })} - ${dateRange[0].endDate?.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                })}`}
+                                {formatDateRangeText()}
                             </p>
                         </div>
                         <button
@@ -444,14 +497,30 @@ export default function ReservePage() {
 
                     <div className="border-t border-gray-200 my-4"></div>
 
-                    {/* Guests */}
+                    {/* Type of Shoot */}
                     <div className="flex justify-between items-center mb-4">
                         <div>
-                            <p className="text-[14px] font-semibold text-gray-800">Guests</p>
-                            <p className="text-[14px] text-gray-700">{guests} Guests</p>
+                            <p className="text-[14px] font-semibold text-gray-800">Type of shoot</p>
+                            <p className="text-[14px] text-gray-700">{getShootTypeLabel()}</p>
                         </div>
                         <button
-                            onClick={() => setShowGuestModal(true)}
+                            onClick={() => setShowTypeModal(true)}
+                            className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
+                        >
+                            change
+                        </button>
+                    </div>
+
+                    <div className="border-t border-gray-200 my-4"></div>
+
+                    {/* Crew */}
+                    <div className="flex justify-between items-center mb-4">
+                        <div>
+                            <p className="text-[14px] font-semibold text-gray-800">Crew</p>
+                            <p className="text-[14px] text-gray-700">{crew} person</p>
+                        </div>
+                        <button
+                            onClick={() => setShowCrewModal(true)}
                             className="text-sm font-medium bg-[#E7E6E2] px-8 py-1.5 rounded-full"
                         >
                             change
@@ -748,8 +817,8 @@ export default function ReservePage() {
                                             onClick={handleStep1Next}
                                             disabled={!selected}
                                             className={`px-8 py-3 rounded-md text-lg font-medium transition ${selected
-                                                    ? "bg-[#7A3E2C] text-white hover:bg-[#693424]"
-                                                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                                ? "bg-[#7A3E2C] text-white hover:bg-[#693424]"
+                                                : "bg-gray-200 text-gray-400 cursor-not-allowed"
                                                 }`}
                                         >
                                             next
@@ -818,14 +887,7 @@ export default function ReservePage() {
                                 <div>
                                     <p className="text-[15px] font-semibold text-gray-800 mb-1">Dates</p>
                                     <p className="text-[15px] text-gray-700">
-                                        {`${dateRange[0].startDate?.toLocaleDateString("en-GB", {
-                                            day: "2-digit",
-                                            month: "short",
-                                        })} - ${dateRange[0].endDate?.toLocaleDateString("en-GB", {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "numeric",
-                                        })}`}
+                                        {formatDateRangeText()}
                                     </p>
                                 </div>
                                 <button
@@ -838,15 +900,32 @@ export default function ReservePage() {
 
                             <div className="border-t border-gray-200 my-4"></div>
 
-                            {/* Guests Section */}
+                            {/* Type of Shoot Section */}
                             <div className="flex justify-between items-center border-gray-200">
                                 <div>
-                                    <p className="text-[15px] font-semibold text-gray-800 mb-1">Guests</p>
-                                    <p className="text-[15px] text-gray-700">{guests} Guests</p>
+                                    <p className="text-[15px] font-semibold text-gray-800 mb-1">Type of shoot</p>
+                                    <p className="text-[15px] text-gray-700">{getShootTypeLabel()}</p>
                                 </div>
 
                                 <button
-                                    onClick={() => setShowGuestModal(true)}
+                                    onClick={() => setShowTypeModal(true)}
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-[14px] px-4 py-1.5 rounded-lg font-medium transition"
+                                >
+                                    change
+                                </button>
+                            </div>
+
+                            <div className="border-t border-gray-200 my-4"></div>
+
+                            {/* Crew Section */}
+                            <div className="flex justify-between items-center border-gray-200">
+                                <div>
+                                    <p className="text-[15px] font-semibold text-gray-800 mb-1">Crew</p>
+                                    <p className="text-[15px] text-gray-700">{crew} person</p>
+                                </div>
+
+                                <button
+                                    onClick={() => setShowCrewModal(true)}
                                     className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-[14px] px-4 py-1.5 rounded-lg font-medium transition"
                                 >
                                     change
@@ -881,7 +960,8 @@ export default function ReservePage() {
                 </div>
             </div>
 
-            {showDateModal && (
+            {/* DATE PICKER MODAL - INSTACATION (RANGE) */}
+            {showDateModal && !isSessionShoot && (
                 <div
                     className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
                     onClick={() => setShowDateModal(false)}
@@ -923,6 +1003,10 @@ export default function ReservePage() {
                                 onChange={(item) => {
                                     setCheckIn(item.selection.startDate)
                                     setCheckOut(item.selection.endDate)
+                                    // Auto close when both dates are selected
+                                    if (item.selection.startDate && item.selection.endDate && item.selection.startDate.getTime() !== item.selection.endDate.getTime()) {
+                                        setTimeout(() => setShowDateModal(false), 300)
+                                    }
                                 }}
                                 rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
                                 months={2}
@@ -945,6 +1029,10 @@ export default function ReservePage() {
                                 onChange={(item) => {
                                     setCheckIn(item.selection.startDate)
                                     setCheckOut(item.selection.endDate)
+                                    // Auto close when both dates are selected
+                                    if (item.selection.startDate && item.selection.endDate && item.selection.startDate.getTime() !== item.selection.endDate.getTime()) {
+                                        setTimeout(() => setShowDateModal(false), 300)
+                                    }
                                 }}
                                 rangeColors={[checkIn ? "#7A3E2C" : "transparent"]}
                                 months={2}
@@ -986,10 +1074,209 @@ export default function ReservePage() {
                 </div>
             )}
 
-            {showGuestModal && (
+            {/* DATE PICKER MODAL - SESSION SHOOT (SINGLE DATE) */}
+            {showDateModal && isSessionShoot && (
                 <div
                     className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
-                    onClick={() => setShowGuestModal(false)}
+                    onClick={() => setShowDateModal(false)}
+                >
+                    <div
+                        className="
+                relative
+                w-full md:w-auto
+                bg-white md:bg-[#FCFBF7]
+                rounded-t-3xl md:rounded-2xl
+                shadow-[0_12px_40px_rgba(0,0,0,0.18)]
+                border border-gray-200
+
+                h-[88vh] md:h-auto
+                min-h-[72vh] md:min-h-[20vh]
+                max-h-[92vh]
+
+                overflow-hidden
+                pb-28 md:pb-0
+            "
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* DRAG INDICATOR – MOBILE */}
+                        <div className="md:hidden flex justify-center py-3 border-b border-gray-200 bg-white">
+                            <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        {/* MOBILE LAYOUT */}
+                        <div className="md:hidden flex flex-col h-full bg-white">
+                            {/* QUICK SELECT */}
+                            <div className="px-4 pt-4 pb-3 space-y-3 border-b border-gray-200">
+                                {[
+                                    {
+                                        label: "Today",
+                                        date: today,
+                                        subtitle: format(today, "MMMM dd"),
+                                    },
+                                    {
+                                        label: "Tomorrow",
+                                        date: tomorrow,
+                                        subtitle: format(tomorrow, "MMMM dd"),
+                                    },
+                                    {
+                                        label: "This weekend",
+                                        date: weekendStart,
+                                        subtitle: `${format(
+                                            weekendStart,
+                                            "MMMM dd"
+                                        )} - ${format(weekendEnd, "dd")}`,
+                                    },
+                                ].map((item) => (
+                                    <div
+                                        key={item.label}
+                                        onClick={() => setDate(item.date)}
+                                        className="
+                                p-4 rounded-2xl
+                                border border-gray-200
+                                bg-white
+                                hover:bg-gray-50
+                                transition
+                                cursor-pointer
+                            "
+                                    >
+                                        <p className="font-semibold text-gray-900">
+                                            {item.label}
+                                        </p>
+                                        <p className="text-sm text-gray-500 mt-0.5">
+                                            {item.subtitle}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* CALENDAR */}
+                            <div className="flex-1 bg-white px-4 py-4 overflow-y-auto">
+                                <div className="w-full rounded-2xl border border-gray-200 bg-white py-4">
+                                    <div className="flex justify-center">
+                                        <div className="inline-block">
+                                            <Calendar
+                                                date={date || new Date()}
+                                                onChange={(d: Date) => setDate(d)}
+                                                color="#7A3E2C"
+                                                monthDisplayFormat="MMMM yyyy"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* DESKTOP LAYOUT */}
+                        <div className="hidden md:flex w-[600px] bg-[#FCFBF7] rounded-2xl font-secondary overflow-hidden">
+                            {/* LEFT */}
+                            <div className="w-[42%] bg-[#F9F8F4] flex flex-col gap-3 p-6 border-r border-gray-200">
+                                <p className="text-sm font-semibold text-gray-600 mb-1">
+                                    Quick select
+                                </p>
+
+                                <div
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
+                                    onClick={() => setDate(today)}
+                                >
+                                    <p className="font-semibold text-gray-900">Today</p>
+                                    <p className="text-sm text-gray-500">
+                                        {format(today, "MMMM dd")}
+                                    </p>
+                                </div>
+
+                                <div
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
+                                    onClick={() => setDate(tomorrow)}
+                                >
+                                    <p className="font-semibold text-gray-900">
+                                        Tomorrow
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        {format(tomorrow, "MMMM dd")}
+                                    </p>
+                                </div>
+
+                                <div
+                                    className="p-4 rounded-2xl border border-gray-200 bg-[#F9F8F4] hover:bg-gray-50 cursor-pointer transition"
+                                    onClick={() => setDate(weekendStart)}
+                                >
+                                    <p className="font-semibold text-gray-900">
+                                        This weekend
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        {`${format(
+                                            weekendStart,
+                                            "MMMM dd"
+                                        )} - ${format(weekendEnd, "dd")}`}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* RIGHT */}
+                            <div className="flex-1 bg-[#F9F8F4] p-6 calendar-wrapper">
+                                <div className="rounded-2xl border border-gray-200 p-3 bg-[#F9F8F4]">
+                                    <Calendar
+                                        date={date || new Date()}
+                                        onChange={(d: Date) => {
+                                            setDate(d)
+                                            setTimeout(() => setShowDateModal(false), 300)
+                                        }}
+                                        color="#7A3E2C"
+                                        monthDisplayFormat="MMMM yyyy"
+                                    />
+                                </div>
+
+                                {/* FORCE CALENDAR BG */}
+                                <style jsx global>{`
+                                    .calendar-wrapper .rdrCalendarWrapper {
+                                        background-color: #F9F8F4;
+                                    }
+
+                                    .calendar-wrapper .rdrMonth {
+                                        background-color: #F9F8F4;
+                                    }
+
+                                    .calendar-wrapper .rdrWeekDays,
+                                    .calendar-wrapper .rdrDays {
+                                        background-color: #F9F8F4;
+                                    }
+                                `}</style>
+                            </div>
+
+                        </div>
+
+                        {/* MOBILE FOOTER */}
+                        <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
+                            {/* Cancel */}
+                            <button
+                                onClick={() => setShowDateModal(false)}
+                                className="flex-1 h-12 border border-[#2D2A29] text-[#2D2A29] font-secondary text-sm font-bold rounded-md"
+                            >
+                                cancel
+                            </button>
+
+                            {/* Next */}
+                            <button
+                                disabled={!date}
+                                onClick={() => setShowDateModal(false)}
+                                className="
+                        flex-1 h-12 rounded-md text-sm
+                        bg-[#7A3E2C] hover:bg-[#693424]
+                        text-white font-secondary font-bold
+                        disabled:opacity-40 disabled:cursor-not-allowed
+                    "
+                            >
+                                next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showCrewModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
+                    onClick={() => setShowCrewModal(false)}
                 >
                     {/* MOBILE – BOTTOM PANEL */}
                     <div
@@ -1023,23 +1310,23 @@ export default function ReservePage() {
                                 <div className="border border-gray-400 rounded-xl px-4 py-4 flex items-center justify-between">
                                     {/* LEFT */}
                                     <div>
-                                        <p className="font-medium text-[#4A3B2D]">Add Guests</p>
-                                        <p className="text-xs text-gray-500 mt-1">Children above 5 years are counted</p>
+                                        <p className="font-medium text-[#4A3B2D]">Add Crew</p>
                                     </div>
 
                                     {/* RIGHT */}
                                     <div className="flex items-center gap-3">
                                         <button
-                                            onClick={() => setGuests(Math.max(1, guests - 1))}
-                                            className="w-9 h-9 rounded-full border flex items-center justify-center"
+                                            onClick={() => setCrew(Math.max(0, crew - 1))}
+                                            disabled={crew === 0}
+                                            className="w-9 h-9 rounded-full border flex items-center justify-center disabled:opacity-40"
                                         >
                                             <FiMinus size={14} />
                                         </button>
 
-                                        <span className="w-6 text-center font-medium">{guests}</span>
+                                        <span className="w-6 text-center font-medium">{crew}</span>
 
                                         <button
-                                            onClick={() => setGuests(guests + 1)}
+                                            onClick={() => setCrew(crew + 1)}
                                             className="w-9 h-9 rounded-full border flex items-center justify-center"
                                         >
                                             <FiPlus size={14} />
@@ -1053,14 +1340,14 @@ export default function ReservePage() {
                         <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
                             <Button
                                 variant="outline"
-                                onClick={() => setShowGuestModal(false)}
+                                onClick={() => setShowCrewModal(false)}
                                 className="flex-1 h-12 border-[#2D2A29] text-[#2D2A29] font-secondary font-bold"
                             >
                                 cancel
                             </Button>
 
                             <Button
-                                onClick={() => setShowGuestModal(false)}
+                                onClick={() => setShowCrewModal(false)}
                                 className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold"
                             >
                                 next
@@ -1072,20 +1359,20 @@ export default function ReservePage() {
                     <div className="hidden md:flex items-center justify-center h-full" onClick={(e) => e.stopPropagation()}>
                         <div className="bg-[#FDFBF6] rounded-3xl shadow-2xl border border-[#E5E2DD] px-8 py-6 w-[420px]">
                             <div className="flex items-center justify-between font-secondary">
-                                <span className="text-[15px] font-medium text-[#2D2A29]">Add Guests</span>
+                                <span className="text-[15px] font-medium text-[#2D2A29]">Add Crew</span>
 
                                 <div className="flex items-center gap-3 text-[13px] text-[#7A7A75]">
                                     <button
-                                        onClick={() => setGuests(Math.max(0, guests - 1))}
-                                        disabled={guests === 0}
+                                        onClick={() => setCrew(Math.max(0, crew - 1))}
+                                        disabled={crew === 0}
                                         className="hover:text-gray-800 disabled:opacity-40 transition"
                                     >
                                         <FiMinus size={14} />
                                     </button>
 
-                                    <span className="text-[15px] w-3 text-center">{guests}</span>
+                                    <span className="text-[15px] w-3 text-center">{crew}</span>
 
-                                    <button onClick={() => setGuests(guests + 1)} className="hover:text-gray-800 transition">
+                                    <button onClick={() => setCrew(crew + 1)} className="hover:text-gray-800 transition">
                                         <FiPlus size={14} />
                                     </button>
                                 </div>
@@ -1097,7 +1384,356 @@ export default function ReservePage() {
                 </div>
             )}
 
-            
+            {/* Type of Shoot Modal */}
+            {showTypeModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40"
+                    onClick={() => setShowTypeModal(false)}
+                >
+                    {/* MOBILE – BOTTOM PANEL */}
+                    <div
+                        className="
+                md:hidden
+                w-full
+                bg-white md:bg-[#FCFBF7]
+                rounded-t-3xl
+                shadow-xl
+                border border-gray-200
+                p-4
+
+                h-[70vh]
+                min-h-[65vh]
+                max-h-[90vh]
+
+                overflow-y-auto
+            "
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* DRAG INDICATOR */}
+                        <div className="flex justify-center mb-4">
+                            <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        {/* CONTENT CARD */}
+                        <div className="px-1">
+                            <div className="border border-gray-700 rounded-2xl p-5 bg-white">
+                                {/* TITLE */}
+                                <h2 className="font-serif text-2xl text-[#4A3B2D] mb-4">
+                                    Type of shoot?
+                                </h2>
+
+                                <div className="border-b border-gray-400 mb-4" />
+
+                                {/* INSTACATION */}
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenShootSection("instacation")}
+                                    className="w-full text-left"
+                                >
+                                    <div className="flex justify-between items-center">
+                                        <p className="text-[16px] font-medium text-[#4A3B2D]">
+                                            Instacation
+                                        </p>
+                                        {openShootSection === "instacation" ? (
+                                            <FiMinus size={16} />
+                                        ) : (
+                                            <FiPlus size={16} />
+                                        )}
+                                    </div>
+                                </button>
+
+                                {openShootSection === "instacation" && (
+                                    <div className="mt-3 flex justify-between items-start">
+                                        <p className="text-[13px] text-gray-600 leading-snug">
+                                            This package include
+                                            <br />
+                                            stay &amp; shooting session
+                                        </p>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setShootType("instacation")
+                                            }}
+                                            className={`text-[12px] ${shootType === "instacation"
+                                                ? "text-gray-400"
+                                                : "text-gray-700 underline"
+                                                }`}
+                                        >
+                                            {shootType === "instacation"
+                                                ? "selected"
+                                                : "select"}
+                                        </button>
+                                    </div>
+                                )}
+
+                                <div className="border-b border-gray-300 my-5" />
+
+                                {/* SESSION SHOOT */}
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenShootSection("session")}
+                                    className="w-full text-left"
+                                >
+                                    <div className="flex justify-between items-center">
+                                        <p className="text-[16px] font-medium text-[#4A3B2D]">
+                                            Session shoot
+                                        </p>
+                                        {openShootSection === "session" ? (
+                                            <FiMinus size={16} />
+                                        ) : (
+                                            <FiPlus size={16} />
+                                        )}
+                                    </div>
+                                </button>
+
+                                {openShootSection === "session" && (
+                                    <div className="mt-4 space-y-4 text-[13px]">
+                                        {/* Morning */}
+                                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                                            <div>
+                                                <p className="text-gray-700">
+                                                    Morning session (5hr)
+                                                </p>
+                                                <p className="font-semibold text-gray-900">
+                                                    07am—12pm
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShootType("session-morning")}
+                                                className={`text-[12px] ${shootType === "session-morning"
+                                                    ? "text-gray-400"
+                                                    : "text-gray-700 underline"
+                                                    }`}
+                                            >
+                                                {shootType === "session-morning"
+                                                    ? "selected"
+                                                    : "select"}
+                                            </button>
+                                        </div>
+
+                                        {/* Afternoon */}
+                                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                                            <div>
+                                                <p className="text-gray-700">
+                                                    Afternoon session (5hr)
+                                                </p>
+                                                <p className="font-semibold text-gray-900">
+                                                    01pm—06pm
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShootType("session-afternoon")}
+                                                className={`text-[12px] ${shootType === "session-afternoon"
+                                                    ? "text-gray-400"
+                                                    : "text-gray-700 underline"
+                                                    }`}
+                                            >
+                                                {shootType === "session-afternoon"
+                                                    ? "selected"
+                                                    : "select"}
+                                            </button>
+                                        </div>
+
+                                        {/* Full day */}
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <p className="text-gray-700">
+                                                    Full day session (11hr)
+                                                </p>
+                                                <p className="font-semibold text-gray-900">
+                                                    07am—06pm
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShootType("session-fullday")}
+                                                className={`text-[12px] ${shootType === "session-fullday"
+                                                    ? "text-gray-400"
+                                                    : "text-gray-700 underline"
+                                                    }`}
+                                            >
+                                                {shootType === "session-fullday"
+                                                    ? "selected"
+                                                    : "select"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* FOOTER */}
+                        <div className="fixed bottom-0 left-0 right-0 md:hidden flex gap-3 p-4 bg-white border-t border-[#E7E6E2] z-50">
+                            <button
+                                onClick={() => setShowTypeModal(false)}
+                                className="flex-1 h-12 border border-[#2D2A29] text-[#2D2A29] font-secondary font-bold rounded-md text-sm"
+                            >
+                                cancel
+                            </button>
+
+                            <button
+                                onClick={() => setShowTypeModal(false)}
+                                className="flex-1 h-12 bg-[#7A3E2C] hover:bg-[#693424] text-white font-secondary font-bold rounded-md text-sm"
+                            >
+                                next
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* DESKTOP – MODAL */}
+                    <div
+                        className="hidden md:block bg-[#FCFBF7] rounded-3xl shadow-md border border-gray-200 px-8 py-6 w-[340px] sm:w-[380px] font-secondary text-gray-800"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Instacation row */}
+                        <button
+                            type="button"
+                            onClick={() => setOpenShootSection("instacation")}
+                            className="w-full text-left"
+                        >
+                            <div className="flex justify-between items-center">
+                                <p className="text-[17px] font-medium text-gray-900">
+                                    Instacation
+                                </p>
+                                {openShootSection === "instacation" ? (
+                                    <FiMinus size={16} />
+                                ) : (
+                                    <FiPlus size={16} />
+                                )}
+                            </div>
+                        </button>
+
+                        {openShootSection === "instacation" && (
+                            <div className="mt-2 flex justify-between items-start">
+                                <p className="text-[13px] text-gray-600 leading-snug">
+                                    This package include
+                                    <br />
+                                    stay &amp; shooting session
+                                </p>
+
+                                <button
+                                    onClick={() => {
+                                        setShootType("instacation")
+                                        setShowTypeModal(false)
+                                    }}
+                                    className={`text-[12px] ${shootType === "instacation"
+                                        ? "text-gray-500"
+                                        : "text-gray-700 underline"
+                                        }`}
+                                >
+                                    {shootType === "instacation"
+                                        ? "selected"
+                                        : "select"}
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="border-b border-gray-300 my-4" />
+
+                        {/* Session shoot */}
+                        <button
+                            type="button"
+                            onClick={() => setOpenShootSection("session")}
+                            className="w-full text-left"
+                        >
+                            <div className="flex justify-between items-center">
+                                <p className="text-[17px] font-medium text-gray-900">
+                                    Session shoot
+                                </p>
+                                {openShootSection === "session" ? (
+                                    <FiMinus size={16} />
+                                ) : (
+                                    <FiPlus size={16} />
+                                )}
+                            </div>
+                        </button>
+
+                        {openShootSection === "session" && (
+                            <div className="mt-3 space-y-3 text-[13px]">
+                                {/* Morning */}
+                                <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                                    <div>
+                                        <p className="text-gray-700">
+                                            Morning session (5hr)
+                                        </p>
+                                        <p className="font-semibold text-gray-900">
+                                            07am—12pm
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setShootType("session-morning")
+                                            setShowTypeModal(false)
+                                        }}
+                                        className={`text-[12px] ${shootType === "session-morning"
+                                            ? "text-gray-500"
+                                            : "text-gray-700 underline"
+                                            }`}
+                                    >
+                                        {shootType === "session-morning"
+                                            ? "selected"
+                                            : "select"}
+                                    </button>
+                                </div>
+
+                                {/* Afternoon */}
+                                <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                                    <div>
+                                        <p className="text-gray-700">
+                                            Afternoon session (5hr)
+                                        </p>
+                                        <p className="font-semibold text-gray-900">
+                                            01pm—06pm
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setShootType("session-afternoon")
+                                            setShowTypeModal(false)
+                                        }}
+                                        className={`text-[12px] ${shootType === "session-afternoon"
+                                            ? "text-gray-500"
+                                            : "text-gray-700 underline"
+                                            }`}
+                                    >
+                                        {shootType === "session-afternoon"
+                                            ? "selected"
+                                            : "select"}
+                                    </button>
+                                </div>
+
+                                {/* Full day */}
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <p className="text-gray-700">
+                                            Full day session (11hr)
+                                        </p>
+                                        <p className="font-semibold text-gray-900">
+                                            07am—06pm
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setShootType("session-fullday")
+                                            setShowTypeModal(false)
+                                        }}
+                                        className={`text-[12px] ${shootType === "session-fullday"
+                                            ? "text-gray-500"
+                                            : "text-gray-700 underline"
+                                            }`}
+                                    >
+                                        {shootType === "session-fullday"
+                                            ? "selected"
+                                            : "select"}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+
             <style>{`
                 @media (max-width: 1024px) {
                 body {
