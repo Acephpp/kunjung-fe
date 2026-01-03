@@ -1,11 +1,17 @@
 import FilterBar from "@/components/FilterBar";
+import ShootSearchBar from "@/components/Shoots/ShootSearchBar";
 import ShootsList from "@/components/Shoots/ShootsList";
 
 export default function page() {
     return (
-        <div className="max-w-9xl mx-auto px-10 py-5 bg-[#FCFBF7] space-y-20">
-            <FilterBar/>
-            <ShootsList/>
+        <div className="bg-[#FCFBF7] md:space-y-15">
+            <div className="hidden md:block max-w-9xl mx-auto px-10">
+                <FilterBar />
+            </div>
+            <div className="block md:hidden">
+                <ShootSearchBar />
+            </div>
+            <ShootsList />
         </div>
     )
 }

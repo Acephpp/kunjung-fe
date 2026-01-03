@@ -9,6 +9,12 @@ type Amenity = {
     available: boolean;
 };
 
+type Discount = {
+    percentage: number;        // contoh: 10 = 10%
+    label?: string;            // contoh: "New Year Sale"
+    appliesTo?: "weekday" | "weekend" | "both";
+};
+
 type Villa = {
     id: number;
     name: string;
@@ -23,21 +29,25 @@ type Villa = {
     weekdayPrice: string;
     rating: number;
     reviews: number;
-    amenities: Amenity[]; 
+    amenities: Amenity[];
     thingsToDo: string;
     address: string;
     mapUrl: string;
     totalPrice: string;
+
+    discount?: Discount; // ✅ TAMBAHAN
+
     detailHeader?: string;
     details: VillaDetail[];
 };
 
-// 🖼️ Semua detail menggunakan gambar umum
+
 const commonImages = [
     "/images/villa-1.jpg",
     "/images/villa-2.jpg",
     "/images/villa-3.jpg",
 ];
+
 const commonImages2 = [
     "/images/villa-1.jpg",
     "/images/villa-2.jpg",
@@ -45,6 +55,41 @@ const commonImages2 = [
     "/images/villa-1.jpg",
     "/images/villa-2.jpg",
     "/images/villa-3.jpg",
+];
+
+const commonAmenities: Amenity[] = [
+    { label: "Hot tub", available: true },
+    { label: "TV", available: true },
+    { label: "Exterior security cameras on property", available: true },
+    { label: "Kitchen", available: true },
+    { label: "Free parking on premises", available: true },
+    { label: "Wifi", available: true },
+    { label: "Dedicated workspace", available: true },
+    { label: "Air conditioning", available: true },
+    { label: "Smoke alarm", available: false },
+];
+
+const commonDetails: VillaDetail[] = [
+    {
+        title: "Living Room",
+        description: "Spacious living room with natural lighting and cozy seating area.",
+        images: commonImages,
+    },
+    {
+        title: "Garden Area",
+        description: "Private garden suitable for relaxing and casual gatherings.",
+        images: commonImages,
+    },
+    {
+        title: "Kitchen & Dining",
+        description: "Fully equipped kitchen with a large dining table.",
+        images: commonImages2,
+    },
+    {
+        title: "Onsen",
+        description: "Private onsen-style hot tub for ultimate relaxation.",
+        images: commonImages,
+    },
 ];
 
 export const villas: Villa[] = [
@@ -61,6 +106,11 @@ export const villas: Villa[] = [
         descImages: commonImages,
         weekendPrice: "IDR 7.000.000",
         weekdayPrice: "IDR 5.000.000",
+        discount: {
+            percentage: 10,
+            label: "Holiday Sale",
+            appliesTo: "both",
+        },
         rating: 4.9,
         reviews: 154,
         amenities: [
@@ -332,5 +382,194 @@ export const villas: Villa[] = [
             { title: "Kitchen and Dining Room", description: "Warm rustic interior for group meals.", images: commonImages },
             { title: "Onsen", description: "Outdoor hot tub surrounded by mountain air.", images: commonImages },
         ],
+    },
+    {
+        id: 7,
+        name: "Kala Villa",
+        location: "Ciumbuleuit, Bandung",
+        guests: 14,
+        bedrooms: 4,
+        bathrooms: 3,
+        description: "Elegant villa with cozy ambience.",
+        image: "/images/villa-1.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 6.000.000",
+        weekdayPrice: "IDR 4.500.000",
+        rating: 4.7,
+        reviews: 71,
+        amenities: commonAmenities,
+        thingsToDo: "Enjoy city skyline at night.",
+        address: "Ciumbuleuit, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 13.500.000",
+        details: commonDetails,
+    },
+    {
+        id: 8,
+        name: "Ruma Senja",
+        location: "Lembang, Bandung",
+        guests: 16,
+        bedrooms: 5,
+        bathrooms: 4,
+        description: "Perfect sunset-view villa.",
+        image: "/images/villa-2.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 6.800.000",
+        weekdayPrice: "IDR 5.200.000",
+        rating: 4.9,
+        reviews: 110,
+        amenities: commonAmenities,
+        thingsToDo: "Sunset and photo moments.",
+        address: "Lembang, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 15.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 9,
+        name: "Aruna House",
+        location: "Dago Atas, Bandung",
+        guests: 10,
+        bedrooms: 4,
+        bathrooms: 3,
+        description: "Modern tropical house.",
+        image: "/images/villa-3.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 5.000.000",
+        weekdayPrice: "IDR 3.900.000",
+        rating: 4.6,
+        reviews: 64,
+        amenities: commonAmenities,
+        thingsToDo: "Chill and city exploration.",
+        address: "Dago Atas, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 11.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 10,
+        name: "Bumi Villa",
+        location: "Parompong, Bandung",
+        guests: 22,
+        bedrooms: 7,
+        bathrooms: 5,
+        description: "Large villa for events & families.",
+        image: "/images/villa-1.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 9.500.000",
+        weekdayPrice: "IDR 7.000.000",
+        rating: 4.8,
+        reviews: 120,
+        amenities: commonAmenities,
+        thingsToDo: "Gatherings and BBQ nights.",
+        address: "Parompong, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 22.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 11,
+        name: "Langit House",
+        location: "Punclut, Bandung",
+        guests: 12,
+        bedrooms: 4,
+        bathrooms: 3,
+        description: "Sky-high view villa.",
+        image: "/images/villa-2.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 5.800.000",
+        weekdayPrice: "IDR 4.200.000",
+        rating: 4.7,
+        reviews: 89,
+        amenities: commonAmenities,
+        thingsToDo: "Skyline view and relaxation.",
+        address: "Punclut, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 13.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 12,
+        name: "Svara Villa",
+        location: "Dago Pakar, Bandung",
+        guests: 9,
+        bedrooms: 3,
+        bathrooms: 2,
+        description: "Quiet modern sanctuary.",
+        image: "/images/villa-3.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 4.300.000",
+        weekdayPrice: "IDR 3.200.000",
+        rating: 4.6,
+        reviews: 55,
+        amenities: commonAmenities,
+        thingsToDo: "Relax and meditate.",
+        address: "Dago Pakar, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 9.800.000",
+        details: commonDetails,
+    },
+    {
+        id: 13,
+        name: "Tara House",
+        location: "Lembang, Bandung",
+        guests: 17,
+        bedrooms: 5,
+        bathrooms: 4,
+        description: "Family-friendly mountain villa.",
+        image: "/images/villa-1.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 7.200.000",
+        weekdayPrice: "IDR 5.400.000",
+        rating: 4.8,
+        reviews: 98,
+        amenities: commonAmenities,
+        thingsToDo: "Family activities and fresh air.",
+        address: "Lembang, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 16.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 14,
+        name: "Hana Villa",
+        location: "Cisarua, Bandung",
+        guests: 11,
+        bedrooms: 4,
+        bathrooms: 3,
+        description: "Japanese-inspired calm villa.",
+        image: "/images/villa-2.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 5.300.000",
+        weekdayPrice: "IDR 4.000.000",
+        rating: 4.7,
+        reviews: 73,
+        amenities: commonAmenities,
+        thingsToDo: "Onsen-style relaxation.",
+        address: "Cisarua, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 12.000.000",
+        details: commonDetails,
+    },
+    {
+        id: 15,
+        name: "Raya Estate",
+        location: "Dago, Bandung",
+        guests: 25,
+        bedrooms: 8,
+        bathrooms: 6,
+        description: "Luxury estate for large gatherings.",
+        image: "/images/villa-3.jpg",
+        descImages: commonImages,
+        weekendPrice: "IDR 11.000.000",
+        weekdayPrice: "IDR 8.500.000",
+        rating: 4.9,
+        reviews: 140,
+        amenities: commonAmenities,
+        thingsToDo: "Events, celebrations, and retreats.",
+        address: "Dago, Bandung",
+        mapUrl: "",
+        totalPrice: "IDR 26.000.000",
+        details: commonDetails,
     },
 ];

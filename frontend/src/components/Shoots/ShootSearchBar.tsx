@@ -178,7 +178,7 @@ export default function ShootSearchBar() {
                     onClick={() => setOpenMobile(true)}
                     className="w-full flex items-center justify-between px-5 py-4 rounded-2xl border border-[#E7E6E2] bg-[#FCFBF7] shadow"
                 >
-                    <span className="text-gray-500">Find shoots</span>
+                    <span className="text-gray-500">Start your search</span>
                     <FiSearch />
                 </button>
             </div>

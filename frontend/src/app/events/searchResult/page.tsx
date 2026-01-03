@@ -1,11 +1,17 @@
+import EventSearchBar from "@/components/event/EventSearchBar";
 import FilterBar from "@/components/FilterBar";
 import WeddingList from "@/components/Wedding/WeddingList";
 
 export default function page() {
     return (
-        <div className="max-w-9xl mx-auto px-10 py-5 bg-[#FCFBF7] space-y-20">
-            <FilterBar/>
-            <WeddingList/>
+        <div className="bg-[#FCFBF7] md:space-y-15">
+            <div className="hidden md:block max-w-9xl mx-auto px-10">
+                <FilterBar />
+            </div>
+            <div className="block md:hidden">
+                <EventSearchBar />
+            </div>
+            <WeddingList />
         </div>
     )
 }
