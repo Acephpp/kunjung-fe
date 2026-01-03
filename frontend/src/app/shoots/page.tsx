@@ -10,9 +10,7 @@ import React from 'react'
 export default function Page() {
     return (
         <div>
-            <div className='max-w-9xl mx-auto px-10'>
-                <ShootSearchBar />
-            </div>
+            <ShootSearchBar />
             <div className="mb-5">
                 <HeroSection />
             </div>

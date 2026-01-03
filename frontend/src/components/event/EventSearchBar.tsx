@@ -1,24 +1,36 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
 import { FiSearch, FiChevronLeft, FiX } from "react-icons/fi"
 import { addDays, format } from "date-fns"
 import Calendar from "react-date-range/dist/components/Calendar"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 type CategoryKey = "celebration" | "gathering" | "business" | null
 
 export default function EventSearchBar() {
     const [openMobile, setOpenMobile] = useState(false)
-    const [mobileStep, setMobileStep] = useState(1)
+    const [mobileStep, setMobileStep] = useState(0)
+    const [mounted, setMounted] = useState(false)
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+        setMounted(true)
+        if (searchParams.get("openModal") === "true") {
+            setOpenMobile(true)
+            setMobileStep(0)
+        }
+    }, [searchParams])
 
     const [showRegion, setShowRegion] = useState(false)
     const [showDate, setShowDate] = useState(false)
     const [showEvent, setShowEvent] = useState(false)
 
-    // region kosong dulu → "Select region"
+    // region kosong dulu → "select region"
     const [region, setRegion] = useState("")
     const [eventType, setEventType] = useState("")
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -80,8 +92,27 @@ export default function EventSearchBar() {
 
     const handleMobileClose = () => {
         setOpenMobile(false)
-        setMobileStep(1)
+        setMobileStep(0)
     }
+
+    const handleClearAll = () => {
+        setRegion("")
+        setSelectedDate(null)
+        setEventType("")
+        setMobileStep(0)
+    }
+
+    // Disable body scroll when mobile modal is open
+    useEffect(() => {
+        if (openMobile) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = ""
+        }
+        return () => {
+            document.body.style.overflow = ""
+        }
+    }, [openMobile])
 
     return (
         <div ref={dropdownRefObj} className="relative z-40">
@@ -89,7 +120,7 @@ export default function EventSearchBar() {
             <div className="lg:hidden px-4">
                 <button
                     onClick={() => setOpenMobile(true)}
-                    className="w-full flex items-center justify-between px-5 py-4 rounded-full border shadow"
+                    className="w-full flex items-center justify-between px-5 py-4 rounded-2xl border border-[#E7E6E2] bg-[#FCFBF7] shadow"
                 >
                     <span className="text-gray-500">Find events</span>
                     <FiSearch />
@@ -97,80 +128,184 @@ export default function EventSearchBar() {
             </div>
 
             {/* ================= MOBILE MODAL WITH STEP FLOW ================= */}
-            {openMobile && (
-                <div className="fixed inset-0 bg-black/40 z-50 lg:hidden">
-                    <div className="absolute inset-0 w-full flex flex-col transition-all duration-300">
-                        {/* Header */}
-                        <div className="border-b border-gray-200 px-4 py-4">
-                            <div className="flex items-center justify-between">
-                                <button
-                                    onClick={() => {
-                                        if (mobileStep > 1) {
-                                            setMobileStep(mobileStep - 1)
-                                        } else {
-                                            handleMobileClose()
-                                        }
-                                    }}
-                                    className="text-gray-600 hover:text-gray-800 transition"
-                                >
-                                    <FiChevronLeft size={24} />
-                                </button>
-                                <button onClick={handleMobileClose} className="text-gray-600 hover:text-gray-800 transition">
-                                    <FiX size={24} />
-                                </button>
+            {openMobile && mounted && createPortal(
+                <div className="fixed inset-0 bg-[#FCFBF7] z-[9999] lg:hidden font-secondary overflow-hidden flex flex-col">
+                    {/* Header */}
+                    <div className="px-5 pt-6 pb-4 flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                            <button
+                                onClick={() => {
+                                    if (mobileStep > 0) {
+                                        setMobileStep(0)
+                                    } else {
+                                        handleMobileClose()
+                                    }
+                                }}
+                                className="text-gray-800 p-1"
+                            >
+                                <FiChevronLeft size={28} />
+                            </button>
+
+                            {/* Tabs navigation */}
+                            <div className="flex gap-8">
+                                <Link href="/?openModal=true" className="text-[15px] font-medium text-gray-400 pb-1">stays</Link>
+                                <button className="text-[15px] font-medium text-gray-900 border-b-2 border-gray-900 pb-1">events</button>
+                                <Link href="/shoots?openModal=true" className="text-[15px] font-medium text-gray-400 pb-1">shoots</Link>
                             </div>
+
+                            <button onClick={handleMobileClose} className="text-gray-800 p-1">
+                                <FiX size={28} />
+                            </button>
                         </div>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="flex-1 overflow-y-auto px-5 pb-6">
+                        {/* Step 0: All Collapsed */}
+                        {mobileStep === 0 && (
+                            <div className="animate-fade-in space-y-3 pt-2">
+                                <div
+                                    onClick={() => setMobileStep(1)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-2xl px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">where</span>
+                                    <span className="font-semibold text-gray-900 text-md">{region || "select region"}</span>
+                                </div>
+                                <div
+                                    onClick={() => setMobileStep(2)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-2xl px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">when</span>
+                                    <span className="font-semibold text-gray-900 text-md">
+                                        {selectedDate ? format(selectedDate, "MMM dd") : "add dates"}
+                                    </span>
+                                </div>
+                                <div
+                                    onClick={() => setMobileStep(3)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-2xl px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">type of event</span>
+                                    <span className="font-semibold text-gray-900 text-md">{eventType || "add event"}</span>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Step 1: Where */}
                         {mobileStep === 1 && (
-                            <div className="flex-1 overflow-y-auto px-4 py-6 animate-fade-in">
-                                <div className="space-y-4">
-                                    <div className="border-2 border-gray-900 rounded-2xl p-6 space-y-4">
-                                        <h2 className="text-2xl font-medium text-gray-900">Where?</h2>
-                                        <div className="w-full h-px bg-gray-300" />
+                            <div className="animate-fade-in flex flex-col h-full">
+                                {/* Main Active Card */}
+                                <div className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] p-6 shadow-sm mb-4 min-h-[500px] flex flex-col">
+                                    <div
+                                        onClick={() => setMobileStep(0)}
+                                        className="mb-4 cursor-pointer"
+                                    >
+                                        <h2 className="text-[24px] font-primary text-gray-900 mb-4">
+                                            Where?
+                                        </h2>
+                                        <div className="w-full h-px bg-gray-200" />
+                                    </div>
 
+                                    <div className="space-y-1">
+                                        {/* Bandung */}
                                         <button
                                             onClick={() => setRegion("Bandung")}
-                                            className={`w-full flex items-center gap-3 p-4 rounded-xl transition ${region === "Bandung" ? "bg-gray-100" : "hover:bg-gray-50"
-                                                }`}
+                                            className="w-full text-left"
                                         >
-                                            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200 flex-shrink-0">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    strokeWidth={2}
-                                                    stroke="currentColor"
-                                                    className="w-6 h-6 text-gray-700"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M12 21c0 0 6-6.75 6-11.25A6 6 0 0 0 6 9.75C6 14.25 12 21 12 21z"
-                                                    />
-                                                    <circle cx="12" cy="9.75" r="2.25" />
-                                                </svg>
-                                            </div>
-                                            <div className="text-left">
-                                                <p className="text-[16px] font-medium text-gray-900">Bandung</p>
-                                                <p className="text-[14px] text-gray-500">West Java, Indonesia</p>
+                                            <div
+                                                className={`py-4 px-2 rounded-2xl flex items-center gap-4 transition-all ${region === "Bandung"
+                                                    ? "bg-gray-100"
+                                                    : "bg-transparent hover:bg-gray-50"
+                                                    }`}
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-[#EAEAEA] flex items-center justify-center">
+                                                    <FiSearch size={24} className="text-gray-800" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-gray-900 text-[16px]">
+                                                        Bandung
+                                                    </p>
+                                                    <p className="text-gray-500 text-[12px]">
+                                                        West Java, Indonesia
+                                                    </p>
+                                                </div>
                                             </div>
                                         </button>
 
-                                        <p className="text-center text-sm text-gray-400 italic py-4">more destination coming soon</p>
+                                        {/* Jakarta */}
+                                        <button
+                                            onClick={() => setRegion("Jakarta")}
+                                            className="w-full text-left"
+                                        >
+                                            <div
+                                                className={`py-4 px-2 rounded-2xl flex items-center gap-4 transition-all ${region === "Jakarta"
+                                                    ? "bg-gray-100"
+                                                    : "bg-transparent hover:bg-gray-50"
+                                                    }`}
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-[#EAEAEA] flex items-center justify-center">
+                                                    <FiSearch size={24} className="text-gray-800" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-gray-900 text-[16px]">
+                                                        Jakarta
+                                                    </p>
+                                                    <p className="text-gray-500 text-[12px]">
+                                                        DKI Jakarta, Indonesia
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        {/* Bali */}
+                                        <button
+                                            onClick={() => setRegion("Bali")}
+                                            className="w-full text-left"
+                                        >
+                                            <div
+                                                className={`py-4 px-2 rounded-2xl flex items-center gap-4 transition-all ${region === "Bali"
+                                                    ? "bg-gray-100"
+                                                    : "bg-transparent hover:bg-gray-50"
+                                                    }`}
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-[#EAEAEA] flex items-center justify-center">
+                                                    <FiSearch size={24} className="text-gray-800" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-gray-900 text-[16px]">
+                                                        Bali
+                                                    </p>
+                                                    <p className="text-gray-500 text-[12px]">
+                                                        Bali, Indonesia
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </button>
                                     </div>
 
-                                    <div className="space-y-3 mt-6">
-                                        <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50">
-                                            <span className="text-gray-400">when</span>
-                                            <span className="font-medium text-gray-800">
-                                                {selectedDate ? format(selectedDate, "MMM dd") : "add dates"}
-                                            </span>
-                                        </div>
-                                        <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50">
-                                            <span className="text-gray-400">event type</span>
-                                            <span className="font-medium text-gray-800">{eventType || "add event"}</span>
-                                        </div>
+                                    <div className="mt-auto mb-2">
+                                        <p className="text-gray-400 italic font-primary text-[12px]">
+                                            more destination coming soon
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Inactive Options */}
+                                <div className="space-y-3">
+                                    <div
+                                        onClick={() => setMobileStep(2)}
+                                        className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                    >
+                                        <span className="text-gray-400 text-md">when</span>
+                                        <span className="font-semibold text-gray-900 text-md">
+                                            {selectedDate ? format(selectedDate, "MMM dd") : "add dates"}
+                                        </span>
+                                    </div>
+                                    <div
+                                        onClick={() => setMobileStep(3)}
+                                        className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                    >
+                                        <span className="text-gray-400 text-md">type of event</span>
+                                        <span className="font-semibold text-gray-900 text-md">{eventType || "add event"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -178,118 +313,164 @@ export default function EventSearchBar() {
 
                         {/* Step 2: When (Calendar) */}
                         {mobileStep === 2 && (
-                            <div className="flex-1 overflow-y-auto px-4 py-6 animate-fade-in">
-                                <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between mb-6 bg-gray-50">
-                                    <span className="text-gray-400">where</span>
-                                    <span className="font-medium text-gray-900">{region}</span>
+                            <div className="animate-fade-in flex flex-col h-full">
+                                {/* Where Summary */}
+                                <div
+                                    onClick={() => setMobileStep(1)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm mb-3 cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">where</span>
+                                    <span className="font-semibold text-gray-900 text-md">{region || "select region"}</span>
                                 </div>
 
-                                <div className="border-2 border-gray-900 rounded-2xl p-6">
-                                    <h2 className="text-2xl font-medium text-gray-900 mb-4">When?</h2>
-                                    <div className="w-full h-px bg-gray-300 mb-4" />
+                                {/* Active When Card */}
+                                <div className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] p-6 shadow-sm mb-3">
+                                    <div
+                                        onClick={() => setMobileStep(0)}
+                                        className="mb-4 cursor-pointer"
+                                    >
+                                        <h2 className="text-[24px] font-primary text-gray-900 mb-4">
+                                            When?
+                                        </h2>
+                                        <div className="w-full h-px bg-gray-200" />
+                                    </div>
 
-                                    <div className="flex justify-center">
+                                    <div className="flex justify-center -mx-4">
                                         <Calendar
                                             date={selectedDate || new Date()}
                                             onChange={(date: Date) => {
                                                 setSelectedDate(date)
                                             }}
-                                            color="#1f2937"
+                                            color="#7A3E2C"
                                             monthDisplayFormat="MMMM yyyy"
                                         />
                                     </div>
 
-                                    <button className="w-full mt-6 border border-gray-300 rounded-xl py-3 text-gray-700 hover:bg-gray-50 transition">
-                                        load more dates
-                                    </button>
+                                    <style jsx global>{`
+                                        .rdrCalendarWrapper {
+                                            background-color: transparent !important;
+                                        }
+                                        .rdrMonth {
+                                            width: 100% !important;
+                                        }
+                                    `}</style>
+                                </div>
+
+                                {/* Type of Event Summary */}
+                                <div
+                                    onClick={() => setMobileStep(3)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">type of event</span>
+                                    <span className="font-semibold text-gray-900 text-md">{eventType || "add event"}</span>
                                 </div>
                             </div>
                         )}
 
-                        {/* Step 3: Event Type */}
+                        {/* Step 3: Type of Event */}
                         {mobileStep === 3 && (
-                            <div className="flex-1 overflow-y-auto px-4 py-6 animate-fade-in">
-                                <div className="space-y-3 mb-6">
-                                    <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between bg-gray-50">
-                                        <span className="text-gray-400">where</span>
-                                        <span className="font-medium text-gray-900">{region}</span>
-                                    </div>
-                                    <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between bg-gray-50">
-                                        <span className="text-gray-400">when</span>
-                                        <span className="font-medium text-gray-900">
-                                            {selectedDate ? format(selectedDate, "MMM dd") : "add dates"}
-                                        </span>
-                                    </div>
+                            <div className="animate-fade-in flex flex-col h-full">
+                                {/* Where Summary */}
+                                <div
+                                    onClick={() => setMobileStep(1)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm mb-3 cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">where</span>
+                                    <span className="font-semibold text-gray-900 text-md">{region || "select region"}</span>
                                 </div>
 
-                                <div className="border-2 border-gray-900 rounded-2xl p-6">
-                                    <h2 className="text-2xl font-medium text-gray-900 mb-4">Type of event?</h2>
-                                    <div className="w-full h-px bg-gray-300 mb-4" />
+                                {/* When Summary */}
+                                <div
+                                    onClick={() => setMobileStep(2)}
+                                    className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] px-6 py-6 flex items-center justify-between shadow-sm mb-3 cursor-pointer hover:bg-gray-50 transition"
+                                >
+                                    <span className="text-gray-400 text-md">when</span>
+                                    <span className="font-semibold text-gray-900 text-md">
+                                        {selectedDate ? format(selectedDate, "MMM dd") : "add dates"}
+                                    </span>
+                                </div>
 
-                                    <div className="space-y-2">
-                                        {eventCategories.map((cat) => (
+                                {/* Active Event Type Card */}
+                                <div className="bg-[#FCFBF7] border border-gray-200 rounded-[24px] shadow-sm h-full flex flex-col overflow-hidden relative">
+                                    {/* Sticky Header */}
+                                    <div
+                                        onClick={() => setMobileStep(0)}
+                                        className="p-6 pb-2 cursor-pointer bg-[#FCFBF7] z-10 flex-shrink-0"
+                                    >
+                                        <h2 className="text-[24px] font-primary text-gray-900 mb-4">
+                                            Type of event?
+                                        </h2>
+                                        <div className="w-full h-px bg-gray-200" />
+                                    </div>
+
+                                    {/* Scrollable Content */}
+                                    <div className="p-6 pt-4 space-y-6 font-secondary text-gray-800 overflow-y-auto flex-1">
+                                        {eventCategories.map((cat, idx) => (
                                             <div key={cat.key}>
                                                 <button
                                                     type="button"
                                                     onClick={() => toggleCategory(cat.key)}
-                                                    className="w-full px-4 py-3 flex items-center justify-between rounded-xl hover:bg-gray-100 transition"
+                                                    className="w-full flex items-center justify-between group"
                                                 >
-                                                    <span className="text-[16px] font-semibold text-gray-900">{cat.label}</span>
-                                                    <span className="text-[18px] leading-none text-gray-800">
+                                                    <span className="text-[18px] font-semibold text-gray-800 group-hover:text-gray-600 transition">{cat.label}</span>
+                                                    <span className="text-[24px] leading-none text-gray-400 font-light">
                                                         {openCategory === cat.key ? "−" : "+"}
                                                     </span>
                                                 </button>
 
-                                                {openCategory === cat.key && (
-                                                    <div className="mt-2 mb-2 ml-4 space-y-2">
+                                                {/* Expanded Items */}
+                                                <div
+                                                    className={`transition-all duration-300 ease-in-out overflow-hidden ${openCategory === cat.key ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
+                                                        }`}
+                                                >
+                                                    <div className="space-y-5 pl-5">
                                                         {cat.items.map((item) => (
                                                             <div
                                                                 key={item}
-                                                                className="px-4 py-2 cursor-pointer rounded-lg hover:bg-gray-100 transition"
-                                                                onClick={() => handleSelectEvent(item)}
+                                                                onClick={() => {
+                                                                    setEventType(item)
+                                                                    setMobileStep(0)
+                                                                }}
+                                                                className="flex items-center justify-between cursor-pointer group"
                                                             >
-                                                                <span className="text-[14px] text-gray-800">{item}</span>
+                                                                <span className="text-[15px] text-gray-600 group-hover:text-gray-900 transition">{item}</span>
+                                                                <span className={`text-[12px] font-medium transition ${eventType === item ? "text-gray-400" : "text-gray-300 group-hover:text-gray-400"}`}>
+                                                                    {eventType === item ? "selected" : "select"}
+                                                                </span>
                                                             </div>
                                                         ))}
                                                     </div>
-                                                )}
+                                                </div>
+
+                                                {/* Separator */}
+                                                <div className="w-full h-px bg-gray-100 mt-4" />
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
                         )}
+                    </div>
 
-                        {/* Footer actions */}
-                        <div className="border-t border-gray-200 px-4 py-6 space-y-3">
-                            {mobileStep < 3 && (
-                                <>
-                                    <button
-                                        onClick={() => setMobileStep(mobileStep + 1)}
-                                        className="w-full bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-gray-800 transition"
-                                    >
-                                        next
-                                    </button>
-                                    <button className="w-full text-center text-gray-700 underline hover:text-gray-900 transition">
-                                        clear all
-                                    </button>
-                                </>
-                            )}
-                            {mobileStep === 3 && (
-                                <>
-                                    <Link href="/events/searchResult" className="w-full block">
-                                        <button className="w-full bg-[#7A3E2C] text-white py-3 rounded-full font-medium hover:bg-[#5c2e20] transition flex items-center justify-center gap-2">
-                                            search <FiSearch size={18} />
-                                        </button>
-                                    </Link>
-                                    <button className="w-full text-center text-gray-700 underline hover:text-gray-900 transition">
-                                        clear all
-                                    </button>
-                                </>
-                            )}
+                    {/* Footer Actions (Sticky Bottom) */}
+                    <div className="px-4 py-4 bg-[#FCFBF7]">
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={handleClearAll}
+                                className="text-center underline font-medium text-[15px] text-gray-800"
+                            >
+                                clear all
+                            </button>
+                            <Link href="/events/searchResult" className="w-full">
+                                <button className="w-full bg-[#7A3E2C] text-white rounded-xl py-4 px-4 flex items-center justify-between shadow-md active:scale-95 transition-transform">
+                                    <span className="text-[15px] font-medium">search</span>
+                                    <FiSearch size={18} />
+                                </button>
+                            </Link>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ================= DESKTOP SEARCH BAR ================= */}
@@ -306,7 +487,7 @@ export default function EventSearchBar() {
                         }}
                     >
                         <p className="text-[16px] font-medium text-gray-800">Where</p>
-                        <p className="text-[15px] text-gray-400">{region || "Select region"}</p>
+                        <p className="text-[15px] text-gray-400">{region || "select region"}</p>
                     </div>
 
                     <div className="w-px h-8 bg-gray-300" />
@@ -447,13 +628,13 @@ export default function EventSearchBar() {
                                 monthDisplayFormat="MMMM yyyy"
                             />
                             <style jsx global>{`
-                            .rdrCalendarWrapper {
-                                background-color: #FCFBF7;
-                            }
-                        `}</style>
+                             .rdrCalendarWrapper {
+                                 background-color: #FCFBF7;
+                             }
+                         `}</style>
                         </div>
                     </div>
-                    
+
                 )}
 
                 {/* === DROPDOWN REGION === */}

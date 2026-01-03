@@ -47,3 +47,35 @@ input[type="range"]::-moz-range-thumb {
     border-radius: 50%;
     cursor: pointer;
 }
+
+
+/* Background utama kalender */
+.rdrCalendarWrapper {
+    background-color: #FCFBF7;
+}
+
+/* Header bulan */
+.rdrMonthAndYearWrapper {
+    background-color: #FCFBF7;
+}
+
+/* Grid tanggal */
+.rdrMonth {
+    background-color: #FCFBF7;
+}
+
+/* Hari normal */
+.rdrDayNumber span {
+    color: #2D2A29;
+}
+
+/* Hari disabled */
+.rdrDayDisabled {
+    background-color: transparent;
+    color: #C4C4C4;
+}
+
+/* Hover date */
+.rdrDayHovered .rdrDayNumber span {
+    color: #7A3E2C;
+}

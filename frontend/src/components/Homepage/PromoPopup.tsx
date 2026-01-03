@@ -38,17 +38,22 @@ export default function PromoPopup() {
     if (!open) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 px-4">
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+            onClick={() => setOpen(false)}
+        >
             <div
                 className="
-                    relative w-full
+                    relative
+                    w-full max-w-[360px]
                     sm:max-w-xl md:max-w-2xl
                     bg-white
-                    rounded-t-3xl sm:rounded-2xl
+                    rounded-2xl
                     shadow-[0_20px_60px_rgba(0,0,0,0.18)]
                     overflow-hidden
                 "
                 style={{ animation: "popup 0.35s ease-out" }}
+                onClick={(e) => e.stopPropagation()}
             >
                 {/* Close */}
                 <button
@@ -69,7 +74,7 @@ export default function PromoPopup() {
                 {/* ===== CONTENT ===== */}
                 <div className="grid sm:grid-cols-2">
                     {/* LEFT - IMAGE */}
-                    <div className="relative h-52 sm:h-full min-h-[240px]">
+                    <div className="relative h-52 sm:h-full min-h-[220px]">
                         <Image
                             src={PROMO_DATA.image}
                             alt={PROMO_DATA.title}
@@ -78,17 +83,15 @@ export default function PromoPopup() {
                             priority
                         />
 
-                        {/* Gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
 
-                        {/* Badge */}
                         <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-[#7A3E2C] text-[11px] font-secondary font-semibold px-3 py-1 rounded-full tracking-wide">
                             PROMO
                         </div>
                     </div>
 
                     {/* RIGHT - CONTENT */}
-                    <div className="p-6 sm:p-7 md:p-9 flex flex-col justify-center">
+                    <div className="p-6 sm:p-7 md:p-9 flex flex-col justify-center text-center sm:text-left">
                         <p className="font-secondary text-[11px] uppercase tracking-[0.18em] text-[#7A3E2C] mb-3">
                             {PROMO_DATA.subtitle}
                         </p>
@@ -112,6 +115,7 @@ export default function PromoPopup() {
                                 rounded-full
                                 transition-all
                                 hover:scale-[1.02]
+                                mx-auto sm:mx-0
                             "
                         >
                             {PROMO_DATA.ctaText}
@@ -124,11 +128,11 @@ export default function PromoPopup() {
             <style>{`
                 @keyframes popup {
                     from {
-                        transform: translateY(28px) scale(0.95);
+                        transform: translate3d(0, 24px, 0) scale(0.96);
                         opacity: 0;
                     }
                     to {
-                        transform: translateY(0) scale(1);
+                        transform: translate3d(0, 0, 0) scale(1);
                         opacity: 1;
                     }
                 }
