@@ -9,10 +9,11 @@ import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 type CategoryKey = "celebration" | "gathering" | "business" | null
 
-export default function EventSearchBar() {
+function EventSearchBarContent() {
     const [openMobile, setOpenMobile] = useState(false)
     const [mobileStep, setMobileStep] = useState(0)
     const [mounted, setMounted] = useState(false)
@@ -676,5 +677,13 @@ export default function EventSearchBar() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function EventSearchBar() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <EventSearchBarContent />
+        </Suspense>
     )
 }

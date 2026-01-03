@@ -10,6 +10,7 @@ import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 type ShootOption =
     | "instacation"
@@ -21,7 +22,7 @@ type ShootOption =
 type ShootSection = "instacation" | "session" | ""
 type ActiveDateField = "single" | "checkin" | "checkout" | null
 
-export default function ShootSearchBar() {
+function ShootSearchBarContent() {
     const [openMobile, setOpenMobile] = useState(false)
     const [mobileStep, setMobileStep] = useState(0)
     const [mounted, setMounted] = useState(false)
@@ -934,5 +935,13 @@ export default function ShootSearchBar() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function ShootSearchBar() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ShootSearchBarContent />
+        </Suspense>
     )
 }

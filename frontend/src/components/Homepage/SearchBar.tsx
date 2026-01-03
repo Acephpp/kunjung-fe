@@ -8,8 +8,9 @@ import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
-export default function SearchBar() {
+function SearchBarContent() {
     const [openMobile, setOpenMobile] = useState(false)
     const [mobileStep, setMobileStep] = useState(0)
     const [mounted, setMounted] = useState(false)
@@ -723,5 +724,13 @@ export default function SearchBar() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function SearchBar() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SearchBarContent />
+        </Suspense>
     )
 }
