@@ -10,6 +10,9 @@ export default function Navbar() {
     const [lastScrollY, setLastScrollY] = useState(0);
     const [openMenu, setOpenMenu] = useState(false);
     const [openFullMenu, setOpenFullMenu] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+    const [openMobilePanel, setOpenMobilePanel] = useState(false);
+    const [isMobilePanelClosing, setIsMobilePanelClosing] = useState(false);
     const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -22,11 +25,17 @@ export default function Navbar() {
             ? "text-white"
             : "text-white/40 hover:text-white";
 
-    // NAVBAR HIDE ON SCROLL
+    // NAVBAR HIDE ON SCROLL (but always show when at top)
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > lastScrollY) setShow(false);
-            else setShow(true);
+            // Always show navbar when at top of page
+            if (window.scrollY <= 10) {
+                setShow(true);
+            } else if (window.scrollY > lastScrollY) {
+                setShow(false);
+            } else {
+                setShow(true);
+            }
             setLastScrollY(window.scrollY);
         };
         window.addEventListener("scroll", handleScroll);
@@ -54,6 +63,22 @@ export default function Navbar() {
         localStorage.removeItem("user");
         setUser(null);
         router.push("/");
+    };
+
+    const handleCloseMenu = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setOpenFullMenu(false);
+            setIsClosing(false);
+        }, 350);
+    };
+
+    const handleCloseMobilePanel = () => {
+        setIsMobilePanelClosing(true);
+        setTimeout(() => {
+            setOpenMobilePanel(false);
+            setIsMobilePanelClosing(false);
+        }, 300);
     };
 
     const getInitials = (firstName: string, lastName: string) => {
@@ -115,7 +140,15 @@ export default function Navbar() {
                     >
                         {/* USER / AVATAR */}
                         <button
-                            onClick={() => setOpenMenu(!openMenu)}
+                            onClick={() => {
+                                // Desktop: toggle dropdown
+                                // Mobile: open panel
+                                if (window.innerWidth >= 1024) {
+                                    setOpenMenu(!openMenu);
+                                } else {
+                                    setOpenMobilePanel(true);
+                                }
+                            }}
                             className={`relative p-1 rounded-full transition flex items-center justify-center w-8 h-8 lg:w-9 lg:h-9 ${user ? "bg-[#2D2A29]" : "hover:bg-gray-100"
                                 }`}
                         >
@@ -131,9 +164,9 @@ export default function Navbar() {
                             )}
                         </button>
 
-                        {/* DROPDOWN */}
+                        {/* DROPDOWN - DESKTOP ONLY */}
                         {openMenu && (
-                            <div className="absolute p-2 right-0 top-10 lg:top-12 w-70 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
+                            <div className="hidden lg:block absolute p-2 right-0 top-10 lg:top-12 w-70 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
                                 {user ? (
                                     <>
                                         <Link
@@ -197,14 +230,89 @@ export default function Navbar() {
                 </div>
             </header>
 
+            {/* ================= MOBILE PANEL (BOTTOM SHEET) ================= */}
+            {openMobilePanel && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        onClick={handleCloseMobilePanel}
+                        className="lg:hidden fixed inset-0 bg-black/50 z-[998] animate-fadeIn"
+                    />
+
+                    {/* Panel */}
+                    <div
+                        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[999] font-secondary ${isMobilePanelClosing ? "animate-panelSlideDown" : "animate-panelSlideUp"
+                            }`}
+                    >
+                        {/* Handle Bar */}
+                        <div className="flex justify-center pt-3 pb-4">
+                            <div className="w-12 h-1 bg-gray-300 rounded-full" />
+                        </div>
+
+                        {/* Content */}
+                        <div className="px-5 pb-8 space-y-3">
+                            {user ? (
+                                <>
+                                    <Link
+                                        href="/reservations"
+                                        onClick={handleCloseMobilePanel}
+                                        className="block w-full text-left px-6 py-4 bg-white border border-gray-200 rounded-2xl text-[15px] font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 active:scale-[0.98] transition"
+                                    >
+                                        Reservations
+                                    </Link>
+                                    <button
+                                        onClick={() => {
+                                            handleCloseMobilePanel();
+                                            router.push("/edit-profile");
+                                        }}
+                                        className="block w-full text-left px-6 py-4 bg-white border border-gray-200 rounded-2xl text-[15px] font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 active:scale-[0.98] transition"
+                                    >
+                                        Edit Personal Information
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            handleCloseMobilePanel();
+                                            handleLogout();
+                                        }}
+                                        className="block w-full text-left px-6 py-4 bg-white border border-gray-200 rounded-2xl text-[15px] font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 active:scale-[0.98] transition"
+                                    >
+                                        Log out
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/auth/login/guest"
+                                        onClick={handleCloseMobilePanel}
+                                        className="block w-full text-left px-6 py-4 bg-white border border-gray-200 rounded-2xl text-[15px] font-medium text-gray-800 active:scale-[0.98] transition hover:bg-gray-100 active:bg-gray-200"
+                                    >
+                                        Guest
+                                    </Link>
+                                    <Link
+                                        href="/auth/login/homeOwner"
+                                        onClick={handleCloseMobilePanel}
+                                        className="block w-full text-left px-6 py-4 bg-white border border-gray-200 rounded-2xl text-[15px] font-medium text-gray-800 hover:bg-gray-100 active:bg-gray-200 active:scale-[0.98] transition"
+                                    >
+                                        Home Owner
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
+
             {/* ================= FULL TOP MENU (OVERLAY) ================= */}
             {openFullMenu && (
-                <div className="fixed inset-x-0 top-0 h-screen lg:h-[50vh] bg-[#7A3E2C] text-[#F5E9E2] z-[999] animate-slideInRight">
+                <div
+                    className={`fixed inset-x-0 top-0 h-screen bg-[#7A3E2C] text-[#F5E9E2] z-[999] ${isClosing ? "animate-modalExit" : "animate-modalEnter"
+                        }`}
+                >
                     {/* Sama dengan container navbar → max-w + padding */}
                     <div className="relative max-w-9xl mx-auto h-full px-4 sm:px-6 lg:px-10">
                         {/* X BUTTON */}
                         <button
-                            onClick={() => setOpenFullMenu(false)}
+                            onClick={handleCloseMenu}
                             className="absolute top-3 right-4 sm:top-4 sm:right-6 lg:top-2 lg:right-10 text-white text-4xl sm:text-5xl lg:text-7xl"
                             aria-label="Close navigation menu"
                         >
@@ -214,36 +322,36 @@ export default function Navbar() {
                         {/* MAIN MENU */}
                         <div className="absolute top-10 left-4 sm:left-6 lg:top-5 lg:left-10 font-primary">
                             <nav className="text-[32px] sm:text-[40px] lg:text-[48px] leading-tight flex flex-wrap gap-x-2 gap-y-1 max-w-5xl">
-                                <Link href="/" className={linkClass("/")}>
+                                <Link href="/" className={linkClass("/")} onClick={handleCloseMenu}>
                                     home
                                 </Link>
                                 <span className="text-white/40">/</span>
 
-                                <Link href="/houses" className={linkClass("/houses")}>
+                                <Link href="/houses" className={linkClass("/houses")} onClick={handleCloseMenu}>
                                     houses
                                 </Link>
                                 <span className="text-white/40">/</span>
 
-                                <Link href="/about" className={linkClass("/about")}>
+                                <Link href="/about" className={linkClass("/about")} onClick={handleCloseMenu}>
                                     brand ethos
                                 </Link>
                                 <span className="text-white/40">/</span>
-                                <Link href="/contact" className={linkClass("/contact")}>
+                                <Link href="/contact" className={linkClass("/contact")} onClick={handleCloseMenu}>
                                     contact
                                 </Link>
                                 <span className="text-[#C3A295]">/</span>
 
-                                <Link href="/stays" className={linkClass("/stays")}>
+                                <Link href="/stays" className={linkClass("/stays")} onClick={handleCloseMenu}>
                                     stays
                                 </Link>
                                 <span className="text-white/40">/</span>
 
-                                <Link href="/events" className={linkClass("/events")}>
+                                <Link href="/events" className={linkClass("/events")} onClick={handleCloseMenu}>
                                     events
                                 </Link>
                                 <span className="text-white/40">/</span>
 
-                                <Link href="/shoots" className={linkClass("/shoots")}>
+                                <Link href="/shoots" className={linkClass("/shoots")} onClick={handleCloseMenu}>
                                     shoots
                                 </Link>
                             </nav>
@@ -308,33 +416,72 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
-
-            {/* ANIMATIONS */}
             <style jsx>{`
                 @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-5px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                    from { opacity: 0; transform: translateY(-5px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
                 .animate-fadeIn {
                     animation: fadeIn 0.15s ease-out;
                 }
 
-                @keyframes slideInRight {
-                    from {
-                        transform: translateX(100%);
+                /* MOBILE: Horizontal slide animations (default) */
+                @keyframes mobileSlideIn {
+                    from { transform: translateX(100%); }
+                    to { transform: translateX(0); }
+                }
+                
+                @keyframes mobileSlideOut {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(100%); }
+                }
+
+                /* DESKTOP: Vertical slide animations (lg and above) */
+                @keyframes desktopSlideIn {
+                    from { transform: translateY(-100%); }
+                    to { transform: translateY(0); }
+                }
+                
+                @keyframes desktopSlideOut {
+                    from { transform: translateY(0); }
+                    to { transform: translateY(-100%); }
+                }
+
+                /* Apply animations based on screen size */
+                .animate-modalEnter {
+                    animation: mobileSlideIn 0.4s ease-out;
+                }
+                
+                .animate-modalExit {
+                    animation: mobileSlideOut 0.4s ease-in;
+                }
+
+                /* Desktop animations using media query */
+                @media (min-width: 1024px) {
+                    .animate-modalEnter {
+                        animation: desktopSlideIn 0.4s ease-out;
                     }
-                    to {
-                        transform: translateX(0);
+                    
+                    .animate-modalExit {
+                        animation: desktopSlideOut 0.4s ease-in;
                     }
                 }
-                .animate-slideInRight {
-                    animation: slideInRight 0.35s ease-out;
+
+                /* Mobile Panel Animations */
+                @keyframes panelSlideUp {
+                    from { transform: translateY(100%); }
+                    to { transform: translateY(0); }
+                }
+                .animate-panelSlideUp {
+                    animation: panelSlideUp 0.3s ease-out;
+                }
+
+                @keyframes panelSlideDown {
+                    from { transform: translateY(0); }
+                    to { transform: translateY(100%); }
+                }
+                .animate-panelSlideDown {
+                    animation: panelSlideDown 0.3s ease-in;
                 }
             `}</style>
         </>
