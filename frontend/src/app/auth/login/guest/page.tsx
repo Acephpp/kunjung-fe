@@ -5,11 +5,6 @@ import Link from "next/link";
 export default function Page() {
     return (
         <div className="bg-[#FCFBF7] text-gray-900 font-secondary">
-            {/* SearchBar hanya mobile */}
-            <div className="block sm:hidden">
-                <SearchBar />
-            </div>
-
             <main
                 className="
                     flex
