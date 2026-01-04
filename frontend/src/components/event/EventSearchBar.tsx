@@ -8,7 +8,7 @@ import Calendar from "react-date-range/dist/components/Calendar"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { Suspense } from "react"
 
 type CategoryKey = "celebration" | "gathering" | "business" | null
@@ -18,14 +18,18 @@ function EventSearchBarContent() {
     const [mobileStep, setMobileStep] = useState(0)
     const [mounted, setMounted] = useState(false)
     const searchParams = useSearchParams()
+    const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
         setMounted(true)
         if (searchParams.get("openModal") === "true") {
             setOpenMobile(true)
             setMobileStep(0)
+            // Clear search params to prevent modal from reopening on refresh
+            router.replace(pathname)
         }
-    }, [searchParams])
+    }, [searchParams, router, pathname])
 
     const [showRegion, setShowRegion] = useState(false)
     const [showDate, setShowDate] = useState(false)

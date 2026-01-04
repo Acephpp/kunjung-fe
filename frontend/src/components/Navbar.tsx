@@ -309,7 +309,7 @@ export default function Navbar() {
                         }`}
                 >
                     {/* Sama dengan container navbar → max-w + padding */}
-                    <div className="relative max-w-9xl mx-auto h-full px-4 sm:px-6 lg:px-10">
+                    <div className="relative max-w-9xl mx-auto h-full px-6 sm:px-10 flex flex-col">
                         {/* X BUTTON */}
                         <button
                             onClick={handleCloseMenu}
@@ -319,37 +319,36 @@ export default function Navbar() {
                             ✕
                         </button>
 
-                        {/* MAIN MENU */}
-                        <div className="absolute top-10 left-4 sm:left-6 lg:top-5 lg:left-10 font-primary">
-                            <nav className="text-[32px] sm:text-[40px] lg:text-[48px] leading-tight flex flex-wrap gap-x-2 gap-y-1 max-w-5xl">
+                        <div className="pt-10 sm:pt-16 lg:pt-20">
+                            <nav className="flex flex-wrap items-center gap-2 text-[28px] sm:text-3xl md:text-4xl lg:text-[48px] max-w-xl sm:max-w-3xl lg:max-w-5xl leading-tight font-light font-primary">
                                 <Link href="/" className={linkClass("/")} onClick={handleCloseMenu}>
                                     home
                                 </Link>
-                                <span className="text-white/40">/</span>
+                                <span className="text-[#C3A295]">/</span>
 
-                                <Link href="/houses" className={linkClass("/houses")} onClick={handleCloseMenu}>
+                                <Link href="/searchResult" className={linkClass("/searchResult")} onClick={handleCloseMenu}>
                                     houses
                                 </Link>
-                                <span className="text-white/40">/</span>
+                                <span className="text-[#C3A295]">/</span>
 
                                 <Link href="/about" className={linkClass("/about")} onClick={handleCloseMenu}>
                                     brand ethos
                                 </Link>
-                                <span className="text-white/40">/</span>
+                                <span className="text-[#C3A295]">/</span>
                                 <Link href="/contact" className={linkClass("/contact")} onClick={handleCloseMenu}>
                                     contact
                                 </Link>
                                 <span className="text-[#C3A295]">/</span>
 
-                                <Link href="/stays" className={linkClass("/stays")} onClick={handleCloseMenu}>
+                                <Link href="/" className={linkClass("/")} onClick={handleCloseMenu}>
                                     stays
                                 </Link>
-                                <span className="text-white/40">/</span>
+                                <span className="text-[#C3A295]">/</span>
 
                                 <Link href="/events" className={linkClass("/events")} onClick={handleCloseMenu}>
                                     events
                                 </Link>
-                                <span className="text-white/40">/</span>
+                                <span className="text-[#C3A295]">/</span>
 
                                 <Link href="/shoots" className={linkClass("/shoots")} onClick={handleCloseMenu}>
                                     shoots
@@ -357,37 +356,56 @@ export default function Navbar() {
                             </nav>
                         </div>
 
-                        {/* BOTTOM AREA */}
-                        <div className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-6 lg:left-10 lg:right-10">
-                            {/* LOGO + COPYRIGHT */}
-                            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                                <img
-                                    src="/images/kunjung-white.png"
-                                    className="h-10 max-w-full lg:mx-0"
-                                    alt="Kunjung"
-                                />
-                                <div className="text-left lg:text-right text-[10px] sm:text-sm font-primary">
-                                    <p>all right reserved</p>
-                                    <p>© 2025, kunjung family</p>
+                        <div className="mt-auto pb-8 sm:pb-10 lg:pb-12">
+                            {/* LOGO + COPYRIGHT + TNC */}
+                            <div className="flex flex-col gap-4 font-primary">
+                                <div className="flex flex-col items-start gap-3 md:flex-row md:items-end md:justify-between">
+                                    <img
+                                        src="/images/kunjung-white.png"
+                                        alt="Kunjung Logo"
+                                        className="h-10 w-auto"
+                                    />
+
+                                    <div className="hidden md:block text-sm text-[#F5E9E2]/80 text-right leading-tight">
+                                        <p>all right reserved</p>
+                                        <p>© 2025, kunjung family</p>
+                                    </div>
+                                </div>
+
+                                {/* mobile : copyright + tnc */}
+                                <div className="flex md:hidden justify-between items-end text-[11px] sm:text-xs text-[#F5E9E2]/80">
+                                    <div className="leading-tight">
+                                        <p>all right reserved</p>
+                                        <p>© 2025, kunjung family</p>
+                                    </div>
+
+                                    <Link href="/tnc" onClick={handleCloseMenu} className="hover:underline">
+                                        TnC & Refund policy
+                                    </Link>
                                 </div>
                             </div>
 
-                            <div className="border-t border-[#F5E9E2] mt-4"></div>
+                            {/* GARIS */}
+                            <div className="border-t border-[#F5E9E2] mt-4" />
 
-                            {/* CONTACT + SOCIAL */}
-                            <div
-                                className="mt-4 flex flex-row justify-between gap-3 lg:flex-row lg:items-center text-[10px] sm:text-lg font-primary"
-                            >
+                            {/* BOTTOM ROW */}
+                            <div className="mt-4 flex justify-between items-center text-[10px] sm:text-sm md:text-base lg:text-lg font-primary">
+                                {/* EMAIL */}
                                 <a
                                     href="mailto:info@kunjungfamily.com"
-                                    className="hover:underline whitespace-nowrap"
+                                    className="hover:underline"
                                 >
                                     info@kunjungfamily.com ↗
                                 </a>
 
-                                <div
-                                    className="flex flex-row gap-2 text-[10px] sm:text-xl justify-end whitespace-nowrap"
-                                >
+                                {/* SOSMED */}
+                                <div className="flex items-center gap-2 text-[10px] sm:text-sm md:text-base">
+                                    <Link href="/tnc" onClick={handleCloseMenu} className="hidden md:inline hover:underline text-[#F5E9E2]/80">
+                                        TnC & Refund policy
+                                    </Link>
+
+                                    <span className="hidden md:inline text-[#C3A295]">|</span>
+
                                     <a href="#" className="hover:underline">instagram</a>
                                     <span>/</span>
                                     <a href="#" className="hover:underline">tiktok</a>
@@ -396,22 +414,19 @@ export default function Navbar() {
                                 </div>
                             </div>
 
-
-
-                            {/* SEARCH BAR – hanya mobile, biar sama seperti desain */}
+                            {/* SEARCH BAR – hanya mobile, matching footer-like experience */}
                             <div className="mt-6 lg:hidden">
-                                <div className="flex items-center justify-between rounded-full border border-[#F5E9E2] px-5 py-3 text-sm">
+                                <Link
+                                    href={`${pathname}?openModal=true`}
+                                    onClick={handleCloseMenu}
+                                    className="flex items-center justify-between rounded-full border border-[#F5E9E2] px-5 py-3 text-sm"
+                                >
                                     <span className="text-[#F5E9E2]/70">
                                         start your search
                                     </span>
-
-                                    <LucideSearch
-                                        size={18}
-                                        className="text-[#F5E9E2]"
-                                    />
-                                </div>
+                                    <LucideSearch size={18} className="text-[#F5E9E2]" />
+                                </Link>
                             </div>
-
                         </div>
                     </div>
                 </div>

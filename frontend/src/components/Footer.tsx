@@ -27,7 +27,7 @@ export default function Footer() {
                     <span className="text-[#C3A295]">/</span>
                     <Link href="/" className={linkClass("/")}>stays</Link>
                     <span className="text-[#C3A295]">/</span>
-                    <Link href="/events" className={linkClass("/events")}>weddings</Link>
+                    <Link href="/events" className={linkClass("/events")}>events</Link>
                     <span className="text-[#C3A295]">/</span>
                     <Link href="/shoots" className={linkClass("/shoots")}>shoots</Link>
                 </nav>

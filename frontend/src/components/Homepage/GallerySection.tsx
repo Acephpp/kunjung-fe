@@ -33,7 +33,7 @@ export default function GallerySection() {
                             className="object-cover w-full h-[250px] sm:[350px] md:h-[420px]"
                         />
                         <div className="flex justify-between md:mt-3 text-[18px] md:text-[32px]">
-                            <span className="text-[#4A3B2D]">weddings</span>
+                            <span className="text-[#4A3B2D]">events</span>
                             <span className="text-[#A06A55] cursor-pointer hover:underline">
                                 more
                             </span>
