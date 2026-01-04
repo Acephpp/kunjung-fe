@@ -319,8 +319,8 @@ export default function Navbar() {
                             ✕
                         </button>
 
-                        <div className="pt-10 sm:pt-16 lg:pt-20">
-                            <nav className="flex flex-wrap items-center gap-2 text-[28px] sm:text-3xl md:text-4xl lg:text-[48px] max-w-xl sm:max-w-3xl lg:max-w-5xl leading-tight font-light font-primary">
+                        <div className="pt-5">
+                            <nav className="flex flex-wrap items-center gap-2 text-[28px] sm:text-3xl md:text-4xl lg:text-[48px] max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl leading-tight font-light font-primary">
                                 <Link href="/" className={linkClass("/")} onClick={handleCloseMenu}>
                                     home
                                 </Link>
