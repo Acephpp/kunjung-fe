@@ -11,9 +11,7 @@ import React from 'react'
 export default function Page() {
     return (
         <div>
-            <div className='max-w-9xl mx-auto md:px-10'>
-                <EventSearchBar />
-            </div>
+            <EventSearchBar />
             <div className="mb-5">
                 <HeroSection />
             </div>

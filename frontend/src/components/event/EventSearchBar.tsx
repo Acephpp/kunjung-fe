@@ -17,9 +17,27 @@ function EventSearchBarContent() {
     const [openMobile, setOpenMobile] = useState(false)
     const [mobileStep, setMobileStep] = useState(0)
     const [mounted, setMounted] = useState(false)
+    const [showNavbar, setShowNavbar] = useState(true)
+    const [lastScrollY, setLastScrollY] = useState(0)
     const searchParams = useSearchParams()
     const router = useRouter()
     const pathname = usePathname()
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY
+            if (currentScrollY <= 10) {
+                setShowNavbar(true)
+            } else if (currentScrollY > lastScrollY) {
+                setShowNavbar(false)
+            } else {
+                setShowNavbar(true)
+            }
+            setLastScrollY(currentScrollY)
+        }
+        window.addEventListener("scroll", handleScroll, { passive: true })
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [lastScrollY])
 
     useEffect(() => {
         setMounted(true)
@@ -120,12 +138,12 @@ function EventSearchBarContent() {
     }, [openMobile])
 
     return (
-        <div ref={dropdownRefObj} className="relative z-40">
+        <div ref={dropdownRefObj} className={`z-[45] w-full transition-all duration-300 lg:relative lg:top-0 lg:bg-transparent lg:border-b-0 lg:backdrop-blur-none backdrop-blur-sm bg-[#FCFBF7]/80 border-b border-gray-200 ${showNavbar ? "sticky top-16" : "sticky top-0"}`}>
             {/* ================= MOBILE SEARCH BAR ================= */}
-            <div className="lg:hidden px-4">
+            <div className="lg:hidden px-4 py-4">
                 <button
                     onClick={() => setOpenMobile(true)}
-                    className="w-full flex items-center justify-between px-5 py-4 rounded-2xl border border-[#E7E6E2] bg-[#FCFBF7] shadow"
+                    className="w-full flex items-center justify-between px-5 py-4 rounded-2xl border border-[#E7E6E2] bg-[#FCFBF7] shadow-sm active:scale-[0.98] transition-all"
                 >
                     <span className="text-gray-500">Start your search</span>
                     <FiSearch />

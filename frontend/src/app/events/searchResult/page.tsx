@@ -8,9 +8,7 @@ export default function page() {
             <div className="hidden md:block max-w-9xl mx-auto px-10">
                 <FilterBar />
             </div>
-            <div className="block md:hidden">
-                <EventSearchBar />
-            </div>
+            <EventSearchBar />
             <WeddingList />
         </div>
     )
